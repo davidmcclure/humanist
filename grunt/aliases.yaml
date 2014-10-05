@@ -4,6 +4,11 @@ compile:
   - browserify
   - less
 
+compile:min:
+  - compile
+  - uglify
+  - cssmin
+
 default:
   - clean
   - compile
