@@ -1,0 +1,11 @@
+
+compile:
+  - jade
+  - browserify
+  - less
+
+default:
+  - clean
+  - compile
+  - connect
+  - watch
