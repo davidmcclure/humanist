@@ -3,7 +3,10 @@
 module.exports = {
 
   options: {
-    paths: 'node_modules'
+    paths: 'node_modules',
+    sourceMap: true,
+    sourceMapBasepath: '_site',
+    sourceMapRootpath: '..'
   },
 
   dist: {

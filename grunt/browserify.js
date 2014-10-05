@@ -4,7 +4,10 @@ module.exports = {
 
   options: {
     transform: [require('grunt-react').browserify],
-    watch: true
+    watch: true,
+    browserifyOptions: {
+      debug: true
+    }
   },
 
   dist: {
