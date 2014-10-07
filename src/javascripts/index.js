@@ -9,9 +9,13 @@ request
 .get('data.json')
 .end(function(error, res) {
 
+  // X/Y pairs for nodes.
   var nodes = _.map(res.body.nodes, function(n) {
     return [n.graphics.x, n.graphics.y];
   });
+
+  // X-axis coordinates.
+  var xs = _.pluck(nodes, 0);
 
   // TODO: Always fullscreen?
   var h = 1000;
@@ -19,12 +23,12 @@ request
 
   // X scale.
   var x = d3.scale.linear()
-    .domain([0, w])
+    .domain([_.min(xs), _.max(xs)])
     .range([0, w]);
 
   // Y scale.
   var y = d3.scale.linear()
-    .domain([0, h])
+    .domain([_.min(xs), _.max(xs)])
     .range([h, 0]);
 
   // Zoomable container.
@@ -41,12 +45,6 @@ request
         .on('zoom', zoom)
     );
 
-  // Overlay.
-  svg.append("rect")
-    .attr("class", "overlay")
-    .attr("width", w)
-    .attr("height", h);
-
   // Nodes.
   var nodes = svg.selectAll('circle')
     .data(nodes)
@@ -55,6 +53,12 @@ request
     .classed({ node: true })
     .attr('r', 2)
     .attr('transform', transform);
+
+  // Overlay.
+  svg.append("rect")
+    .attr("class", "overlay")
+    .attr("width", w)
+    .attr("height", h);
 
   // Zoom circles.
   function zoom() {
