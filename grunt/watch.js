@@ -3,7 +3,7 @@
 module.exports = {
 
   livereload: {
-    files: '_site/*',
+    files: '<%= site %>/*',
     options: { livereload: true }
   },
 

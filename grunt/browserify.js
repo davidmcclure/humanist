@@ -12,7 +12,7 @@ module.exports = {
 
   dist: {
     src: 'src/javascripts/index.js',
-    dest: '_site/script.js'
+    dest: '<%= site %>/script.js'
   }
 
 };

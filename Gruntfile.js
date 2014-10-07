@@ -6,7 +6,8 @@ module.exports = function(grunt) {
   require('jit-grunt')(grunt);
 
   require('load-grunt-config')(grunt, {
-    loadGruntTasks: false
+    loadGruntTasks: false,
+    data: { site: '_site' }
   });
 
 };
