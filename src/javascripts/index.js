@@ -9,7 +9,7 @@ request
 .get('data.json')
 .end(function(error, res) {
 
-  var data = _.map(res.body.nodes, function(n) {
+  var nodes = _.map(res.body.nodes, function(n) {
     return [n.graphics.x, n.graphics.y];
   });
 
@@ -17,9 +17,10 @@ request
 
   svg
     .selectAll('circle')
-    .data(data)
+    .data(nodes)
     .enter()
     .append('circle')
+    .classed({ node: true })
     .attr('r', 5)
     .attr('transform', function(d) {
       return 'translate('+d+')';
