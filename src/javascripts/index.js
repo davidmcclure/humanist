@@ -1,8 +1,9 @@
 
 
-var d3 = require('d3-browserify');
-var request = require('superagent');
+var $ = require('jquery');
 var _ = require('lodash');
+var request = require('superagent');
+var d3 = require('d3-browserify');
 
 
 request
@@ -41,7 +42,7 @@ request
       d3.behavior.zoom()
         .x(x)
         .y(y)
-        .scaleExtent([0.1, 10])
+        .scaleExtent([0.01, 100])
         .on('zoom', zoom)
     );
 
@@ -51,7 +52,7 @@ request
     .enter()
     .append('circle')
     .classed({ node: true })
-    .attr('r', 2)
+    .attr('r', 1)
     .attr('transform', transform);
 
   // Overlay.
