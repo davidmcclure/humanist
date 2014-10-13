@@ -2,7 +2,6 @@
 
 var $ = require('jquery');
 var _ = require('lodash');
-var request = require('superagent');
 var d3 = require('d3-browserify');
 var Backbone = require('backbone');
 Backbone.$ = $;
@@ -27,7 +26,6 @@ var Network = Backbone.View.extend({
     this._initData();
     this._initResize();
     this._initNodes();
-    this._initOverlay();
 
   },
 
@@ -47,19 +45,18 @@ var Network = Backbone.View.extend({
     this.ys = _.pluck(this.coords, 1);
 
     // Min/max values on axes.
-    this.xmax = _.max(this.xs);
     this.xmin = _.min(this.xs);
-    this.ymax = _.max(this.ys);
+    this.xmax = _.max(this.xs);
     this.ymin = _.min(this.ys);
+    this.ymax = _.max(this.ys);
 
     // Deltas on X/Y axes.
-    this.xd = this.xmax-this.xmin;
-    this.yd = this.ymax-this.ymin;
+    this.dx = this.xmax-this.xmin;
+    this.dy = this.ymax-this.ymin;
 
-    // Domain for axes.
-    this.domain = this.xd > this.yd ?
-      [this.xmin, this.xmax]:
-      [this.ymin, this.ymax];
+    // TODO|dev
+    this.xDomain = [this.xmin, this.xmax];
+    this.yDomain = [this.ymin, this.ymax];
 
   },
 
@@ -86,11 +83,10 @@ var Network = Backbone.View.extend({
 
   /**
    * Render the nodes.
-   * TODO: Render words, not just dots.
    */
   _initNodes: function() {
 
-    // Append the nodes.
+    // Render the nodes.
     this.nodes = this.outer.selectAll('circle')
       .data(this.coords)
       .enter()
@@ -105,31 +101,24 @@ var Network = Backbone.View.extend({
 
 
   /**
-   * Inject an overlay to catch zoom events.
-   */
-  _initOverlay: function() {
-    // TODO
-  },
-
-
-  /**
    * Fill the window with the network.
    */
   fitToWindow: function() {
 
-    // Size the SVG container.
     var h = $(window).height();
     var w = $(window).width();
+
+    // Size the SVG container.
     this.svg.attr('width', w).attr('height', h);
 
     // X-axis scale.
     this.xScale = d3.scale.linear()
-      .domain(this.domain)
+      .domain(this.xDomain)
       .range([0, w]);
 
     // Y-axis scale.
     this.yScale = d3.scale.linear()
-      .domain(this.domain)
+      .domain(this.yDomain)
       .range([h, 0]);
 
     var zoomHandler = d3.behavior.zoom()
@@ -140,6 +129,7 @@ var Network = Backbone.View.extend({
 
     // Add zoomable <g>.
     this.outer.call(zoomHandler);
+    //this.zoomNodes();
 
   },
 
@@ -161,8 +151,6 @@ var Network = Backbone.View.extend({
 
 
 // TODO|dev
-request
-.get('data.json')
-.end(function(error, res) {
-  new Network({ data: res.body });
+$.getJSON('data.json', function(data) {
+  new Network({ data: data });
 });
