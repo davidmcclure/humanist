@@ -22,7 +22,6 @@ module.exports = Backbone.View.extend({
     this._initMarkup();
     this._initData();
     this._initResize();
-    this._initRoutes();
     this._initNodes();
 
   },
@@ -93,15 +92,6 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * When the zoom changes, update the XYZ route.
-   */
-  _initRoutes: function() {
-    var update = _.debounce(this.setRouteXYZ, 500);
-    this.on('zoom', update);
-  },
-
-
-  /**
    * Render the nodes.
    */
   _initNodes: function() {
@@ -161,7 +151,8 @@ module.exports = Backbone.View.extend({
       .x(this.xScale)
       .y(this.yScale)
       .scaleExtent([0.01, 100])
-      .on('zoom', _.bind(this.renderNodes, this));
+      .on('zoom', _.bind(this.renderNodes, this))
+      .size([w, h]);
 
     // Add zoom to <g>.
     this.outer.call(this.zoom);
@@ -182,40 +173,6 @@ module.exports = Backbone.View.extend({
       ')';
     }, this));
 
-    if (d3.event) {
-      var x = d3.event.translate[0].toFixed(4);
-      var y = d3.event.translate[1].toFixed(4);
-      var z = d3.event.scale.toFixed(4);
-      this.trigger('zoom', x, y, z);
-    }
-
-  },
-
-
-  /**
-   * Set the current :x/:y/:z route.
-   *
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Number} z
-   */
-  setRouteXYZ: function(x, y, z) {
-    Backbone.history.navigate(x+'/'+y+'/'+z, {
-      replace: true
-    });
-  },
-
-
-  /**
-   * Apply a :x/:y/:z focus triple.
-   *
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Number} z
-   */
-  applyXYZ: function(x, y, z) {
-    this.zoom.translate([x, y]).zoom(z);
-    this.zoom(this.svg.transition().duration(500));
   }
 
 
