@@ -148,14 +148,14 @@ var Network = Backbone.View.extend({
       .domain(yd)
       .range([h, 0]);
 
-    var zoomHandler = d3.behavior.zoom()
+    this.zoom = d3.behavior.zoom()
       .x(this.xScale)
       .y(this.yScale)
       .scaleExtent([0.01, 100])
       .on('zoom', _.bind(this.renderNodes, this));
 
     // Add zoom to outer <g>.
-    this.outer.call(zoomHandler);
+    this.outer.call(this.zoom);
 
   },
 
@@ -164,12 +164,15 @@ var Network = Backbone.View.extend({
    * Apply the current axis scales to the nodes.
    */
   renderNodes: function() {
+
+    // Render the new node positions.
     this.nodes.attr('transform', _.bind(function(d) {
       return 'translate('+
         this.xScale(d[0])+','+
         this.yScale(d[1])+
       ')';
     }, this));
+
   }
 
 
