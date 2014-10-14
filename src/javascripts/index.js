@@ -23,6 +23,9 @@ var Network = Backbone.View.extend({
     // d3-wrap the container.
     this.svg = d3.select(this.el);
 
+    // Zoomable container.
+    this.outer = this.svg.append('g');
+
     this._initData();
     this._initResize();
     this._initNodes();
@@ -66,16 +69,14 @@ var Network = Backbone.View.extend({
    */
   _initResize: function() {
 
-    // Zoomable container.
-    this.outer = this.svg.append('g');
-
     // Debounce the resizer.
-    var debounced = _.debounce(
-      _.bind(this.fitToWindow, this), 500
-    );
+    var resize = _.debounce(_.bind(function() {
+      this.fitToWindow();
+      this.renderNodes();
+    }, this), 500);
 
     // Bind to window resize.
-    $(window).resize(debounced);
+    $(window).resize(resize);
     this.fitToWindow();
 
   },
@@ -95,7 +96,7 @@ var Network = Backbone.View.extend({
       .attr('r', 1);
 
     // Apply zoom.
-    this.zoomNodes();
+    this.renderNodes();
 
   },
 
@@ -125,11 +126,10 @@ var Network = Backbone.View.extend({
       .x(this.xScale)
       .y(this.yScale)
       .scaleExtent([0.01, 100])
-      .on('zoom', this.zoomNodes);
+      .on('zoom', this.renderNodes);
 
-    // Add zoomable <g>.
+    // Add zoom to outer <g>.
     this.outer.call(zoomHandler);
-    //this.zoomNodes();
 
   },
 
@@ -137,7 +137,7 @@ var Network = Backbone.View.extend({
   /**
    * Apply the current axis scales to the nodes.
    */
-  zoomNodes: function() {
+  renderNodes: function() {
     this.nodes.attr('transform', _.bind(function(d) {
       return 'translate('+
         this.xScale(d[0])+','+
