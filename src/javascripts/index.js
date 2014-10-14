@@ -1,11 +1,13 @@
 
 
 var $ = require('jquery');
+var _ = require('lodash');
 var Backbone = require('backbone');
-var Router = require('./router');
+var Network = require('./view');
 Backbone.$ = $;
 
 
-$(function() {
-  new Router();
-});
+// TODO|dev
+$.getJSON('data.json', _.bind(function(data) {
+  new Network({ data: data });
+}, this));
