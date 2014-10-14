@@ -20,15 +20,28 @@ var Network = Backbone.View.extend({
 
     this.data = options.data;
 
+    this._initMarkup();
+    this._initData();
+    this._initResize();
+    this._initNodes();
+
+  },
+
+
+  /**
+   * Inject containers.
+   */
+  _initMarkup: function() {
+
     // d3-wrap the container.
     this.svg = d3.select(this.el);
 
     // Zoomable container.
     this.outer = this.svg.append('g');
 
-    this._initData();
-    this._initResize();
-    this._initNodes();
+    // Pointer events overlay.
+    this.overlay = this.outer.append('rect')
+      .classed({ overlay: true });
 
   },
 
@@ -57,10 +70,6 @@ var Network = Backbone.View.extend({
     // Deltas on X/Y axes.
     this.dx = this.xmax-this.xmin;
     this.dy = this.ymax-this.ymin;
-
-    // TODO|dev
-    this.xDomain = [this.xmin, this.xmax];
-    this.yDomain = [this.ymin, this.ymax];
 
   },
 
@@ -113,24 +122,37 @@ var Network = Backbone.View.extend({
     // Size the SVG container.
     this.svg.attr('width', w).attr('height', h);
 
+    // Size the overlay.
+    this.overlay.attr('width', w).attr('height', h);
+
+    // Get the X/Y-axis domains.
+    if (this.dx > this.dy) {
+      var r = h/w;
+      var d = (this.dx-this.dy)/2;
+      var yd = [r*(this.ymin-d), r*(this.ymax+d)];
+      var xd = [this.xmin, this.xmax];
+    } else {
+      var r = w/h;
+      var d = (this.dy-this.dx)/2;
+      var xd = [r*(this.xmin-d), r*(this.xmax+d)];
+      var yd = [this.ymin, this.ymax];
+    }
+
     // X-axis scale.
     this.xScale = d3.scale.linear()
-      .domain(this.xDomain)
+      .domain(xd)
       .range([0, w]);
-
-    var r = h/w;
-    var d = (this.dx-this.dy)/2;
 
     // Y-axis scale.
     this.yScale = d3.scale.linear()
-      .domain([r*(this.ymin-d), r*(this.ymax+d)])
+      .domain(yd)
       .range([h, 0]);
 
     var zoomHandler = d3.behavior.zoom()
       .x(this.xScale)
       .y(this.yScale)
       .scaleExtent([0.01, 100])
-      .on('zoom', this.renderNodes);
+      .on('zoom', _.bind(this.renderNodes, this));
 
     // Add zoom to outer <g>.
     this.outer.call(zoomHandler);
