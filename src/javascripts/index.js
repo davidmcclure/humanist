@@ -29,7 +29,7 @@ var Network = Backbone.View.extend({
 
 
   /**
-   * Inject containers.
+   * Inject the top-level containers.
    */
   _initMarkup: function() {
 
@@ -148,14 +148,14 @@ var Network = Backbone.View.extend({
       .domain(yd)
       .range([h, 0]);
 
-    this.zoom = d3.behavior.zoom()
+    var zoom = d3.behavior.zoom()
       .x(this.xScale)
       .y(this.yScale)
       .scaleExtent([0.01, 100])
       .on('zoom', _.bind(this.renderNodes, this));
 
-    // Add zoom to outer <g>.
-    this.outer.call(this.zoom);
+    // Add zoom to <g>.
+    this.outer.call(zoom);
 
   },
 
