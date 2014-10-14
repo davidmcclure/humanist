@@ -2,12 +2,10 @@
 
 var $ = require('jquery');
 var Backbone = require('backbone');
-var Network = require('./view');
+var Router = require('./router');
 Backbone.$ = $;
 
 
-// TODO|dev
-$.getJSON('data.json', function(data) {
-  new Network({ data: data });
-  Backbone.history.start();
+$(function() {
+  new Router();
 });
