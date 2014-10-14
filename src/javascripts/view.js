@@ -20,9 +20,9 @@ module.exports = Backbone.View.extend({
     this.data = options.data;
 
     this._initMarkup();
-    this._initDebounces();
     this._initData();
     this._initResize();
+    this._initRoutes();
     this._initNodes();
 
   },
@@ -75,18 +75,6 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * Set debounced copies of methods.
-   */
-  _initDebounces: function() {
-
-    this.setRouteXYZDebounced = _.debounce(
-      this.setRouteXYZ, 200
-    );
-
-  },
-
-
-  /**
    * Bind a debounced resize listener.
    */
   _initResize: function() {
@@ -101,6 +89,15 @@ module.exports = Backbone.View.extend({
     $(window).resize(resize);
     this.fitToWindow();
 
+  },
+
+
+  /**
+   * When the zoom changes, update the XYZ route.
+   */
+  _initRoutes: function() {
+    var update = _.debounce(this.setRouteXYZ, 200);
+    this.on('zoom', update);
   },
 
 
@@ -186,11 +183,10 @@ module.exports = Backbone.View.extend({
     }, this));
 
     if (d3.event) {
-      console.log(d3.event);
       var x = d3.event.translate[0].toFixed(4);
       var y = d3.event.translate[1].toFixed(4);
       var z = d3.event.scale.toFixed(4);
-      this.setRouteXYZDebounced(x, y, z);
+      this.trigger('zoom', x, y, z);
     }
 
   },
