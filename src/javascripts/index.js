@@ -35,6 +35,7 @@ var Network = Backbone.View.extend({
 
   /**
    * Parse the raw network data.
+   * TODO: Precompute as much of this as possible.
    */
   _initData: function() {
 
@@ -117,9 +118,12 @@ var Network = Backbone.View.extend({
       .domain(this.xDomain)
       .range([0, w]);
 
+    var r = h/w;
+    var d = (this.dx-this.dy)/2;
+
     // Y-axis scale.
     this.yScale = d3.scale.linear()
-      .domain(this.yDomain)
+      .domain([r*(this.ymin-d), r*(this.ymax+d)])
       .range([h, 0]);
 
     var zoomHandler = d3.behavior.zoom()
