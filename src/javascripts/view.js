@@ -19,28 +19,11 @@ module.exports = Backbone.View.extend({
 
     this.data = options.data;
 
-    this._initMarkup();
     this._initData();
+    this._initMarkup();
+    this._initZoom();
     this._initResize();
     this._initNodes();
-
-  },
-
-
-  /**
-   * Inject the top-level containers.
-   */
-  _initMarkup: function() {
-
-    // d3-wrap the container.
-    this.svg = d3.select(this.el);
-
-    // Zoomable container.
-    this.outer = this.svg.append('g');
-
-    // Pointer events overlay.
-    this.overlay = this.outer.append('rect')
-      .classed({ overlay: true });
 
   },
 
@@ -69,6 +52,39 @@ module.exports = Backbone.View.extend({
     // Deltas on X/Y axes.
     this.dx = this.xmax-this.xmin;
     this.dy = this.ymax-this.ymin;
+
+  },
+
+
+  /**
+   * Inject the top-level containers.
+   */
+  _initMarkup: function() {
+
+    // Top-level SVG element.
+    this.svg = d3.select(this.el);
+
+    // Zoomable container.
+    this.outer = this.svg.append('g');
+
+    // Pointer events overlay.
+    this.overlay = this.outer.append('rect')
+      .classed({ overlay: true });
+
+  },
+
+
+  /**
+   * Attach a zoom handler to the outer <g>.
+   */
+  _initZoom: function() {
+
+    this.zoom = d3.behavior.zoom()
+      .on('zoom', _.bind(this.renderNodes, this))
+      .scaleExtent([0.01, 100]);
+
+    // Add zoom to <g>.
+    this.outer.call(this.zoom);
 
   },
 
@@ -147,15 +163,11 @@ module.exports = Backbone.View.extend({
       .domain(yd)
       .range([h, 0]);
 
-    this.zoom = d3.behavior.zoom()
+    // Update the zoom handler.
+    this.zoom
       .x(this.xScale)
       .y(this.yScale)
-      .scaleExtent([0.01, 100])
-      .on('zoom', _.bind(this.renderNodes, this))
       .size([w, h]);
-
-    // Add zoom to <g>.
-    this.outer.call(this.zoom);
 
   },
 
