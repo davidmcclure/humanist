@@ -25,14 +25,11 @@ module.exports = Backbone.View.extend({
 
     this.data = options.data;
 
-    this._initNodeData();
-    this._initEdgeData();
-
+    this._initData();
     this._initMarkup();
     this._initZoom();
     this._initResize();
     this._initNodes();
-    this._initEdges();
 
     // Initial zoom.
     this.applyZoom();
@@ -44,7 +41,7 @@ module.exports = Backbone.View.extend({
    * Prepare the node data.
    * TODO: Precompute as much of this as possible.
    */
-  _initNodeData: function() {
+  _initData: function() {
 
     // Node X/Y coordinates.
     var coords = _.map(this.data.nodes, function(n) {
@@ -64,40 +61,6 @@ module.exports = Backbone.View.extend({
     // Deltas on X/Y axes.
     this.dx = this.xmax-this.xmin;
     this.dy = this.ymax-this.ymin;
-
-  },
-
-
-  /**
-   * Prepare the edge data.
-   * TODO: Precompute as much of this as possible.
-   */
-  _initEdgeData: function() {
-
-    var self = this;
-
-    var buckets = _.chain(this.data.links)
-      .groupBy(function(e, i) {
-        return Math.floor(i/100);
-      }).toArray().value();
-
-    this.edgePaths = _.map(buckets, function(b) {
-      return _.reduce(b, function(p, e) {
-
-        // Get the source/target nodes.
-        var source = self.data.nodes[e.source];
-        var target = self.data.nodes[e.target];
-
-        // Get the endpoints.
-        var x1 = source.graphics.x;
-        var y1 = source.graphics.y;
-        var x2 = target.graphics.x;
-        var y2 = target.graphics.y;
-
-        return p += 'M '+x1+','+y1+' L '+x2+','+y2+' Z ';
-
-      }, '');
-    });
 
   },
 
@@ -182,18 +145,6 @@ module.exports = Backbone.View.extend({
       .text(function(n) {
         return n.label;
       });
-
-  },
-
-
-  /**
-   * Render the edges.
-   */
-  _initEdges: function() {
-
-    this.edges = _.map(this.edgePaths, _.bind(function(d) {
-      return this.edgeGroup.append('path').attr('d', d);
-    }, this));
 
   },
 
