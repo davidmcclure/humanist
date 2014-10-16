@@ -11,6 +11,11 @@ module.exports = Backbone.View.extend({
 
   el: '#network',
 
+  options: {
+    zoomExtent: [0.1, 50],
+    fontExtent: [6, 60]
+  },
+
 
   /**
    * Spin up the network.
@@ -22,6 +27,7 @@ module.exports = Backbone.View.extend({
     this._initData();
     this._initMarkup();
     this._initZoom();
+    this._initFontSizes();
     this._initResize();
     this._initNodes();
 
@@ -81,10 +87,22 @@ module.exports = Backbone.View.extend({
 
     this.zoom = d3.behavior.zoom()
       .on('zoom', _.bind(this.applyZoom, this))
-      .scaleExtent([0.01, 100]);
+      .scaleExtent(this.options.zoomExtent);
 
     // Add zoom to <g>.
     this.outer.call(this.zoom);
+
+  },
+
+
+  /**
+   * Create a scale to map zoom level -> font size.
+   */
+  _initFontSizes: function() {
+
+    this.fScale = d3.scale.linear()
+      .domain(this.options.zoomExtent)
+      .range([6, 60]);
 
   },
 
@@ -189,12 +207,15 @@ module.exports = Backbone.View.extend({
 
     this.renderNodes();
 
-    // Save the new :x/:y/:z focus position.
-    this.focus = [
-      this.xScale.invert(this.w/2), // x
-      this.yScale.invert(this.h/2), // y
-      this.zoom.scale()             // z
-    ];
+    var x = this.xScale.invert(this.w/2);
+    var y = this.yScale.invert(this.h/2);
+    var z = this.zoom.scale();
+
+    // Save the new focus.
+    this.focus = [x, y, z];
+
+    // TODO|dev
+    this.nodes.style('font-size', this.fScale(z));
 
   },
 
