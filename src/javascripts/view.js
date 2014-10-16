@@ -4,7 +4,7 @@ var $ = require('jquery');
 var _ = require('lodash');
 var Backbone = require('backbone');
 var d3 = require('d3-browserify');
-var Path = require('paths-js/path');
+var rbush = require('rbush');
 
 
 module.exports = Backbone.View.extend({
@@ -29,6 +29,7 @@ module.exports = Backbone.View.extend({
     this._initZoom();
     this._initResize();
     this._initNodes();
+    this._initEdges();
 
     this.applyZoom(); // Initial zoom.
 
@@ -50,13 +51,13 @@ module.exports = Backbone.View.extend({
     this.zoomOverlay = this.outer.append('rect')
       .classed({ overlay: true });
 
-    // Nodes <g>.
-    this.nodeGroup = this.outer.append('g')
-      .classed({ nodes: true });
-
     // Edges <g>.
     this.edgeGroup = this.outer.append('g')
       .classed({ edges: true });
+
+    // Nodes <g>.
+    this.nodeGroup = this.outer.append('g')
+      .classed({ nodes: true });
 
   },
 
@@ -127,8 +128,31 @@ module.exports = Backbone.View.extend({
     this.nodes = this.nodeGroup.selectAll('text');
 
     // Highlight on hover.
-    this.nodes.on('mouseenter', _.bind(this.highlight, this));
-    this.nodes.on('mouseleave', _.bind(this.unhighlight, this));
+    this.nodes.on('mouseenter',
+      _.bind(this.highlight, this)
+    );
+
+    // Unhighlight on blur.
+    this.nodes.on('mouseleave',
+      _.bind(this.unhighlight, this)
+    );
+
+  },
+
+
+  /**
+   * Initialize the edge index.
+   */
+  _initEdges: function() {
+
+    // Load the index.
+    this.edgeIndex = new rbush();
+    this.edgeIndex.load(this.data.edges);
+
+    // Debounce the query method.
+    this.debouncedQueryEdges = _.debounce(
+      this.queryEdges, 500
+    );
 
   },
 
@@ -209,6 +233,9 @@ module.exports = Backbone.View.extend({
     // Update the font sizes.
     this.nodes.style('font-size', this.fontScale(z));
 
+    // Update edges.
+    this.debouncedQueryEdges();
+
   },
 
 
@@ -224,6 +251,47 @@ module.exports = Backbone.View.extend({
         this.yScale(d.graphics.y)+
       ')';
     }, this));
+
+  },
+
+
+  /**
+   * Render a fresh set of edges.
+   */
+  queryEdges: function() {
+
+    // Get current BBOX.
+    var x1 = this.xScale.invert(0);
+    var y1 = this.yScale.invert(this.h);
+    var x2 = this.xScale.invert(this.w);
+    var y2 = this.yScale.invert(0);
+
+    // Query for visible edges.
+    var edges = this.edgeIndex.search([
+      x1, y1, x2, y2
+    ]);
+
+    // Sort by edge weight.
+    var edges = _.sortBy(edges, function(e) {
+      return 1-e[4].weight
+    });
+
+    // Clear current edges.
+    this.edgeGroup
+      .selectAll('line.background')
+      .remove();
+
+    // Walk the 1000 heaviest edges.
+    _.each(_.first(edges, 1000), _.bind(function(e) {
+
+      // Render the new edges.
+      this.edgeGroup.append('line')
+        .datum({ x1: e[0], y1: e[1], x2: e[2], y2: e[3] })
+        .classed({ background: true });
+
+    }, this));
+
+    this.zoomEdges();
 
   },
 
@@ -304,9 +372,9 @@ module.exports = Backbone.View.extend({
       var ty = targetDatum.graphics.y;
 
       // Set the endpoints.
-      this.edgeGroup.append('line').datum({
-        x1: sx, y1: sy, x2: tx, y2: ty
-      });
+      this.edgeGroup.append('line')
+        .datum({ x1: sx, y1: sy, x2: tx, y2: ty })
+        .classed({ highlight: true });
 
     }, this));
 
@@ -320,7 +388,7 @@ module.exports = Backbone.View.extend({
    */
   unhighlight: function() {
     this.nodes.classed({ highlighted: false })
-    this.edgeGroup.selectAll('line').remove();
+    this.edgeGroup.selectAll('line.highlight').remove();
   }
 
 

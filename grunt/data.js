@@ -65,6 +65,28 @@ module.exports = function(grunt) {
       });
 
 
+      // Edges:
+      // ------
+
+      d2.edges = [];
+
+      // Edge list for rbush.
+      _.each(d1.links, function(e) {
+
+        var s = d1.nodes[e.source];
+        var t = d1.nodes[e.target];
+
+        d2.edges.push([
+          s.graphics.x,
+          s.graphics.y,
+          t.graphics.x,
+          t.graphics.y,
+          { weight: e.value }
+        ]);
+
+      });
+
+
       // Write JSON.
       grunt.file.write(
         '_site/data.json', JSON.stringify(d2)
