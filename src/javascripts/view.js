@@ -80,7 +80,7 @@ module.exports = Backbone.View.extend({
   _initZoom: function() {
 
     this.zoom = d3.behavior.zoom()
-      .on('zoom', _.bind(this.renderNodes, this))
+      .on('zoom', _.bind(this.applyZoom, this))
       .scaleExtent([0.01, 100]);
 
     // Add zoom to <g>.
@@ -97,7 +97,7 @@ module.exports = Backbone.View.extend({
     // Debounce the resizer.
     var resize = _.debounce(_.bind(function() {
       this.fitToWindow();
-      this.renderNodes();
+      this.applyZoom();
     }, this), 500);
 
     // Bind to window resize.
@@ -113,15 +113,17 @@ module.exports = Backbone.View.extend({
   _initNodes: function() {
 
     // Render the nodes.
-    this.nodes = this.outer.selectAll('circle')
-      .data(this.coords)
+    this.nodes = this.outer.selectAll('text')
+      .data(this.data.nodes)
       .enter()
-      .append('circle')
+      .append('text')
       .classed({ node: true })
-      .attr('r', 1);
+      .text(function(n) {
+        return n.label;
+      });
 
     // Apply zoom.
-    this.renderNodes();
+    this.applyZoom();
 
   },
 
@@ -181,17 +183,11 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * Apply the current axis scales to the nodes.
+   * Apply the current zoom level to the nodes/edges.
    */
-  renderNodes: function() {
+  applyZoom: function() {
 
-    // Render the new node positions.
-    this.nodes.attr('transform', _.bind(function(d) {
-      return 'translate('+
-        this.xScale(d[0])+','+
-        this.yScale(d[1])+
-      ')';
-    }, this));
+    this.renderNodes();
 
     // Save the new :x/:y/:z focus position.
     this.focus = [
@@ -199,6 +195,22 @@ module.exports = Backbone.View.extend({
       this.yScale.invert(this.h/2), // y
       this.zoom.scale()             // z
     ];
+
+  },
+
+
+  /**
+   * Render the node positions.
+   */
+  renderNodes: function() {
+
+    // Render the new node positions.
+    this.nodes.attr('transform', _.bind(function(d) {
+      return 'translate('+
+        this.xScale(d.graphics.x)+','+
+        this.yScale(d.graphics.y)+
+      ')';
+    }, this));
 
   },
 
@@ -224,7 +236,7 @@ module.exports = Backbone.View.extend({
     var dy = this.h/2 - y;
 
     this.zoom.translate([dx, dy]);
-    this.renderNodes();
+    this.applyZoom();
 
   }
 
