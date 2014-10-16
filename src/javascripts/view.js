@@ -114,6 +114,7 @@ module.exports = Backbone.View.extend({
       var node = this.nodeGroup
         .append('text')
         .datum(n)
+        .attr('text-anchor', 'middle')
         .classed({ node: true })
         .text(n.label);
 
@@ -258,28 +259,43 @@ module.exports = Backbone.View.extend({
    */
   highlight: function(data) {
 
-    // Get the source <text>.
-    var source = this.labelToNode[data.label];
+    // Get the source coordinates.
+    var sourceDatum = this.data.nodes[data.label];
+    var sx = sourceDatum.graphics.x;
+    var sy = sourceDatum.graphics.y;
 
     // Highlight the source node.
-    source.classed({ highlighted: true });
+    this.labelToNode[data.label].classed({ highlighted: true });
 
-    // Get the target labels.
-    var targets = this.data.nodes[data.label].targets;
+    // Iterate over the targets.
+    _.each(sourceDatum.targets, _.bind(function(label) {
 
-    // Highlight the targets.
-    _.each(targets, _.bind(function(label) {
+      // Highlight the targets.
       this.labelToNode[label].classed({ highlighted: true })
+
+      // Get the target coordinates.
+      var targetDatum = this.data.nodes[label]
+      var tx = targetDatum.graphics.x;
+      var ty = targetDatum.graphics.y;
+
+      this.edgeGroup.append('line')
+        .attr('x1', this.xScale(sx))
+        .attr('y1', this.yScale(sy))
+        .attr('x2', this.xScale(tx))
+        .attr('y2', this.yScale(ty));
+
     }, this));
+
 
   },
 
 
   /**
-   * Unhighlight all nodes.
+   * Unhighlight nodes, remove highlight edges.
    */
   unhighlight: function() {
     this.nodes.classed({ highlighted: false })
+    this.edgeGroup.selectAll('line').remove();
   }
 
 
