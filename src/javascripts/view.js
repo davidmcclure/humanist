@@ -131,23 +131,27 @@ module.exports = Backbone.View.extend({
    */
   fitToWindow: function() {
 
-    var h = $(window).height();
-    var w = $(window).width();
+    this.h = $(window).height();
+    this.w = $(window).width();
 
     // Size the SVG container.
-    this.svg.attr('width', w).attr('height', h);
+    this.svg
+      .attr('height', this.h)
+      .attr('width', this.w);
 
     // Size the overlay.
-    this.overlay.attr('width', w).attr('height', h);
+    this.overlay
+      .attr('height', this.h)
+      .attr('width', this.w);
 
     // Get the X/Y-axis domains.
     if (this.dx > this.dy) {
-      var r = h/w;
+      var r = this.h/this.w;
       var d = (this.dx-this.dy)/2;
       var yd = [r*(this.ymin-d), r*(this.ymax+d)];
       var xd = [this.xmin, this.xmax];
     } else {
-      var r = w/h;
+      var r = this.w/this.h;
       var d = (this.dy-this.dx)/2;
       var xd = [r*(this.xmin-d), r*(this.xmax+d)];
       var yd = [this.ymin, this.ymax];
@@ -156,18 +160,22 @@ module.exports = Backbone.View.extend({
     // X-axis scale.
     this.xScale = d3.scale.linear()
       .domain(xd)
-      .range([0, w]);
+      .range([0, this.w]);
 
     // Y-axis scale.
     this.yScale = d3.scale.linear()
       .domain(yd)
-      .range([h, 0]);
+      .range([this.h, 0]);
 
     // Update the zoom handler.
     this.zoom
+      .size([this.w, this.h])
       .x(this.xScale)
-      .y(this.yScale)
-      .size([w, h]);
+      .y(this.yScale);
+
+    if (this.focus) {
+      this.focusOnXYZ.apply(this, this.focus);
+    }
 
   },
 
@@ -184,6 +192,39 @@ module.exports = Backbone.View.extend({
         this.yScale(d[1])+
       ')';
     }, this));
+
+    // Save the new :x/:y/:z focus position.
+    this.focus = [
+      this.xScale.invert(this.w/2), // x
+      this.yScale.invert(this.h/2), // y
+      this.zoom.scale()             // z
+    ];
+
+  },
+
+
+  /**
+   * Apply a :x/:y/:z focus position.
+   *
+   * @param {Number} x
+   * @param {Number} y
+   * @param {Number} z
+   */
+  focusOnXYZ: function(x, y, z) {
+
+    // Reset the focus, apply zoom.
+    this.zoom.translate([0, 0]).scale(z);
+
+    // X/Y coordinate of the centroid.
+    var x = this.xScale(x);
+    var y = this.yScale(y);
+
+    // Distance from viewport center.
+    var dx = this.w/2 - x;
+    var dy = this.h/2 - y;
+
+    this.zoom.translate([dx, dy]);
+    this.renderNodes();
 
   }
 
