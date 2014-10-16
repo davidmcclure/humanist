@@ -135,6 +135,8 @@ module.exports = Backbone.View.extend({
    */
   _initNodes: function() {
 
+    var self = this;
+
     // Inject the nodes.
     this.nodes = this.nodeGroup
       .selectAll('text')
@@ -145,6 +147,11 @@ module.exports = Backbone.View.extend({
       .text(function(n) {
         return n.label;
       });
+
+    // Hover.
+    this.nodes.on('mouseenter', function(data) {
+      self.highlightNode(data.label);
+    });
 
   },
 
@@ -209,7 +216,6 @@ module.exports = Backbone.View.extend({
   applyZoom: function() {
 
     this.renderNodes();
-    this.renderEdges();
 
     var x = this.xScale.invert(this.w/2);
     var y = this.yScale.invert(this.h/2);
@@ -241,14 +247,6 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * Render the edge positions.
-   */
-  renderEdges: function() {
-    // TODO
-  },
-
-
-  /**
    * Apply a :x/:y/:z focus position.
    *
    * @param {Number} x
@@ -271,6 +269,16 @@ module.exports = Backbone.View.extend({
     this.zoom.translate([dx, dy]);
     this.applyZoom();
 
+  },
+
+
+  /**
+   * Highlight a node and all its siblings.
+   *
+   * @param {String} label
+   */
+  highlightNode: function(label) {
+    console.log(label);
   }
 
 
