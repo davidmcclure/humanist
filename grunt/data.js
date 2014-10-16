@@ -48,24 +48,18 @@ module.exports = function(grunt) {
 
       // Label -> node.
       _.each(d1.nodes, function(n) {
+        n.siblings = [];
         d2.nodes[n.label] = n;
       });
 
-
-      // Edges:
-      // ------
-
-      d2.edges = {};
-
-      // Label -> sibling labels.
+      // Cache sibling labels.
       _.each(d1.links, function(e) {
 
         var s = d1.nodes[e.source].label;
         var t = d1.nodes[e.target].label;
 
         // Register the link.
-        if (_.has(d2.edges, s)) d2.edges[s].push(t);
-        else d2.edges[s] = [t];
+        d2.nodes[s].siblings.push(t);
 
       });
 

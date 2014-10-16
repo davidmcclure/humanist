@@ -24,6 +24,7 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
 
     this.data = options.data;
+    console.log(this.data);
 
     this._initMarkup();
     this._initZoom();
@@ -252,7 +253,7 @@ module.exports = Backbone.View.extend({
    * @param {String} label
    */
   highlightNode: function(label) {
-    console.log(label);
+    // TODO
   }
 
 
