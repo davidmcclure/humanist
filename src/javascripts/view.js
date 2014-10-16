@@ -43,6 +43,21 @@ module.exports = Backbone.View.extend({
    */
   _initData: function() {
 
+    this.siblings = {};
+
+    // Map label -> sibling labels.
+    _.each(this.data.links, _.bind(function(e) {
+
+      // Get source/target labels.
+      var s = this.data.nodes[e.source].label;
+      var t = this.data.nodes[e.target].label;
+
+      // Register the connection.
+      if (_.has(this.siblings, s)) this.siblings[s].push(t);
+      else this.siblings[s] = [t];
+
+    }, this));
+
     // Node X/Y coordinates.
     var coords = _.map(this.data.nodes, function(n) {
       return [n.graphics.x, n.graphics.y];
