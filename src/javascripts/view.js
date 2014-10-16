@@ -195,8 +195,10 @@ module.exports = Backbone.View.extend({
    */
   applyZoom: function() {
 
-    this.renderNodes();
+    this.zoomNodes();
+    this.zoomEdges();
 
+    // Get current focus.
     var x = this.xScale.invert(this.w/2);
     var y = this.yScale.invert(this.h/2);
     var z = this.zoom.scale();
@@ -213,7 +215,7 @@ module.exports = Backbone.View.extend({
   /**
    * Render the node positions.
    */
-  renderNodes: function() {
+  zoomNodes: function() {
 
     // Render the new node positions.
     this.nodes.attr('transform', _.bind(function(d) {
@@ -222,6 +224,29 @@ module.exports = Backbone.View.extend({
         this.yScale(d.graphics.y)+
       ')';
     }, this));
+
+  },
+
+
+  /**
+   * Render the edge positions.
+   */
+  zoomEdges: function() {
+
+    // Render the new edge positions.
+    this.edgeGroup.selectAll('line')
+      .attr('x1', _.bind(function(d) {
+        return this.xScale(d.x1);
+      }, this))
+      .attr('y1', _.bind(function(d) {
+        return this.yScale(d.y1);
+      }, this))
+      .attr('x2', _.bind(function(d) {
+        return this.xScale(d.x2);
+      }, this))
+      .attr('y2', _.bind(function(d) {
+        return this.yScale(d.y2);
+      }, this));
 
   },
 
@@ -259,33 +284,33 @@ module.exports = Backbone.View.extend({
    */
   highlight: function(data) {
 
-    // Get the source coordinates.
+    // Source coordinates.
     var sourceDatum = this.data.nodes[data.label];
     var sx = sourceDatum.graphics.x;
     var sy = sourceDatum.graphics.y;
 
-    // Highlight the source node.
+    // Highlight source.
     this.labelToNode[data.label].classed({ highlighted: true });
 
     // Iterate over the targets.
     _.each(sourceDatum.targets, _.bind(function(label) {
 
-      // Highlight the targets.
+      // Highlight targets.
       this.labelToNode[label].classed({ highlighted: true })
 
-      // Get the target coordinates.
+      // Target coordinates.
       var targetDatum = this.data.nodes[label]
       var tx = targetDatum.graphics.x;
       var ty = targetDatum.graphics.y;
 
-      this.edgeGroup.append('line')
-        .attr('x1', this.xScale(sx))
-        .attr('y1', this.yScale(sy))
-        .attr('x2', this.xScale(tx))
-        .attr('y2', this.yScale(ty));
+      // Set the endpoints.
+      this.edgeGroup.append('line').datum({
+        x1: sx, y1: sy, x2: tx, y2: ty
+      });
 
     }, this));
 
+    this.zoomEdges();
 
   },
 
