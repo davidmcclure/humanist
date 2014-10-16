@@ -49,7 +49,7 @@ module.exports = function(grunt) {
 
       // Label -> node.
       _.each(d1.nodes, function(n) {
-        n.siblings = [];
+        n.targets = [];
         d2.nodes[n.label] = n;
       });
 
@@ -60,7 +60,7 @@ module.exports = function(grunt) {
         var t = d1.nodes[e.target].label;
 
         // Register the link.
-        d2.nodes[s].siblings.push(t);
+        d2.nodes[s].targets.push(t);
 
       });
 

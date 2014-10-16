@@ -24,15 +24,13 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
 
     this.data = options.data;
-    console.log(this.data);
 
     this._initMarkup();
     this._initZoom();
     this._initResize();
     this._initNodes();
 
-    // Initial zoom.
-    this.applyZoom();
+    this.applyZoom(); // Initial zoom.
 
   },
 
@@ -107,23 +105,29 @@ module.exports = Backbone.View.extend({
    */
   _initNodes: function() {
 
-    var self = this;
+    this.labelToNode = {};
 
-    // Inject the nodes.
-    this.nodes = this.nodeGroup
-      .selectAll('text')
-      .data(_.values(this.data.nodes))
-      .enter()
-      .append('text')
-      .classed({ node: true })
-      .text(function(n) {
-        return n.label;
-      });
+    // Iterate over nodes.
+    _.map(this.data.nodes, _.bind(function(n) {
 
-    // Hover.
-    this.nodes.on('mouseenter', function(data) {
-      self.highlightNode(data.label);
-    });
+      // Inject the label.
+      var node = this.nodeGroup
+        .append('text')
+        .datum(n)
+        .classed({ node: true })
+        .text(n.label);
+
+      // Map label -> element.
+      this.labelToNode[n.label] = node;
+
+    }, this));
+
+    // Select the collection.
+    this.nodes = this.nodeGroup.selectAll('text');
+
+    // Highlight on hover.
+    this.nodes.on('mouseenter', _.bind(this.highlight, this));
+    this.nodes.on('mouseleave', _.bind(this.unhighlight, this));
 
   },
 
@@ -250,10 +254,32 @@ module.exports = Backbone.View.extend({
   /**
    * Highlight a node and all its siblings.
    *
-   * @param {String} label
+   * @param {Object} data
    */
-  highlightNode: function(label) {
-    // TODO
+  highlight: function(data) {
+
+    // Get the source <text>.
+    var source = this.labelToNode[data.label];
+
+    // Highlight the source node.
+    source.classed({ highlighted: true });
+
+    // Get the target labels.
+    var targets = this.data.nodes[data.label].targets;
+
+    // Highlight the targets.
+    _.each(targets, _.bind(function(label) {
+      this.labelToNode[label].classed({ highlighted: true })
+    }, this));
+
+  },
+
+
+  /**
+   * Unhighlight all nodes.
+   */
+  unhighlight: function() {
+    this.nodes.classed({ highlighted: false })
   }
 
 

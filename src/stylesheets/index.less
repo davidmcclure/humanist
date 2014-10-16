@@ -13,12 +13,14 @@ body {
 }
 
 text.node {
+
   font-family: Inconsolata;
   fill: darken(whitesmoke, 25%);
   cursor: pointer;
-}
 
-path {
-  stroke-width: 1;
-  stroke: darken(whitesmoke, 40%);
+  &.highlighted {
+    fill: whitesmoke;
+    font-weight: bold;
+  }
+
 }

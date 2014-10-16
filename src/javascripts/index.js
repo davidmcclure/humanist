@@ -9,5 +9,5 @@ Backbone.$ = $;
 
 // TODO|dev
 $.getJSON('data.json', _.bind(function(data) {
-  window.view = new Network({ data: data });
+  new Network({ data: data });
 }, this));
