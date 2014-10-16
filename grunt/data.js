@@ -11,6 +11,7 @@ module.exports = function(grunt) {
     'Preprocess the data file.',
     function() {
 
+
       // Read the data file.
       var d1 = grunt.file.readJSON('data.json');
       var d2 = {}; // New data.
@@ -68,6 +69,7 @@ module.exports = function(grunt) {
       grunt.file.write(
         '_site/data.json', JSON.stringify(d2)
       );
+
 
     });
 
