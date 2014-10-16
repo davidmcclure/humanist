@@ -15,8 +15,9 @@ module.exports = function(grunt) {
       var d1 = grunt.file.readJSON('data.json');
       var d2 = {}; // New data.
 
-      // Data extent:
-      // ------------
+
+      // Extent:
+      // -------
 
       d2.extent = {};
 
@@ -36,8 +37,9 @@ module.exports = function(grunt) {
       d2.extent.ymax = _.max(ys);
 
       // Deltas on X/Y axes.
-      d2.extent.dx = d2.xmax-d2.xmin;
-      d2.extent.dy = d2.ymax-d2.ymin;
+      d2.extent.dx = d2.extent.xmax-d2.extent.xmin;
+      d2.extent.dy = d2.extent.ymax-d2.extent.ymin;
+
 
       // Nodes:
       // ------
@@ -48,6 +50,7 @@ module.exports = function(grunt) {
       _.each(d1.nodes, function(n) {
         d2.nodes[n.label] = n;
       });
+
 
       // Edges:
       // ------
@@ -66,8 +69,11 @@ module.exports = function(grunt) {
 
       });
 
-      var dist = path.resolve(__dirname, '../_site/data.json');
-      jf.writeFileSync(dist, d2);
+
+      // Write JSON.
+      grunt.file.write(
+        '_site/data.json', JSON.stringify(d2)
+      );
 
     });
 

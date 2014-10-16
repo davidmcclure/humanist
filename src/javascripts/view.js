@@ -25,7 +25,6 @@ module.exports = Backbone.View.extend({
 
     this.data = options.data;
 
-    this._initData();
     this._initMarkup();
     this._initZoom();
     this._initResize();
@@ -33,49 +32,6 @@ module.exports = Backbone.View.extend({
 
     // Initial zoom.
     this.applyZoom();
-
-  },
-
-
-  /**
-   * Prepare the node data.
-   * TODO: Precompute as much of this as possible.
-   */
-  _initData: function() {
-
-    this.siblings = {};
-
-    // Map label -> sibling labels.
-    _.each(this.data.links, _.bind(function(e) {
-
-      // Get source/target labels.
-      var s = this.data.nodes[e.source].label;
-      var t = this.data.nodes[e.target].label;
-
-      // Register the connection.
-      if (_.has(this.siblings, s)) this.siblings[s].push(t);
-      else this.siblings[s] = [t];
-
-    }, this));
-
-    // Node X/Y coordinates.
-    var coords = _.map(this.data.nodes, function(n) {
-      return [n.graphics.x, n.graphics.y];
-    });
-
-    // X and Y coordinates.
-    var xs = _.pluck(coords, 0);
-    var ys = _.pluck(coords, 1);
-
-    // X/Y min/max values.
-    this.xmin = _.min(xs);
-    this.xmax = _.max(xs);
-    this.ymin = _.min(ys);
-    this.ymax = _.max(ys);
-
-    // Deltas on X/Y axes.
-    this.dx = this.xmax-this.xmin;
-    this.dy = this.ymax-this.ymin;
 
   },
 
@@ -155,7 +111,7 @@ module.exports = Backbone.View.extend({
     // Inject the nodes.
     this.nodes = this.nodeGroup
       .selectAll('text')
-      .data(this.data.nodes)
+      .data(_.values(this.data.nodes))
       .enter()
       .append('text')
       .classed({ node: true })
@@ -176,6 +132,9 @@ module.exports = Backbone.View.extend({
    */
   fitToWindow: function() {
 
+    var e = this.data.extent;
+
+    // Measure the window.
     this.h = $(window).height();
     this.w = $(window).width();
 
@@ -190,16 +149,16 @@ module.exports = Backbone.View.extend({
       .attr('width', this.w);
 
     // Get the X/Y-axis domains.
-    if (this.dx > this.dy) {
+    if (e.dx > e.dy) {
       var r = this.h/this.w;
-      var d = (this.dx-this.dy)/2;
-      var yd = [r*(this.ymin-d), r*(this.ymax+d)];
-      var xd = [this.xmin, this.xmax];
+      var d = (e.dx-e.dy)/2;
+      var yd = [r*(e.ymin-d), r*(e.ymax+d)];
+      var xd = [e.xmin, e.xmax];
     } else {
       var r = this.w/this.h;
-      var d = (this.dy-this.dx)/2;
-      var xd = [r*(this.xmin-d), r*(this.xmax+d)];
-      var yd = [this.ymin, this.ymax];
+      var d = (e.dy-e.dx)/2;
+      var xd = [r*(e.xmin-d), r*(e.xmax+d)];
+      var yd = [e.ymin, e.ymax];
     }
 
     // X-axis scale.
