@@ -4,6 +4,7 @@ var $ = require('jquery');
 var _ = require('lodash');
 var Backbone = require('backbone');
 var d3 = require('d3-browserify');
+var Path = require('paths-js/path');
 
 
 module.exports = Backbone.View.extend({
@@ -24,40 +25,79 @@ module.exports = Backbone.View.extend({
 
     this.data = options.data;
 
-    this._initData();
+    this._initNodeData();
+    this._initEdgeData();
+
     this._initMarkup();
     this._initZoom();
     this._initResize();
     this._initNodes();
     this._initEdges();
 
+    // Initial zoom.
+    this.applyZoom();
+
   },
 
 
   /**
-   * Parse the raw network data.
+   * Prepare the node data.
    * TODO: Precompute as much of this as possible.
    */
-  _initData: function() {
+  _initNodeData: function() {
 
-    // Bare X/Y coordinates.
-    this.coords = _.map(this.data.nodes, function(n) {
+    // Node X/Y coordinates.
+    var coords = _.map(this.data.nodes, function(n) {
       return [n.graphics.x, n.graphics.y];
     });
 
     // X and Y coordinates.
-    this.xs = _.pluck(this.coords, 0);
-    this.ys = _.pluck(this.coords, 1);
+    var xs = _.pluck(coords, 0);
+    var ys = _.pluck(coords, 1);
 
-    // Min/max values on axes.
-    this.xmin = _.min(this.xs);
-    this.xmax = _.max(this.xs);
-    this.ymin = _.min(this.ys);
-    this.ymax = _.max(this.ys);
+    // X/Y min/max values.
+    this.xmin = _.min(xs);
+    this.xmax = _.max(xs);
+    this.ymin = _.min(ys);
+    this.ymax = _.max(ys);
 
     // Deltas on X/Y axes.
     this.dx = this.xmax-this.xmin;
     this.dy = this.ymax-this.ymin;
+
+  },
+
+
+  /**
+   * Prepare the edge data.
+   * TODO: Precompute as much of this as possible.
+   */
+  _initEdgeData: function() {
+
+    var self = this;
+
+    var buckets = _.chain(this.data.links)
+      .groupBy(function(e, i) {
+        return Math.floor(i/100);
+      }).toArray().value();
+
+    this.edgePaths = _.map(buckets, function(b) {
+      return _.reduce(b, function(p, e) {
+
+        // Get the source/target nodes.
+        var source = self.data.nodes[e.source];
+        var target = self.data.nodes[e.target];
+
+        // Get the endpoints.
+        var x1 = source.graphics.x;
+        var y1 = source.graphics.y;
+        var x2 = target.graphics.x;
+        var y2 = target.graphics.y;
+
+        return p += 'M '+x1+','+y1+' L '+x2+','+y2+' Z ';
+
+      }, '');
+    });
 
   },
 
@@ -143,9 +183,6 @@ module.exports = Backbone.View.extend({
         return n.label;
       });
 
-    // Apply zoom.
-    this.applyZoom();
-
   },
 
 
@@ -154,25 +191,8 @@ module.exports = Backbone.View.extend({
    */
   _initEdges: function() {
 
-    // Iterate over edges.
-    _.each(this.data.links, _.bind(function(e) {
-
-      // Get source and target nodes.
-      var source = this.data.nodes[e.source];
-      var target = this.data.nodes[e.target];
-
-      // Get the endpoints.
-      var x1 = source.graphics.x;
-      var y1 = source.graphics.y;
-      var x2 = target.graphics.x;
-      var y2 = target.graphics.y;
-
-      this.edgeGroup.append('line')
-        .attr('x1', x1)
-        .attr('y1', y1)
-        .attr('x2', x2)
-        .attr('y2', y2);
-
+    this.edges = _.map(this.edgePaths, _.bind(function(d) {
+      return this.edgeGroup.append('path').attr('d', d);
     }, this));
 
   },
@@ -238,6 +258,7 @@ module.exports = Backbone.View.extend({
   applyZoom: function() {
 
     this.renderNodes();
+    this.renderEdges();
 
     var x = this.xScale.invert(this.w/2);
     var y = this.yScale.invert(this.h/2);
@@ -265,6 +286,14 @@ module.exports = Backbone.View.extend({
       ')';
     }, this));
 
+  },
+
+
+  /**
+   * Render the edge positions.
+   */
+  renderEdges: function() {
+    // TODO
   },
 
 
