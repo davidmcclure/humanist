@@ -29,6 +29,7 @@ module.exports = Backbone.View.extend({
     this._initZoom();
     this._initResize();
     this._initNodes();
+    this._initEdges();
 
   },
 
@@ -43,6 +44,12 @@ module.exports = Backbone.View.extend({
     this.coords = _.map(this.data.nodes, function(n) {
       return [n.graphics.x, n.graphics.y];
     });
+
+    // ID -> node.
+    this.idToNode = _.zipObject(
+      _.pluck(this.data.nodes, 'id'),
+      this.data.nodes
+    );
 
     // X and Y coordinates.
     this.xs = _.pluck(this.coords, 0);
@@ -136,6 +143,14 @@ module.exports = Backbone.View.extend({
     // Apply zoom.
     this.applyZoom();
 
+  },
+
+
+  /**
+   * Render the edges.
+   */
+  _initEdges: function() {
+    // TODO
   },
 
 
