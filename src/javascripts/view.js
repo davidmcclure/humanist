@@ -45,12 +45,6 @@ module.exports = Backbone.View.extend({
       return [n.graphics.x, n.graphics.y];
     });
 
-    // ID -> node.
-    this.idToNode = _.zipObject(
-      _.pluck(this.data.nodes, 'id'),
-      this.data.nodes
-    );
-
     // X and Y coordinates.
     this.xs = _.pluck(this.coords, 0);
     this.ys = _.pluck(this.coords, 1);
@@ -80,8 +74,16 @@ module.exports = Backbone.View.extend({
     this.outer = this.svg.append('g');
 
     // Pointer events overlay.
-    this.overlay = this.outer.append('rect')
+    this.zoomOverlay = this.outer.append('rect')
       .classed({ overlay: true });
+
+    // Nodes <g>.
+    this.nodeGroup = this.outer.append('g')
+      .classed({ nodes: true });
+
+    // Edges <g>.
+    this.edgeGroup = this.outer.append('g')
+      .classed({ edges: true });
 
   },
 
@@ -130,8 +132,9 @@ module.exports = Backbone.View.extend({
    */
   _initNodes: function() {
 
-    // Render the nodes.
-    this.nodes = this.outer.selectAll('text')
+    // Inject the nodes.
+    this.nodes = this.nodeGroup
+      .selectAll('text')
       .data(this.data.nodes)
       .enter()
       .append('text')
@@ -150,7 +153,28 @@ module.exports = Backbone.View.extend({
    * Render the edges.
    */
   _initEdges: function() {
-    // TODO
+
+    // Iterate over edges.
+    _.each(this.data.links, _.bind(function(e) {
+
+      // Get source and target nodes.
+      var source = this.data.nodes[e.source];
+      var target = this.data.nodes[e.target];
+
+      // Get the endpoints.
+      var x1 = source.graphics.x;
+      var y1 = source.graphics.y;
+      var x2 = target.graphics.x;
+      var y2 = target.graphics.y;
+
+      this.edgeGroup.append('line')
+        .attr('x1', x1)
+        .attr('y1', y1)
+        .attr('x2', x2)
+        .attr('y2', y2);
+
+    }, this));
+
   },
 
 
@@ -168,7 +192,7 @@ module.exports = Backbone.View.extend({
       .attr('width', this.w);
 
     // Size the overlay.
-    this.overlay
+    this.zoomOverlay
       .attr('height', this.h)
       .attr('width', this.w);
 
