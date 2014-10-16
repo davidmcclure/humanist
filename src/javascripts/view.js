@@ -27,7 +27,6 @@ module.exports = Backbone.View.extend({
     this._initData();
     this._initMarkup();
     this._initZoom();
-    this._initFontSizes();
     this._initResize();
     this._initNodes();
 
@@ -85,6 +84,7 @@ module.exports = Backbone.View.extend({
    */
   _initZoom: function() {
 
+    // Construct the zoom handler.
     this.zoom = d3.behavior.zoom()
       .on('zoom', _.bind(this.applyZoom, this))
       .scaleExtent(this.options.zoomExtent);
@@ -92,15 +92,8 @@ module.exports = Backbone.View.extend({
     // Add zoom to <g>.
     this.outer.call(this.zoom);
 
-  },
-
-
-  /**
-   * Create a scale to map zoom level -> font size.
-   */
-  _initFontSizes: function() {
-
-    this.fScale = d3.scale.linear()
+    // Zoom -> font size scale.
+    this.fontScale = d3.scale.linear()
       .domain(this.options.zoomExtent)
       .range([6, 60]);
 
@@ -214,8 +207,8 @@ module.exports = Backbone.View.extend({
     // Save the new focus.
     this.focus = [x, y, z];
 
-    // TODO|dev
-    this.nodes.style('font-size', this.fScale(z));
+    // Update the font sizes.
+    this.nodes.style('font-size', this.fontScale(z));
 
   },
 
