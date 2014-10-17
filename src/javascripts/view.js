@@ -15,7 +15,7 @@ module.exports = Backbone.View.extend({
   options: {
     fontExtent: [6, 60],
     zoomExtent: [0.1, 50],
-    edges: 1000
+    edges: 500
   },
 
 
