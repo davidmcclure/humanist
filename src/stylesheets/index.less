@@ -6,6 +6,7 @@
 
 body {
   margin: 0;
+  font-family: Inconsolata;
   background: @color-bg;
 }
 
@@ -18,7 +19,6 @@ body {
 
   text.node {
 
-    font-family: Inconsolata;
     fill: darken(whitesmoke, 25%);
     cursor: pointer;
 
@@ -84,10 +84,26 @@ body {
 #timeline {
 
   position: fixed;
-  height: 80px;
+  height: 30px;
   left: 0;
-  bottom: 0;
+  bottom: 20px;
 
+  fill: darken(whitesmoke, 30%);
   background: rgba(0, 0, 0, 0.3);
+  font-size: 12px;
+
+  path {
+    fill: none;
+  }
+
+  line {
+    stroke-width: 1;
+    stroke: whitesmoke;
+  }
+
+  g.year text {
+    fill: darken(whitesmoke, 10%);
+    font-weight: bold;
+  }
 
 }

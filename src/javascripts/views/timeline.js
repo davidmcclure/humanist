@@ -22,6 +22,7 @@ module.exports = Backbone.View.extend({
 
     this._initRadio();
     this._initMarkup();
+    this._initTicks();
     this._initResize();
 
   },
@@ -60,6 +61,22 @@ module.exports = Backbone.View.extend({
     // SVG container.
     this.svg = d3.select(this.el);
 
+    // Axis <g>.
+    this.ticks = this.svg.append('g')
+      .classed({ ticks: true });
+
+  },
+
+
+  /**
+   * Initialize the time axis.
+   */
+  _initTicks: function() {
+
+    // X-axis renderer.
+    this.xAxis = d3.svg.axis()
+      .orient('bottom');
+
   },
 
 
@@ -90,6 +107,25 @@ module.exports = Backbone.View.extend({
 
     // Size the SVG container.
     this.svg.attr('width', this.w);
+
+    // X-axis scale.
+    this.xScale = d3.time.scale()
+      .domain([new Date(2000, 0, 1), new Date(2002, 0, 0)])
+      .range([0, this.w]);
+
+    // Re-scale the ticks.
+    this.xAxis.scale(this.xScale);
+    this.ticks.call(this.xAxis);
+
+    // Get year ticks.
+    var years = this.ticks
+      .selectAll('g')
+      .filter(function(d) {
+        return d3.time.year(d) >= d;
+      });
+
+    // Add custom class.
+    years.classed('year', true);
 
   }
 
