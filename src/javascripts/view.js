@@ -13,8 +13,9 @@ module.exports = Backbone.View.extend({
   el: '#network',
 
   options: {
+    fontExtent: [6, 60],
     zoomExtent: [0.1, 50],
-    fontExtent: [6, 60]
+    edges: 1000
   },
 
 
@@ -151,7 +152,7 @@ module.exports = Backbone.View.extend({
 
     // Debounce the query method.
     this.debouncedQueryEdges = _.debounce(
-      this.queryEdges, 500
+      this.queryEdges, 200
     );
 
   },
@@ -244,7 +245,6 @@ module.exports = Backbone.View.extend({
    */
   zoomNodes: function() {
 
-    // Render the new node positions.
     this.nodes.attr('transform', _.bind(function(d) {
       return 'translate('+
         this.xScale(d.graphics.x)+','+
@@ -276,13 +276,16 @@ module.exports = Backbone.View.extend({
       return 1-e[4].weight
     });
 
+    // Take the X heaviest edges.
+    var edges = _.first(edges, this.options.edges);
+
     // Clear current edges.
     this.edgeGroup
       .selectAll('line.background')
       .remove();
 
     // Walk the 1000 heaviest edges.
-    _.each(_.first(edges, 1000), _.bind(function(e) {
+    _.each(edges, _.bind(function(e) {
 
       // Render the new edges.
       this.edgeGroup.append('line')
@@ -301,7 +304,6 @@ module.exports = Backbone.View.extend({
    */
   zoomEdges: function() {
 
-    // Render the new edge positions.
     this.edgeGroup.selectAll('line')
       .attr('x1', _.bind(function(d) {
         return this.xScale(d.x1);
@@ -352,26 +354,26 @@ module.exports = Backbone.View.extend({
    */
   highlight: function(data) {
 
-    // Source coordinates.
+    // Get the source coordinates.
     var sourceDatum = this.data.nodes[data.label];
     var sx = sourceDatum.graphics.x;
     var sy = sourceDatum.graphics.y;
 
-    // Highlight source.
+    // Highlight the source <text>.
     this.labelToNode[data.label].classed({ highlighted: true });
 
     // Iterate over the targets.
     _.each(sourceDatum.targets, _.bind(function(label) {
 
-      // Highlight targets.
+      // Highlight the target <text>'s.
       this.labelToNode[label].classed({ highlighted: true })
 
-      // Target coordinates.
+      // Get the target coordinates.
       var targetDatum = this.data.nodes[label]
       var tx = targetDatum.graphics.x;
       var ty = targetDatum.graphics.y;
 
-      // Set the endpoints.
+      // Inject the edge.
       this.edgeGroup.append('line')
         .datum({ x1: sx, y1: sy, x2: tx, y2: ty })
         .classed({ highlight: true });
