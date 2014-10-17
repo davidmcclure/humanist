@@ -304,19 +304,17 @@ module.exports = Backbone.View.extend({
    */
   zoomEdges: function() {
 
+    var self = this;
+
     this.edgeGroup.selectAll('line')
-      .attr('x1', _.bind(function(d) {
-        return this.xScale(d.x1);
-      }, this))
-      .attr('y1', _.bind(function(d) {
-        return this.yScale(d.y1);
-      }, this))
-      .attr('x2', _.bind(function(d) {
-        return this.xScale(d.x2);
-      }, this))
-      .attr('y2', _.bind(function(d) {
-        return this.yScale(d.y2);
-      }, this));
+      .each(function(d) {
+        d3.select(this).attr({
+          x1: self.xScale(d.x1),
+          y1: self.yScale(d.y1),
+          x2: self.xScale(d.x2),
+          y2: self.yScale(d.y2)
+        })
+      });
 
   },
 
