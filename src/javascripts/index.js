@@ -3,7 +3,8 @@
 var $ = require('jquery');
 var _ = require('lodash');
 var Backbone = require('backbone');
-var Network = require('./view');
+var Network = require('./views/network');
+var Minimap = require('./views/minimap');
 Backbone.$ = $;
 
 
