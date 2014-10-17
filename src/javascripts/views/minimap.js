@@ -206,17 +206,21 @@ module.exports = Backbone.View.extend({
     var x2 = this.xScale(extent[2]);
     var y2 = this.yScale(extent[3]);
 
-    // Keep preview inside the container.
+    // Keep preview inside container.
     x1 = x1 > 0 ? x1 : 1;
     y1 = y1 > 0 ? y1 : 1;
     x2 = x2 < this.w ? x2 : this.w-1;
     y2 = y2 < this.h ? y2 : this.h-1;
 
+    // Don't set negative dimensions.
+    var height = y2-y1 > 0 ? y2-y1 : 0;
+    var width  = x2-x1 > 0 ? x2-x1 : 0;
+
     this.extent.attr({
       x:      x1,
       y:      y1,
-      height: y2-y1,
-      width:  x2-x1
+      height: height,
+      width:  width
     });
 
   }

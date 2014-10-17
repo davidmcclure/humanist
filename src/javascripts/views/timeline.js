@@ -35,17 +35,17 @@ module.exports = Backbone.View.extend({
 
     // Draw line to date.
     this.radio.on('highlight', _.bind(function(label, cid) {
-      console.log('highlight');
+      // TODO
     }, this));
 
     // Remove date line.
     this.radio.on('unhighlight', _.bind(function(cid) {
-      console.log('unhighlight');
+      // TODO
     }, this));
 
     // Update the focus.
     this.radio.on('extent', _.bind(function(extent, cid) {
-      console.log('extent');
+      // TODO
     }, this));
 
   },
