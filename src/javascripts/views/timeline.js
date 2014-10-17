@@ -1,5 +1,6 @@
 
 
+var $ = require('jquery');
 var _ = require('lodash');
 var Backbone = require('backbone');
 var Radio = require('backbone.radio');
@@ -66,7 +67,30 @@ module.exports = Backbone.View.extend({
    * Bind a debounced resize listener.
    */
   _initResize: function() {
-    // TODO
+
+    // Debounce the resizer.
+    var resize = _.debounce(_.bind(function() {
+      this.fitToWindow();
+    }, this), 500);
+
+    // Bind to window resize.
+    $(window).resize(resize);
+    this.fitToWindow();
+
+  },
+
+
+  /**
+   * Fill the width with the timeline.
+   */
+  fitToWindow: function() {
+
+    // Measure the window.
+    this.w = $(window).width();
+
+    // Size the SVG container.
+    this.svg.attr('width', this.w);
+
   }
 
 
