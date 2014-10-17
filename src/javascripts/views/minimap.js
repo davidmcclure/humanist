@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Backbone = require('backbone');
+var Radio = require('backbone.radio');
 var d3 = require('d3-browserify');
 
 
@@ -18,9 +19,30 @@ module.exports = Backbone.View.extend({
 
     this.data = options.data;
 
+    this._initRadio();
     this._initMarkup();
     this._initAxes();
     this._initNodes();
+
+  },
+
+
+  /**
+   * Connect to event channels.
+   */
+  _initRadio: function() {
+
+    this.radio = Radio.channel('network');
+
+    // Mirror highlights.
+    this.radio.on('highlight', _.bind(function(label, cid) {
+      if (cid != this.cid) this.highlight(label);
+    }, this));
+
+    // Mirror unhighlight.
+    this.radio.on('unhighlight', _.bind(function(cid) {
+      if (cid != this.cid) this.unhighlight();
+    }, this));
 
   },
 
@@ -108,12 +130,14 @@ module.exports = Backbone.View.extend({
     // Highlight on hover.
     this.nodes.on('mouseenter', _.bind(function(d) {
       this.highlight(d.label);
+      this.radio.trigger('highlight', d.label, this.cid);
     }, this));
 
     // Unhighlight on blur.
-    this.nodes.on('mouseleave',
-      _.bind(this.unhighlight, this)
-    );
+    this.nodes.on('mouseleave', _.bind(function(d) {
+      this.unhighlight();
+      this.radio.trigger('unhighlight', this.cid);
+    }, this));
 
   },
 
@@ -143,12 +167,15 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * Unhighlight nodes, remove highlight edges.
+   * Unhighlight nodes.
    */
   unhighlight: function() {
+
+    // Unhighlight the nodes.
     this.nodes
       .classed({ highlighted: false })
       .attr('r', 1);
+
   }
 
 
