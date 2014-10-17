@@ -409,7 +409,7 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * Highlight a node and all its siblings.
+   * Highlight a node.
    *
    * @param {String} label
    */
@@ -422,7 +422,7 @@ module.exports = Backbone.View.extend({
 
     // Highlight the source <text>.
     this.labelToNode[label]
-      .classed({ highlighted: true });
+      .classed({ highlighted: true, source: true });
 
     // Iterate over the targets.
     _.each(sourceDatum.targets, _.bind(function(label) {
@@ -454,11 +454,11 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * Unhighlight nodes, remove highlight edges.
+   * Unhighlight all nodes.
    */
   unhighlight: function() {
+    this.nodes.classed({ highlighted: false, source: false })
     this.edgeGroup.selectAll('line.highlight').remove();
-    this.nodes.classed({ highlighted: false })
   }
 
 

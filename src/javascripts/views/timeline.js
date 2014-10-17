@@ -21,6 +21,7 @@ module.exports = Backbone.View.extend({
 
     this._initRadio();
     this._initMarkup();
+    this._initResize();
 
   },
 
@@ -58,6 +59,14 @@ module.exports = Backbone.View.extend({
     // SVG container.
     this.svg = d3.select(this.el);
 
+  },
+
+
+  /**
+   * Bind a debounced resize listener.
+   */
+  _initResize: function() {
+    // TODO
   }
 
 

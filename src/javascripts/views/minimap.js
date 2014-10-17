@@ -11,6 +11,10 @@ module.exports = Backbone.View.extend({
 
   el: '#minimap',
 
+  options: {
+    r: { off: 1, on: 1.5, src: 4 }
+  },
+
 
   /**
    * Spin up the network.
@@ -125,7 +129,7 @@ module.exports = Backbone.View.extend({
         .classed({ node: true })
         .attr('cx', this.xScale(n.graphics.x))
         .attr('cy', this.yScale(n.graphics.y))
-        .attr('r', 1);
+        .attr('r', this.options.r.off);
 
       // Map label -> element.
       this.labelToNode[n.label] = node;
@@ -163,13 +167,14 @@ module.exports = Backbone.View.extend({
 
     // Highlight the source <text>.
     this.labelToNode[label]
-      .classed({ highlighted: true });
+      .classed({ highlighted: true, source: true })
+      .attr('r', this.options.r.src);
 
     // Highlight the target <text>'s.
     _.each(sourceDatum.targets, _.bind(function(label) {
       this.labelToNode[label]
         .classed({ highlighted: true })
-        .attr('r', 2);
+        .attr('r', this.options.r.on);
     }, this));
 
   },
@@ -182,8 +187,8 @@ module.exports = Backbone.View.extend({
 
     // Unhighlight the nodes.
     this.nodes
-      .classed({ highlighted: false })
-      .attr('r', 1);
+      .classed({ highlighted: false, source: false })
+      .attr('r', this.options.r.off);
 
   },
 

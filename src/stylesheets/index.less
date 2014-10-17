@@ -1,11 +1,12 @@
 
 
 @import url("//fonts.googleapis.com/css?family=Inconsolata:400,700");
-@bg-color: #0c2d49;
+@color-bg: #0c2d49;
+@color-hl: #ffc600;
 
 body {
   margin: 0;
-  background: @bg-color;
+  background: @color-bg;
 }
 
 #network {
@@ -26,6 +27,10 @@ body {
       font-weight: bold;
     }
 
+    &.highlighted.source {
+      fill: @color-hl;
+    }
+
   }
 
   line {
@@ -34,7 +39,7 @@ body {
     pointer-events: none;
 
     &.background {
-      stroke: lighten(@bg-color, 25%);
+      stroke: lighten(@color-bg, 25%);
     }
 
     &.highlight {
@@ -48,8 +53,8 @@ body {
 #minimap {
 
   position: fixed;
-  width: 300px;
-  height: 100px;
+  width: 400px;
+  height: 120px;
   top: 20px;
   right: 20px;
 
@@ -59,7 +64,11 @@ body {
     cursor: pointer;
 
     &.highlighted {
-      fill: white;
+      fill: whitesmoke;
+    }
+
+    &.highlighted.source {
+      fill: @color-hl;
     }
 
   }
@@ -67,7 +76,7 @@ body {
   rect.extent {
     fill: none;
     stroke-width: 1;
-    stroke: #ffc600;
+    stroke: @color-hl;
   }
 
 }
