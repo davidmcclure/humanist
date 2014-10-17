@@ -256,6 +256,12 @@ module.exports = Backbone.View.extend({
     var y = this.yScale.invert(this.h/2);
     var z = this.zoom.scale();
 
+    // Get current extent.
+    var x1 = this.xScale.invert(0);
+    var y1 = this.yScale.invert(0);
+    var x2 = this.xScale.invert(this.w);
+    var y2 = this.yScale.invert(this.h);
+
     // On zoom, update the font sizes.
     if (!this.focus || z != this.focus[2]) {
       this.nodes.style('font-size', this.fontScale(z));
@@ -263,6 +269,12 @@ module.exports = Backbone.View.extend({
 
     // Save the new focus.
     this.focus = [x, y, z];
+
+    // Save the new extent.
+    this.extent = [x1, y1, x2, y2];
+
+    // Publish the extent.
+    this.radio.trigger('extent', this.extent, this.cid);
 
     // Update edges.
     this.debouncedQueryEdges();
