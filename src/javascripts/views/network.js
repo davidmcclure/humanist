@@ -126,12 +126,13 @@ module.exports = Backbone.View.extend({
     }, this));
 
     // Select the collection.
-    this.nodes = this.nodeGroup.selectAll('text');
+    this.nodes = this.nodeGroup
+      .selectAll('text');
 
     // Highlight on hover.
-    this.nodes.on('mouseenter',
-      _.bind(this.highlight, this)
-    );
+    this.nodes.on('mouseenter', _.bind(function(d) {
+      this.highlight(d.label);
+    }, this));
 
     // Unhighlight on blur.
     this.nodes.on('mouseleave',
@@ -154,6 +155,9 @@ module.exports = Backbone.View.extend({
     this.debouncedQueryEdges = _.debounce(
       this.queryEdges, 200
     );
+
+    // Init selection.
+    this.selectEdges();
 
   },
 
@@ -220,19 +224,21 @@ module.exports = Backbone.View.extend({
    */
   applyZoom: function() {
 
-    this.zoomNodes();
-    this.zoomEdges();
+    this.renderNodes();
+    this.renderEdges();
 
     // Get current focus.
     var x = this.xScale.invert(this.w/2);
     var y = this.yScale.invert(this.h/2);
     var z = this.zoom.scale();
 
+    // On zoom, update the font sizes.
+    if (!this.focus || z != this.focus[2]) {
+      this.nodes.style('font-size', this.fontScale(z));
+    }
+
     // Save the new focus.
     this.focus = [x, y, z];
-
-    // Update the font sizes.
-    this.nodes.style('font-size', this.fontScale(z));
 
     // Update edges.
     this.debouncedQueryEdges();
@@ -243,7 +249,7 @@ module.exports = Backbone.View.extend({
   /**
    * Render the node positions.
    */
-  zoomNodes: function() {
+  renderNodes: function() {
 
     this.nodes.attr('transform', _.bind(function(d) {
       return 'translate('+
@@ -252,6 +258,42 @@ module.exports = Backbone.View.extend({
       ')';
     }, this));
 
+  },
+
+
+  /**
+   * Render the edge positions.
+   */
+  renderEdges: function() {
+
+    var self = this;
+
+    this.edges.each(function(d) {
+      d3.select(this).attr({
+        x1: self.xScale(d.x1),
+        y1: self.yScale(d.y1),
+        x2: self.xScale(d.x2),
+        y2: self.yScale(d.y2)
+      })
+    });
+
+  },
+
+
+  /**
+   * Cache the edge selection.
+   */
+  selectEdges: function() {
+    this.edges = this.edgeGroup.selectAll('line');
+  },
+
+
+  /**
+   * Update the edge selection and re-render.
+   */
+  updateEdges: function() {
+    this.selectEdges();
+    this.renderEdges();
   },
 
 
@@ -289,32 +331,17 @@ module.exports = Backbone.View.extend({
 
       // Render the new edges.
       this.edgeGroup.append('line')
-        .datum({ x1: e[0], y1: e[1], x2: e[2], y2: e[3] })
-        .classed({ background: true });
+        .classed({ background: true })
+        .datum({
+          x1: e[0],
+          y1: e[1],
+          x2: e[2],
+          y2: e[3]
+        });
 
     }, this));
 
-    this.zoomEdges();
-
-  },
-
-
-  /**
-   * Render the edge positions.
-   */
-  zoomEdges: function() {
-
-    var self = this;
-
-    this.edgeGroup.selectAll('line')
-      .each(function(d) {
-        d3.select(this).attr({
-          x1: self.xScale(d.x1),
-          y1: self.yScale(d.y1),
-          x2: self.xScale(d.x2),
-          y2: self.yScale(d.y2)
-        })
-      });
+    this.updateEdges();
 
   },
 
@@ -348,23 +375,25 @@ module.exports = Backbone.View.extend({
   /**
    * Highlight a node and all its siblings.
    *
-   * @param {Object} data
+   * @param {String} label
    */
-  highlight: function(data) {
+  highlight: function(label) {
 
     // Get the source coordinates.
-    var sourceDatum = this.data.nodes[data.label];
+    var sourceDatum = this.data.nodes[label];
     var sx = sourceDatum.graphics.x;
     var sy = sourceDatum.graphics.y;
 
     // Highlight the source <text>.
-    this.labelToNode[data.label].classed({ highlighted: true });
+    this.labelToNode[label]
+      .classed({ highlighted: true });
 
     // Iterate over the targets.
     _.each(sourceDatum.targets, _.bind(function(label) {
 
       // Highlight the target <text>'s.
-      this.labelToNode[label].classed({ highlighted: true })
+      this.labelToNode[label]
+        .classed({ highlighted: true })
 
       // Get the target coordinates.
       var targetDatum = this.data.nodes[label]
@@ -373,12 +402,17 @@ module.exports = Backbone.View.extend({
 
       // Inject the edge.
       this.edgeGroup.append('line')
-        .datum({ x1: sx, y1: sy, x2: tx, y2: ty })
-        .classed({ highlight: true });
+        .classed({ highlight: true })
+        .datum({
+          x1: sx,
+          y1: sy,
+          x2: tx,
+          y2: ty
+        });
 
     }, this));
 
-    this.zoomEdges();
+    this.updateEdges();
 
   },
 
@@ -387,8 +421,8 @@ module.exports = Backbone.View.extend({
    * Unhighlight nodes, remove highlight edges.
    */
   unhighlight: function() {
-    this.nodes.classed({ highlighted: false })
     this.edgeGroup.selectAll('line.highlight').remove();
+    this.nodes.classed({ highlighted: false })
   }
 
 
