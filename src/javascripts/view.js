@@ -13,7 +13,7 @@ module.exports = Backbone.View.extend({
   el: '#network',
 
   options: {
-    fontExtent: [6, 60],
+    fontExtent: [6, 70],
     zoomExtent: [0.1, 50],
     edges: 500
   },
