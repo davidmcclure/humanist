@@ -44,16 +44,6 @@ module.exports = Backbone.View.extend({
 
     this.radio = Radio.channel('network');
 
-    // Draw line to date.
-    this.radio.on('highlight', _.bind(function(label, cid) {
-      // TODO
-    }, this));
-
-    // Remove date line.
-    this.radio.on('unhighlight', _.bind(function(cid) {
-      // TODO
-    }, this));
-
     // Update the focus.
     this.radio.on('move', _.bind(function(extent, cid) {
       this.setExtent(extent);
