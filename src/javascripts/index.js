@@ -3,9 +3,9 @@
 var $ = require('jquery');
 var _ = require('lodash');
 var Backbone = require('backbone');
-var Network = require('./views/network');
-var Timeline = require('./views/timeline');
-var Minimap = require('./views/minimap');
+var Network = require('./network/network.view');
+var Timeline = require('./timeline/timeline.view');
+var Minimap = require('./minimap/minimap.view');
 Backbone.$ = $;
 
 
