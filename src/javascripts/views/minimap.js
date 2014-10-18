@@ -49,7 +49,7 @@ module.exports = Backbone.View.extend({
     }, this));
 
     // Preview the extent.
-    this.radio.on('extent', _.bind(function(extent, cid) {
+    this.radio.on('move', _.bind(function(extent, cid) {
       if (cid != this.cid) this.renderExtent(extent);
     }, this));
 

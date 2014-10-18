@@ -267,14 +267,14 @@ module.exports = Backbone.View.extend({
       this.nodes.style('font-size', this.fontScale(z));
     }
 
-    // Save the new focus.
-    this.focus = [x, y, z];
-
-    // Save the new extent.
+    // Set the new extent.
     this.extent = [x1, y1, x2, y2];
 
+    // Set the new focus.
+    this.focus = [x, y, z];
+
     // Publish the extent.
-    this.radio.trigger('extent', this.extent, this.cid);
+    this.radio.trigger('move', this.extent, this.cid);
 
     // Update edges.
     this.debouncedQueryEdges();
