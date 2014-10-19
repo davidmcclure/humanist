@@ -41,14 +41,7 @@ module.exports = Backbone.View.extend({
    * Connect to event channels.
    */
   _initRadio: function() {
-
     this.radio = Radio.channel('network');
-
-    // Update the focus.
-    this.radio.on('move', _.bind(function(extent, cid) {
-      this.setExtent(extent);
-    }, this));
-
   },
 
 
@@ -143,7 +136,7 @@ module.exports = Backbone.View.extend({
    *
    * @param {Array} extent
    */
-  setExtent: function(extent) {
+  renderExtent: function(extent) {
 
     // Map start and end dates.
     var d1 = this.timeScale(extent[0]);

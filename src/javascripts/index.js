@@ -3,10 +3,11 @@
 var $ = require('jquery');
 var _ = require('lodash');
 var Backbone = require('backbone');
-var Network = require('./network/network.view');
-var Timeline = require('./timeline/timeline.view');
-var Minimap = require('./minimap/minimap.view');
 Backbone.$ = $;
+
+var Network = require('./network/network.ctl');
+var Timeline = require('./timeline/timeline.ctl');
+var Minimap = require('./minimap/minimap.ctl');
 
 
 // TODO|dev

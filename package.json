@@ -29,6 +29,7 @@
     "d3-browserify": "^3.4.11",
     "jquery": "^2.1.1",
     "lodash": "^2.4.1",
+    "radio.controller": "^0.1.0",
     "rbush": "^1.3.4",
     "react": "^0.11.1"
   }

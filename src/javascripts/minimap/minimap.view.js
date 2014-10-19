@@ -35,24 +35,7 @@ module.exports = Backbone.View.extend({
    * Connect to event channels.
    */
   _initRadio: function() {
-
     this.radio = Radio.channel('network');
-
-    // Mirror highlights.
-    this.radio.on('highlight', _.bind(function(label, cid) {
-      if (cid != this.cid) this.highlight(label);
-    }, this));
-
-    // Mirror unhighlight.
-    this.radio.on('unhighlight', _.bind(function(cid) {
-      if (cid != this.cid) this.unhighlight();
-    }, this));
-
-    // Preview the extent.
-    this.radio.on('move', _.bind(function(extent, cid) {
-      if (cid != this.cid) this.renderExtent(extent);
-    }, this));
-
   },
 
 

@@ -1,7 +1,7 @@
 
 
 var Controller = require('radio.controller');
-var Network = require('./network.view');
+var Minimap = require('./minimap.view');
 
 
 module.exports = Controller.extend({
@@ -12,7 +12,8 @@ module.exports = Controller.extend({
     network: {
       events: [
         'highlight',
-        'unhighlight'
+        'unhighlight',
+        'move'
       ]
     }
 
@@ -25,7 +26,7 @@ module.exports = Controller.extend({
    * @param {Object} options
    */
   initialize: function(options) {
-    this.view = new Network(options);
+    this.view = new Minimap(options);
   },
 
 
@@ -52,6 +53,18 @@ module.exports = Controller.extend({
       this.view.unhighlight();
     }
   },
+
+
+  /**
+   * Update the extent preview.
+   *
+   * @param {String} cid
+   */
+  move: function(extent, cid) {
+    if (cid != this.view.cid) {
+      this.view.renderExtent(extent);
+    }
+  }
 
 
 });
