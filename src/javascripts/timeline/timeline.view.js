@@ -26,7 +26,6 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
 
     this.data = options.data;
-    window.data = this.data;
 
     this._initRadio();
     this._initMarkup();
