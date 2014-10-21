@@ -138,8 +138,8 @@ module.exports = Backbone.View.extend({
   renderExtent: function(extent) {
 
     // Map start and end dates.
-    var d1 = this.timeScale(extent[0]);
-    var d2 = this.timeScale(extent[2]);
+    var d1 = this.timeScale(extent.x1);
+    var d2 = this.timeScale(extent.x2);
 
     // Apply the new domain.
     this.xScale.domain([new Date(d1), new Date(d2)]);

@@ -237,7 +237,7 @@ var Network = module.exports = Backbone.View.extend({
     }
 
     // Set the new extent.
-    this.extent = [x1, y1, x2, y2];
+    this.extent = { x1:x1, y1:y1, x2:x2, y2:y2 };
 
     // Set the new focus.
     this.focus = { x:x, y:y, z:z };

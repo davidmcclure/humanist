@@ -181,10 +181,10 @@ var Minimap = module.exports = Backbone.View.extend({
   renderExtent: function(extent) {
 
     // Scale the BBOX.
-    var x1 = this.xScale(extent[0]);
-    var y1 = this.yScale(extent[1]);
-    var x2 = this.xScale(extent[2]);
-    var y2 = this.yScale(extent[3]);
+    var x1 = this.xScale(extent.x1);
+    var y1 = this.yScale(extent.y1);
+    var x2 = this.xScale(extent.x2);
+    var y2 = this.yScale(extent.y2);
 
     // Keep preview inside container.
     x1 = x1 > 0 ? x1 : 1;
