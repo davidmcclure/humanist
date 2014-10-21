@@ -72,13 +72,13 @@ module.exports = Backbone.View.extend({
     // Get the X/Y-axis domains.
     if (e.dx > e.dy) {
       var r = this.h/this.w;
-      var d = (e.dx-e.dy)/2;
-      var yd = [r*(e.ymin-d), r*(e.ymax+d)];
+      var p = ((e.dx*r)-e.dy)/2;
+      var yd = [e.ymin-p, e.ymax+p];
       var xd = [e.xmin, e.xmax];
     } else {
       var r = this.w/this.h;
-      var d = (e.dy-e.dx)/2;
-      var xd = [r*(e.xmin-d), r*(e.xmax+d)];
+      var p = ((e.dy*r)-e.dx)/2;
+      var xd = [e.xmin-p, e.xmax+p];
       var yd = [e.ymin, e.ymax];
     }
 
