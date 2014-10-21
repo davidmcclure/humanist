@@ -206,7 +206,7 @@ var Network = module.exports = Backbone.View.extend({
       .y(this.yScale);
 
     if (this.focus) {
-      this.focusOnXYZ.apply(this, this.focus);
+      this.focusOnXYZ(this.focus);
     }
 
   },
@@ -236,10 +236,8 @@ var Network = module.exports = Backbone.View.extend({
       this.nodes.style('font-size', this.fontScale(z));
     }
 
-    // Set the new extent.
+    // Set the new extent and focus.
     this.extent = { x1:x1, y1:y1, x2:x2, y2:y2 };
-
-    // Set the new focus.
     this.focus = { x:x, y:y, z:z };
 
     // Publish the extent.

@@ -30,6 +30,7 @@ var Minimap = module.exports = Backbone.View.extend({
     this._initMarkup();
     this._initScales();
     this._initDrag();
+    this._initClick();
     this._initNodes();
 
   },
@@ -82,12 +83,31 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   _initDrag: function() {
 
+    var self = this;
+
     // Construct the drag handler.
     this.drag = d3.behavior.drag()
-      .on('drag', _.bind(this.dragExtent, this));
+      .on('drag', function() {
+         self.publishFocus(d3.mouse(this));
+      });
 
     // Add drag to the <rect>.
     this.extent.call(this.drag);
+
+  },
+
+
+  /**
+   * Initialize click panning.
+   */
+  _initClick: function() {
+
+    var self = this;
+
+    // Bind the click listener.
+    this.svg.on('click', function() {
+      self.publishFocus(d3.mouse(this));
+    });
 
   },
 
@@ -207,13 +227,15 @@ var Minimap = module.exports = Backbone.View.extend({
 
 
   /**
-   * Render an extent drag.
+   * Publish a new focus position.
+   *
+   * @param {Array} mouse
    */
-  dragExtent: function() {
+  publishFocus: function(mouse) {
 
     // Get current focus.
-    var x = this.xScale.invert(d3.event.x);
-    var y = this.yScale.invert(d3.event.y);
+    var x = this.xScale.invert(mouse[0]);
+    var y = this.yScale.invert(mouse[1]);
 
     // Pan the map.
     this.radio.trigger('focus', { x:x, y:y });
