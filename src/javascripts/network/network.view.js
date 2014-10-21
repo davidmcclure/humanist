@@ -14,6 +14,7 @@ module.exports = Backbone.View.extend({
   el: '#network',
 
   options: {
+    padding: 50,
     fontExtent: [6, 70],
     zoomExtent: [0.1, 50],
     edges: 500
@@ -199,24 +200,28 @@ module.exports = Backbone.View.extend({
     if (e.dx > e.dy) {
       var r = this.h/this.w;
       var p = ((e.dx*r)-e.dy)/2;
-      var yd = [e.ymin-p, e.ymax+p];
       var xd = [e.xmin, e.xmax];
+      var yd = [e.ymin-p, e.ymax+p];
+      var xp = this.options.padding;
+      var yp = this.options.padding*r;
     } else {
       var r = this.w/this.h;
       var p = ((e.dy*r)-e.dx)/2;
       var xd = [e.xmin-p, e.xmax+p];
       var yd = [e.ymin, e.ymax];
+      var xp = this.options.padding*r;
+      var yp = this.options.padding;
     }
 
     // X-axis scale.
     this.xScale = d3.scale.linear()
       .domain(xd)
-      .range([0, this.w]);
+      .range([xp, this.w-xp]);
 
     // Y-axis scale.
     this.yScale = d3.scale.linear()
       .domain(yd)
-      .range([this.h, 0]);
+      .range([this.h-yp, yp]);
 
     // Update the zoom handler.
     this.zoom
