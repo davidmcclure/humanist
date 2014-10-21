@@ -2,11 +2,13 @@
 
 var _ = require('lodash');
 var Backbone = require('backbone');
+var Cocktail = require('backbone.cocktail');
+var ScalesMixin = require('../mixins/scales.mixin');
 var Radio = require('backbone.radio');
 var d3 = require('d3-browserify');
 
 
-module.exports = Backbone.View.extend({
+var Minimap = module.exports = Backbone.View.extend({
 
 
   el: '#minimap',
@@ -26,7 +28,7 @@ module.exports = Backbone.View.extend({
 
     this._initRadio();
     this._initMarkup();
-    this._initAxes();
+    this._initScales();
     this._initNodes();
 
   },
@@ -60,42 +62,16 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * Initialize the X/Y axes.
+   * Initialize the X/Y scales.
    */
-  _initAxes: function() {
-
-    var e = this.data.extent;
+  _initScales: function() {
 
     // Measure the container.
     this.h = this.$el.height();
     this.w = this.$el.width();
 
-    // Get the X/Y-axis domains.
-    if (e.dx > e.dy) {
-      var r = this.h/this.w;
-      var p = ((e.dx*r)-e.dy)/2;
-      var xd = [e.xmin, e.xmax];
-      var yd = [e.ymin-p, e.ymax+p];
-      var xp = this.options.padding;
-      var yp = this.options.padding*r;
-    } else {
-      var r = this.w/this.h;
-      var p = ((e.dy*r)-e.dx)/2;
-      var xd = [e.xmin-p, e.xmax+p];
-      var yd = [e.ymin, e.ymax];
-      var xp = this.options.padding*r;
-      var yp = this.options.padding;
-    }
-
-    // X-axis scale.
-    this.xScale = d3.scale.linear()
-      .domain(xd)
-      .range([xp, this.w-xp]);
-
-    // Y-axis scale.
-    this.yScale = d3.scale.linear()
-      .domain(yd)
-      .range([this.h-yp, yp]);
+    // Fit the scales to the node extent.
+    this.fitScales(this.data.extent, this.h, this.w);
 
   },
 
@@ -215,3 +191,7 @@ module.exports = Backbone.View.extend({
 
 
 });
+
+
+// Mixins:
+Cocktail.mixin(Minimap, ScalesMixin);
