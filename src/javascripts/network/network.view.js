@@ -360,6 +360,8 @@ var Network = module.exports = Backbone.View.extend({
    */
   focusOnXYZ: function(x, y, z) {
 
+    z = z || this.focus[2];
+
     // Reset the focus, apply zoom.
     this.zoom.translate([0, 0]).scale(z);
 

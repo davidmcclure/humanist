@@ -12,7 +12,8 @@ module.exports = Controller.extend({
     network: {
       events: [
         'highlight',
-        'unhighlight'
+        'unhighlight',
+        'focus'
       ]
     }
 
@@ -26,6 +27,7 @@ module.exports = Controller.extend({
    */
   initialize: function(options) {
     this.view = new Network(options);
+    window.view = this.view;
   },
 
 
@@ -52,6 +54,14 @@ module.exports = Controller.extend({
       this.view.unhighlight();
     }
   },
+
+
+  /**
+   * Apply a new focus position.
+   */
+  focus: function(x, y) {
+    this.view.focusOnXYZ(x, y);
+  }
 
 
 });

@@ -29,6 +29,7 @@ var Minimap = module.exports = Backbone.View.extend({
     this._initRadio();
     this._initMarkup();
     this._initScales();
+    this._initDrag();
     this._initNodes();
 
   },
@@ -72,6 +73,21 @@ var Minimap = module.exports = Backbone.View.extend({
 
     // Fit the scales to the node extent.
     this.fitScales(this.data.extent, this.h, this.w);
+
+  },
+
+
+  /**
+   * Initialize extent dragging.
+   */
+  _initDrag: function() {
+
+    // Construct the drag handler.
+    this.drag = d3.behavior.drag()
+      .on('drag', _.bind(this.dragExtent, this));
+
+    // Add drag to the <rect>.
+    this.extent.call(this.drag);
 
   },
 
@@ -186,6 +202,21 @@ var Minimap = module.exports = Backbone.View.extend({
       height: height,
       width:  width
     });
+
+  },
+
+
+  /**
+   * Render an extent drag.
+   */
+  dragExtent: function() {
+
+    // Get current focus.
+    var x = this.xScale.invert(d3.event.x);
+    var y = this.yScale.invert(d3.event.y);
+
+    // Pan the map.
+    this.radio.trigger('focus', x, y);
 
   }
 
