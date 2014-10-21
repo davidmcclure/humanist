@@ -24,9 +24,17 @@
   }
 
   rect.extent {
-    fill: none;
+
+    pointer-events: all;
     stroke-width: 1;
     stroke: @color-hl;
+    fill: none;
+
+    &:hover {
+      fill: black;
+      fill-opacity: 0.2;
+    }
+
   }
 
 }
