@@ -1,110 +1,14 @@
 
 
+// Fonts:
 @import url("//fonts.googleapis.com/css?family=Inconsolata:400,700");
+
+// Colors:
 @color-bg: #0c2d49;
 @color-hl: #ffc600;
 
-body {
-  margin: 0;
-  font-family: Inconsolata;
-  background: @color-bg;
-}
-
-#network {
-
-  rect.overlay {
-    fill: none;
-    pointer-events: all;
-  }
-
-  text.node {
-
-    fill: darken(whitesmoke, 25%);
-    cursor: pointer;
-
-    &.highlighted {
-      fill: whitesmoke;
-      font-weight: bold;
-    }
-
-    &.highlighted.source {
-      fill: @color-hl;
-    }
-
-  }
-
-  line {
-
-    stroke-width: 0.2;
-    pointer-events: none;
-
-    &.background {
-      stroke: lighten(@color-bg, 25%);
-    }
-
-    &.highlight {
-      stroke: darken(whitesmoke, 20%);
-    }
-
-  }
-
-}
-
-#minimap {
-
-  position: fixed;
-  width: 400px;
-  height: 120px;
-  top: 20px;
-  right: 20px;
-
-  circle.node {
-
-    fill: darken(whitesmoke, 30%);
-    cursor: pointer;
-
-    &.highlighted {
-      fill: whitesmoke;
-    }
-
-    &.highlighted.source {
-      fill: @color-hl;
-    }
-
-  }
-
-  rect.extent {
-    fill: none;
-    stroke-width: 1;
-    stroke: @color-hl;
-  }
-
-}
-
-#timeline {
-
-  position: fixed;
-  height: 40px;
-  left: 0;
-  bottom: 0;
-
-  fill: darken(whitesmoke, 20%);
-  background: rgba(0, 0, 0, 0.5);
-  font-size: 12px;
-
-  path {
-    fill: none;
-  }
-
-  line {
-    stroke-width: 1;
-    stroke: whitesmoke;
-  }
-
-  g.year text {
-    fill: darken(whitesmoke, 10%);
-    font-size: 16px;
-    font-weight: bold;
-  }
-
-}
+// Source:
+@import "global";
+@import "network";
+@import "timeline";
+@import "minimap";

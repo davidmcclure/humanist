@@ -1,0 +1,41 @@
+
+
+#network {
+
+  rect.overlay {
+    fill: none;
+    pointer-events: all;
+  }
+
+  text.node {
+
+    fill: darken(whitesmoke, 25%);
+    cursor: pointer;
+
+    &.highlighted {
+      fill: whitesmoke;
+      font-weight: bold;
+    }
+
+    &.highlighted.source {
+      fill: @color-hl;
+    }
+
+  }
+
+  line {
+
+    stroke-width: 0.2;
+    pointer-events: none;
+
+    &.background {
+      stroke: lighten(@color-bg, 25%);
+    }
+
+    &.highlight {
+      stroke: darken(whitesmoke, 20%);
+    }
+
+  }
+
+}

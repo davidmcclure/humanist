@@ -1,0 +1,32 @@
+
+
+#minimap {
+
+  position: fixed;
+  width: 400px;
+  height: 120px;
+  top: 20px;
+  right: 20px;
+
+  circle.node {
+
+    fill: darken(whitesmoke, 30%);
+    cursor: pointer;
+
+    &.highlighted {
+      fill: whitesmoke;
+    }
+
+    &.highlighted.source {
+      fill: @color-hl;
+    }
+
+  }
+
+  rect.extent {
+    fill: none;
+    stroke-width: 1;
+    stroke: @color-hl;
+  }
+
+}
