@@ -232,7 +232,7 @@ var Network = module.exports = Backbone.View.extend({
     var y2 = this.yScale.invert(this.h);
 
     // On zoom, update the font sizes.
-    if (!this.focus || z != this.focus[2]) {
+    if (!this.focus || z != this.focus.z) {
       this.nodes.style('font-size', this.fontScale(z));
     }
 
@@ -240,7 +240,7 @@ var Network = module.exports = Backbone.View.extend({
     this.extent = [x1, y1, x2, y2];
 
     // Set the new focus.
-    this.focus = [x, y, z];
+    this.focus = { x:x, y:y, z:z };
 
     // Publish the extent.
     this.radio.trigger('move', this.extent, this.cid);
@@ -354,20 +354,18 @@ var Network = module.exports = Backbone.View.extend({
   /**
    * Apply a :x/:y/:z focus position.
    *
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Number} z
+   * @param {Object} focus
    */
-  focusOnXYZ: function(x, y, z) {
+  focusOnXYZ: function(focus) {
 
-    z = z || this.focus[2];
+    z = focus.z || this.focus.z;
 
     // Reset the focus, apply zoom.
     this.zoom.translate([0, 0]).scale(z);
 
     // X/Y coordinate of the centroid.
-    var x = this.xScale(x);
-    var y = this.yScale(y);
+    var x = this.xScale(focus.x);
+    var y = this.yScale(focus.y);
 
     // Distance from viewport center.
     var dx = this.w/2 - x;

@@ -216,7 +216,7 @@ var Minimap = module.exports = Backbone.View.extend({
     var y = this.yScale.invert(d3.event.y);
 
     // Pan the map.
-    this.radio.trigger('focus', x, y);
+    this.radio.trigger('focus', { x:x, y:y });
 
   }
 
