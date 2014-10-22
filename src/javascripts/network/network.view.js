@@ -20,7 +20,8 @@ var Network = module.exports = Backbone.View.extend({
     fontExtent: [6, 70],
     zoomExtent: [0.1, 50],
     edgeCount: 500,
-    panDuration: 800
+    panDuration: 800,
+    wordScale: 7
   },
 
 
@@ -39,6 +40,9 @@ var Network = module.exports = Backbone.View.extend({
     this._initEdges();
 
     this.triggerZoom();
+
+    // TODO|dev
+    window.view = this;
 
   },
 
@@ -391,6 +395,29 @@ var Network = module.exports = Backbone.View.extend({
 
     // Else, apply now.
     else this.triggerZoom();
+
+  },
+
+
+  /**
+   * Focus on an individual word.
+   *
+   * @param {String} word
+   * @param {Boolean} animate
+   */
+  focusOnWord: function(word, animate) {
+
+    // Get the coordinates.
+    var d = this.data.nodes[word];
+
+    var focus = {
+      x: d.graphics.x,
+      y: d.graphics.y,
+      z: this.options.wordScale
+    };
+
+    // Apply the focus
+    this.focusOnXYZ(focus, animate);
 
   },
 
