@@ -19,7 +19,7 @@ var Network = module.exports = Backbone.View.extend({
     padding: 50,
     fontExtent: [6, 70],
     zoomExtent: [0.1, 50],
-    edges: 500,
+    edgeCount: 500,
     panDuration: 800
   },
 
@@ -331,7 +331,7 @@ var Network = module.exports = Backbone.View.extend({
     });
 
     // Take the X heaviest edges.
-    var edges = _.first(edges, this.options.edges);
+    var edges = _.first(edges, this.options.edgeCount);
 
     // Clear current edges.
     this.edgeGroup
