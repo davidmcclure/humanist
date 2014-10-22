@@ -86,6 +86,10 @@ var Network = module.exports = Backbone.View.extend({
       .on('zoom', _.bind(this.applyZoom, this))
       .scaleExtent(this.options.zoomExtent);
 
+    // TODO: Why is this necessary?
+    // Burn in the transition.
+    d3.transition().call(this.zoom.event);
+
     // Add zoom to <g>.
     this.outer.call(this.zoom);
 
@@ -376,7 +380,7 @@ var Network = module.exports = Backbone.View.extend({
     }
 
     // TODO|dev
-    d3.transition().duration(750)
+    d3.transition().duration(1000)
       .call(this.zoom.event);
 
   },
