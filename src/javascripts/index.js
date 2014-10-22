@@ -8,11 +8,18 @@ Backbone.$ = $;
 var Network = require('./network/network.ctl');
 var Timeline = require('./timeline/timeline.ctl');
 var Minimap = require('./minimap/minimap.ctl');
+var Router = require('./router');
 
 
-// TODO|dev
+// Load the data file.
 $.getJSON('data.json', _.bind(function(data) {
+
+  // Views:
   new Minimap({ data: data });
   new Timeline({ data: data });
   new Network({ data: data });
+
+  // Routes:
+  new Router();
+
 }, this));
