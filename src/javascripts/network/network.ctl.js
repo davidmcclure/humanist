@@ -58,9 +58,11 @@ module.exports = Controller.extend({
 
   /**
    * Apply a new focus position.
+   *
+   * @param {Object} focus
    */
-  focus: function(x, y) {
-    this.view.focusOnXYZ(x, y);
+  focus: function(focus, duration) {
+    this.view.focusOnXYZ(focus);
   }
 
 

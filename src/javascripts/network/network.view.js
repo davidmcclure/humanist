@@ -104,13 +104,13 @@ var Network = module.exports = Backbone.View.extend({
 
     // Debounce the resizer.
     var resize = _.debounce(_.bind(function() {
-      this.fitToWindow();
+      this.fitWindow();
       this.applyZoom();
     }, this), 500);
 
     // Bind to window resize.
     $(window).resize(resize);
-    this.fitToWindow();
+    this.fitWindow();
 
   },
 
@@ -180,7 +180,7 @@ var Network = module.exports = Backbone.View.extend({
   /**
    * Fill the window with the network.
    */
-  fitToWindow: function() {
+  fitWindow: function() {
 
     // Measure the window.
     this.h = $(window).height();
@@ -356,10 +356,8 @@ var Network = module.exports = Backbone.View.extend({
    */
   focusOnXYZ: function(focus) {
 
-    z = focus.z || this.focus.z;
-
     // Reset the focus, apply zoom.
-    this.zoom.translate([0, 0]).scale(z);
+    this.zoom.translate([0, 0]);
 
     // X/Y coordinate of the centroid.
     var x = this.xScale(focus.x);
@@ -369,8 +367,17 @@ var Network = module.exports = Backbone.View.extend({
     var dx = this.w/2 - x;
     var dy = this.h/2 - y;
 
+    // Apply the new translation.
     this.zoom.translate([dx, dy]);
-    this.applyZoom();
+
+    // Apply a new zoom.
+    if (focus.z) {
+      this.zoom.scale(focus.z);
+    }
+
+    // TODO|dev
+    d3.transition().duration(750)
+      .call(this.zoom.event);
 
   },
 
