@@ -92,7 +92,7 @@ var Network = module.exports = Backbone.View.extend({
     // Zoom -> font size scale.
     this.fontScale = d3.scale.linear()
       .domain(this.options.zoomExtent)
-      .range([6, 60]);
+      .range(this.options.fontExtent);
 
   },
 
