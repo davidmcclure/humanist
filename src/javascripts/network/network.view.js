@@ -366,8 +366,10 @@ var Network = module.exports = Backbone.View.extend({
    */
   focusOnXYZ: function(focus, animate) {
 
+    z = focus.z || this.focus.z;
+
     // Reset the focus, apply zoom.
-    this.zoom.translate([0, 0]);
+    this.zoom.translate([0, 0]).scale(z);
 
     // X/Y coordinate of the centroid.
     var x = this.xScale(focus.x);
@@ -379,11 +381,6 @@ var Network = module.exports = Backbone.View.extend({
 
     // Apply the new translation.
     this.zoom.translate([dx, dy]);
-
-    // Apply a new scale.
-    if (focus.z) {
-      this.zoom.scale(focus.z);
-    }
 
     // Animate if duration.
     if (animate === true) {
