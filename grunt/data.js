@@ -1,7 +1,7 @@
 
 
 var _ = require('lodash');
-var jf = require('jsonfile');
+var Set = require('collections/set');
 var path = require('path');
 
 module.exports = function(grunt) {
@@ -49,7 +49,7 @@ module.exports = function(grunt) {
 
       // Label -> node.
       _.each(d1.nodes, function(n) {
-        n.targets = [];
+        n.targets = new Set();
         d2.nodes[n.label] = n;
       });
 
@@ -60,7 +60,8 @@ module.exports = function(grunt) {
         var t = d1.nodes[e.target].label;
 
         // Register the link.
-        d2.nodes[s].targets.push(t);
+        d2.nodes[s].targets.add(t);
+        d2.nodes[t].targets.add(s);
 
       });
 
