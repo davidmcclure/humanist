@@ -60,9 +60,10 @@ module.exports = Controller.extend({
    * Apply a new focus position.
    *
    * @param {Object} focus
+   * @param {Boolean} animate
    */
-  focus: function(focus, duration) {
-    this.view.focusOnXYZ(focus);
+  focus: function(focus, animate) {
+    this.view.focusOnXYZ(focus, animate);
   }
 
 

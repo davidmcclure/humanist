@@ -19,7 +19,8 @@ var Network = module.exports = Backbone.View.extend({
     padding: 50,
     fontExtent: [6, 70],
     zoomExtent: [0.1, 50],
-    edges: 500
+    edges: 500,
+    panDuration: 800
   },
 
 
@@ -37,7 +38,7 @@ var Network = module.exports = Backbone.View.extend({
     this._initNodes();
     this._initEdges();
 
-    this.applyZoom(); // Initial zoom.
+    this.triggerZoom();
 
   },
 
@@ -83,12 +84,8 @@ var Network = module.exports = Backbone.View.extend({
 
     // Construct the zoom handler.
     this.zoom = d3.behavior.zoom()
-      .on('zoom', _.bind(this.applyZoom, this))
+      .on('zoom', _.bind(this.renderZoom, this))
       .scaleExtent(this.options.zoomExtent);
-
-    // TODO: Why is this necessary?
-    // Burn in the transition.
-    d3.transition().call(this.zoom.event);
 
     // Add zoom to <g>.
     this.outer.call(this.zoom);
@@ -109,7 +106,7 @@ var Network = module.exports = Backbone.View.extend({
     // Debounce the resizer.
     var resize = _.debounce(_.bind(function() {
       this.fitWindow();
-      this.applyZoom();
+      this.triggerZoom();
     }, this), 500);
 
     // Bind to window resize.
@@ -217,9 +214,17 @@ var Network = module.exports = Backbone.View.extend({
 
 
   /**
+   * Programmatically trigger a `zoom` event.
+   */
+  triggerZoom: function() {
+    this.zoom.event(this.outer);
+  },
+
+
+  /**
    * Apply the current zoom level to the nodes/edges.
    */
-  applyZoom: function() {
+  renderZoom: function() {
 
     this.renderNodes();
     this.renderEdges();
@@ -269,6 +274,14 @@ var Network = module.exports = Backbone.View.extend({
 
 
   /**
+   * Cache the edge selection.
+   */
+  selectEdges: function() {
+    this.edges = this.edgeGroup.selectAll('line');
+  },
+
+
+  /**
    * Render the edge positions.
    */
   renderEdges: function() {
@@ -284,14 +297,6 @@ var Network = module.exports = Backbone.View.extend({
       })
     });
 
-  },
-
-
-  /**
-   * Cache the edge selection.
-   */
-  selectEdges: function() {
-    this.edges = this.edgeGroup.selectAll('line');
   },
 
 
@@ -357,8 +362,9 @@ var Network = module.exports = Backbone.View.extend({
    * Apply a :x/:y/:z focus position.
    *
    * @param {Object} focus
+   * @param {Boolean} animate
    */
-  focusOnXYZ: function(focus) {
+  focusOnXYZ: function(focus, animate) {
 
     // Reset the focus, apply zoom.
     this.zoom.translate([0, 0]);
@@ -374,14 +380,20 @@ var Network = module.exports = Backbone.View.extend({
     // Apply the new translation.
     this.zoom.translate([dx, dy]);
 
-    // Apply a new zoom.
+    // Apply a new scale.
     if (focus.z) {
       this.zoom.scale(focus.z);
     }
 
-    // TODO|dev
-    d3.transition().duration(1000)
-      .call(this.zoom.event);
+    // Animate if duration.
+    if (animate === true) {
+      this.outer.transition()
+        .duration(this.options.panDuration)
+        .call(this.zoom.event);
+    }
+
+    // Else, apply now.
+    else this.triggerZoom();
 
   },
 

@@ -87,6 +87,9 @@ var Minimap = module.exports = Backbone.View.extend({
 
     // Construct the drag handler.
     this.drag = d3.behavior.drag()
+      .on('dragstart', function() {
+        d3.event.sourceEvent.stopPropagation();
+      })
       .on('drag', function() {
          self.publishFocus(d3.mouse(this));
       });
@@ -106,7 +109,8 @@ var Minimap = module.exports = Backbone.View.extend({
 
     // Bind the click listener.
     this.svg.on('click', function() {
-      self.publishFocus(d3.mouse(this));
+      if (d3.event.defaultPrevented) return;
+      self.publishFocus(d3.mouse(this), true);
     });
 
   },
@@ -230,15 +234,16 @@ var Minimap = module.exports = Backbone.View.extend({
    * Publish a new focus position.
    *
    * @param {Array} mouse
+   * @param {Boolean} animate
    */
-  publishFocus: function(mouse) {
+  publishFocus: function(mouse, animate) {
 
     // Get current focus.
     var x = this.xScale.invert(mouse[0]);
     var y = this.yScale.invert(mouse[1]);
 
     // Pan the map.
-    this.radio.trigger('focus', { x:x, y:y });
+    this.radio.trigger('focus', { x:x, y:y }, animate);
 
   }
 
