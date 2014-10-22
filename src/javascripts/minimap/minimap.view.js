@@ -29,6 +29,7 @@ var Minimap = module.exports = Backbone.View.extend({
     this._initRadio();
     this._initMarkup();
     this._initScales();
+    this._initAxis();
     this._initDrag();
     this._initClick();
     this._initNodes();
@@ -75,6 +76,14 @@ var Minimap = module.exports = Backbone.View.extend({
     // Fit the scales to the node extent.
     this.fitScales(this.data.extent, this.h, this.w);
 
+  },
+
+
+  /**
+   * Initialize the time axis.
+   */
+  _initAxis: function() {
+    console.log('axis');
   },
 
 
