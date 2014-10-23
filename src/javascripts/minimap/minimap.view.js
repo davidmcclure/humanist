@@ -40,7 +40,7 @@ var Minimap = module.exports = Backbone.View.extend({
    * Connect to event channels.
    */
   _initRadio: function() {
-    this.radio = Radio.channel('network');
+    this.radio = Radio.channel('minimap');
   },
 
 

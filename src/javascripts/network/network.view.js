@@ -17,7 +17,7 @@ var Network = module.exports = Backbone.View.extend({
 
   options: {
     padding: 50,
-    fontExtent: [6, 70],
+    fontExtent: [4, 70],
     zoomExtent: [0.1, 50],
     edgeCount: 500,
     panDuration: 800,

@@ -9,7 +9,7 @@ module.exports = Controller.extend({
 
   radio: {
 
-    network: {
+    minimap: {
       events: [
         'highlight',
         'unhighlight',
@@ -38,9 +38,7 @@ module.exports = Controller.extend({
    * @param {String} cid
    */
   highlight: function(label, cid) {
-    if (cid != this.view.cid) {
-      this.view.renderHighlight(label);
-    }
+    this.view.renderHighlight(label);
   },
 
 
@@ -50,9 +48,7 @@ module.exports = Controller.extend({
    * @param {String} cid
    */
   unhighlight: function(cid) {
-    if (cid != this.view.cid) {
-      this.view.renderUnhighlight();
-    }
+    this.view.renderUnhighlight();
   },
 
 

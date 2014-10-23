@@ -27,20 +27,11 @@ module.exports = Backbone.View.extend({
 
     this.data = options.data;
 
-    this._initRadio();
     this._initMarkup();
     this._initScales();
     this._initTicks();
     this._initResize();
 
-  },
-
-
-  /**
-   * Connect to event channels.
-   */
-  _initRadio: function() {
-    this.radio = Radio.channel('network');
   },
 
 

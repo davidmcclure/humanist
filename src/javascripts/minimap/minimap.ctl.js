@@ -36,9 +36,7 @@ module.exports = Controller.extend({
    * @param {String} cid
    */
   move: function(extent, cid) {
-    if (cid != this.view.cid) {
-      this.view.renderExtent(extent);
-    }
+    this.view.renderExtent(extent);
   },
 
 
@@ -49,9 +47,7 @@ module.exports = Controller.extend({
    * @param {String} cid
    */
   highlight: function(label, cid) {
-    if (cid != this.view.cid) {
-      this.view.renderHighlight(label);
-    }
+    this.view.renderHighlight(label);
   },
 
 
@@ -62,9 +58,7 @@ module.exports = Controller.extend({
    * @param {String} cid
    */
   unhighlight: function(label, cid) {
-    if (cid != this.view.cid) {
-      this.view.renderUnhighlight(label);
-    }
+    this.view.renderUnhighlight(label);
   }
 
 
