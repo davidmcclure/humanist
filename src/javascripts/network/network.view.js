@@ -206,13 +206,13 @@ var Network = module.exports = Backbone.View.extend({
     var y2 = this.yScale.invert(this.h);
 
     // On zoom, update the font sizes.
-    if (!this.focus || z != this.focus.z) {
+    if (!this.center || z != this.center.z) {
       this.nodes.style('font-size', this.fontScale(z));
     }
 
-    // Set the new extent and focus.
+    // Set the new extent and center.
     this.extent = { x1:x1, y1:y1, x2:x2, y2:y2 };
-    this.focus = { x:x, y:y, z:z };
+    this.center = { x:x, y:y, z:z };
 
     // Publish the extent.
     this.radio.trigger('move', this.extent, this.cid);
@@ -241,7 +241,7 @@ var Network = module.exports = Backbone.View.extend({
   /**
    * Update the edge selection and re-render.
    */
-  updateEdges: function() {
+  refreshEdges: function() {
     this.selectEdges();
     this.renderEdges();
   },
@@ -278,14 +278,16 @@ var Network = module.exports = Backbone.View.extend({
    * After a zoom, query for new edges and update the route.
    */
   onZoomEnd: function() {
-    this.queryEdges();
+    this.filterEdgesByExtent();
+    this.updateRoute();
   },
 
 
   /**
-   * Render a fresh set of edges.
+   * Clear the current background edges and render a new set of edges that
+   * fall within the current viewport extent.
    */
-  queryEdges: function() {
+  filterEdgesByExtent: function() {
 
     // Get current BBOX.
     var x1 = this.xScale.invert(0);
@@ -326,7 +328,23 @@ var Network = module.exports = Backbone.View.extend({
 
     }, this));
 
-    this.updateEdges();
+    this.refreshEdges();
+
+  },
+
+
+  /**
+   * Update the route to point to the current location.
+   */
+  updateRoute: function() {
+
+    var x = this.center.x.toFixed(2);
+    var y = this.center.y.toFixed(2);
+    var z = this.center.z.toFixed(2);
+
+    Backbone.history.navigate(x+'/'+y+'/'+z, {
+      replace: true
+    });
 
   },
 
@@ -359,8 +377,8 @@ var Network = module.exports = Backbone.View.extend({
       .x(this.xScale)
       .y(this.yScale);
 
-    if (this.focus) {
-      this.focusOnXYZ(this.focus);
+    if (this.center) {
+      this.focusOnXYZ(this.center);
     }
 
   },
@@ -369,19 +387,19 @@ var Network = module.exports = Backbone.View.extend({
   /**
    * Apply a :x/:y/:z focus position.
    *
-   * @param {Object} focus
+   * @param {Object} center
    * @param {Boolean} animate
    */
-  focusOnXYZ: function(focus, animate) {
+  focusOnXYZ: function(center, animate) {
 
-    z = focus.z || this.focus.z;
+    z = center.z || this.center.z;
 
     // Reset the focus, apply zoom.
     this.zoom.translate([0, 0]).scale(z);
 
     // X/Y coordinate of the centroid.
-    var x = this.xScale(focus.x);
-    var y = this.yScale(focus.y);
+    var x = this.xScale(center.x);
+    var y = this.yScale(center.y);
 
     // Distance from viewport center.
     var dx = this.w/2 - x;
@@ -414,14 +432,14 @@ var Network = module.exports = Backbone.View.extend({
     // Get the coordinates.
     var d = this.data.nodes[word];
 
-    var focus = {
+    var center = {
       x: d.graphics.x,
       y: d.graphics.y,
       z: this.options.focusScale
     };
 
-    // Apply the focus
-    this.focusOnXYZ(focus, animate);
+    // Apply the center.
+    this.focusOnXYZ(center, animate);
 
   },
 
@@ -486,7 +504,7 @@ var Network = module.exports = Backbone.View.extend({
 
     }, this));
 
-    this.updateEdges();
+    this.refreshEdges();
 
   },
 

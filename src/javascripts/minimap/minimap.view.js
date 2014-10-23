@@ -91,7 +91,7 @@ var Minimap = module.exports = Backbone.View.extend({
         d3.event.sourceEvent.stopPropagation();
       })
       .on('drag', function() {
-         self.publishFocus(d3.mouse(this));
+         self.publishCenter(d3.mouse(this));
       });
 
     // Add drag to the <rect>.
@@ -110,7 +110,7 @@ var Minimap = module.exports = Backbone.View.extend({
     // Bind the click listener.
     this.svg.on('click', function() {
       if (d3.event.defaultPrevented) return;
-      self.publishFocus(d3.mouse(this), true);
+      self.publishCenter(d3.mouse(this), true);
     });
 
   },
@@ -160,7 +160,7 @@ var Minimap = module.exports = Backbone.View.extend({
   /**
    * Position the extent preview.
    *
-   * @param {Array} focus
+   * @param {Array} extent
    */
   renderExtent: function(extent) {
 
@@ -196,9 +196,9 @@ var Minimap = module.exports = Backbone.View.extend({
    * @param {Array} mouse
    * @param {Boolean} animate
    */
-  publishFocus: function(mouse, animate) {
+  publishCenter: function(mouse, animate) {
 
-    // Get current focus.
+    // Get current center.
     var x = this.xScale.invert(mouse[0]);
     var y = this.yScale.invert(mouse[1]);
 

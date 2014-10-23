@@ -52,11 +52,11 @@ module.exports = Controller.extend({
   /**
    * Apply a new focus position.
    *
-   * @param {Object} focus
+   * @param {Object} center
    * @param {Boolean} animate
    */
-  focus: function(focus, animate) {
-    this.view.focusOnXYZ(focus, animate);
+  focus: function(center, animate) {
+    this.view.focusOnXYZ(center, animate);
   }
 
 
