@@ -96,6 +96,11 @@ var Network = module.exports = Backbone.View.extend({
       .domain(this.options.zoomExtent)
       .range(this.options.fontExtent);
 
+    // Debounce a zoom-end callback.
+    this.debouncedZoomEnd = _.debounce(
+      this.onZoomEnd, 200
+    );
+
   },
 
 
@@ -167,11 +172,6 @@ var Network = module.exports = Backbone.View.extend({
     this.edgeIndex = new rbush();
     this.edgeIndex.load(this.data.edges);
 
-    // Debounce the query method.
-    this.debouncedQueryEdges = _.debounce(
-      this.queryEdges, 200
-    );
-
     // Init selection.
     this.selectEdges();
 
@@ -217,8 +217,8 @@ var Network = module.exports = Backbone.View.extend({
     // Publish the extent.
     this.radio.trigger('move', this.extent, this.cid);
 
-    // Update edges.
-    this.debouncedQueryEdges();
+    // Notify zoom end.
+    this.debouncedZoomEnd();
 
   },
 
@@ -235,6 +235,15 @@ var Network = module.exports = Backbone.View.extend({
       ')';
     }, this));
 
+  },
+
+
+  /**
+   * Update the edge selection and re-render.
+   */
+  updateEdges: function() {
+    this.selectEdges();
+    this.renderEdges();
   },
 
 
@@ -266,11 +275,10 @@ var Network = module.exports = Backbone.View.extend({
 
 
   /**
-   * Update the edge selection and re-render.
+   * After a zoom, query for new edges and update the route.
    */
-  updateEdges: function() {
-    this.selectEdges();
-    this.renderEdges();
+  onZoomEnd: function() {
+    this.queryEdges();
   },
 
 
