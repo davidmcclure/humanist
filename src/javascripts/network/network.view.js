@@ -157,9 +157,15 @@ var Network = module.exports = Backbone.View.extend({
       this.radio.trigger('unhighlight', d.label, this.cid);
     }, this));
 
-    // Select on click.
+    // Select on node click.
     this.nodes.on('click', _.bind(function(d) {
       console.log(d.label);
+      d3.event.stopPropagation();
+    }, this));
+
+    // Unselect on canvas click.
+    this.svg.on('click', _.bind(function(d) {
+      console.log('unselect');
     }, this));
 
   },
