@@ -152,8 +152,8 @@ var Minimap = module.exports = Backbone.View.extend({
 
     // Unhighlight on blur.
     this.nodes.on('mouseleave', _.bind(function(d) {
-      this.unhighlight();
-      this.radio.trigger('unhighlight', this.cid);
+      this.unhighlight(d.label);
+      this.radio.trigger('unhighlight', d.label, this.cid);
     }, this));
 
   },
@@ -166,8 +166,7 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   highlight: function(label) {
 
-    // Get the source data.
-    var sourceDatum = this.data.nodes[label];
+    var datum = this.data.nodes[label];
 
     // Highlight the source <text>.
     this.labelToNode[label]
@@ -175,7 +174,7 @@ var Minimap = module.exports = Backbone.View.extend({
       .attr('r', this.options.r.src);
 
     // Highlight the target <text>'s.
-    _.each(sourceDatum.targets, _.bind(function(label) {
+    _.each(datum.targets, _.bind(function(label) {
       this.labelToNode[label]
         .classed({ highlighted: true })
         .attr('r', this.options.r.on);
@@ -186,13 +185,24 @@ var Minimap = module.exports = Backbone.View.extend({
 
   /**
    * Unhighlight nodes.
+   *
+   * @param {String} label
    */
-  unhighlight: function() {
+  unhighlight: function(label) {
 
-    // Unhighlight the nodes.
-    this.nodes
+    var datum = this.data.nodes[label];
+
+    // Unhighlight the source <text>.
+    this.labelToNode[label]
       .classed({ highlighted: false, source: false })
       .attr('r', this.options.r.off);
+
+    // Unhighlight the target <text>'s.
+    _.each(datum.targets, _.bind(function(label) {
+      this.labelToNode[label]
+        .classed({ highlighted: false })
+        .attr('r', this.options.r.off);
+    }, this));
 
   },
 

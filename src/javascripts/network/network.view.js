@@ -41,9 +41,6 @@ var Network = module.exports = Backbone.View.extend({
 
     this.triggerZoom();
 
-    // TODO|dev
-    window.view = this;
-
   },
 
 
@@ -126,6 +123,7 @@ var Network = module.exports = Backbone.View.extend({
   _initNodes: function() {
 
     this.labelToNode = {};
+    this.selected = null;
 
     // Iterate over nodes.
     _.map(this.data.nodes, _.bind(function(n) {
@@ -154,9 +152,14 @@ var Network = module.exports = Backbone.View.extend({
     }, this));
 
     // Unhighlight on blur.
-    this.nodes.on('mouseleave', _.bind(function() {
-      this.unhighlight();
-      this.radio.trigger('unhighlight', this.cid);
+    this.nodes.on('mouseleave', _.bind(function(d) {
+      this.unhighlight(d.label);
+      this.radio.trigger('unhighlight', d.label, this.cid);
+    }, this));
+
+    // Select on click.
+    this.nodes.on('click', _.bind(function(d) {
+      console.log(d.label);
     }, this));
 
   },
@@ -469,10 +472,26 @@ var Network = module.exports = Backbone.View.extend({
 
   /**
    * Unhighlight all nodes.
+   *
+   * @param {String} label
    */
-  unhighlight: function() {
-    this.nodes.classed({ highlighted: false, source: false })
+  unhighlight: function(label) {
+
+    var datum = this.data.nodes[label];
+
+    // Unhighlight the source <text>.
+    this.labelToNode[label]
+      .classed({ highlighted: false, source: false });
+
+    // Unhighlight the target <text>'s.
+    _.each(datum.targets, _.bind(function(label) {
+      this.labelToNode[label]
+        .classed({ highlighted: false });
+    }, this));
+
+    // Remove highlight edges.
     this.edgeGroup.selectAll('line.highlight').remove();
+
   }
 
 
