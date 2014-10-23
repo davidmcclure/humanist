@@ -228,6 +228,7 @@ var Minimap = module.exports = Backbone.View.extend({
     _.each(datum.targets, _.bind(function(label) {
       this.labelToNode[label]
         .classed({ highlight: true })
+        .filter(':not(.select)')
         .attr('r', this.options.r.on);
     }, this));
 
@@ -241,8 +242,9 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   select: function(label) {
     this.labelToNode[label]
-      .attr('r', this.options.r.src)
-      .classed({ select: true });
+      .classed({ select: true })
+      .filter(':not(.select)')
+      .attr('r', this.options.r.src);
   },
 
 
@@ -252,6 +254,7 @@ var Minimap = module.exports = Backbone.View.extend({
   unhighlight: function() {
     this.nodes
       .classed({ highlight: false, source: false })
+      .filter(':not(.select)')
       .attr('r', this.options.r.off);
   },
 
@@ -261,8 +264,8 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   unselect: function() {
     this.nodes
-      .attr('r', this.options.r.off)
-      .classed({ select: false });
+      .classed({ select: false })
+      .attr('r', this.options.r.off);
   }
 
 
