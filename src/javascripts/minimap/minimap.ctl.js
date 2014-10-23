@@ -33,7 +33,7 @@ module.exports = Controller.extend({
   /**
    * Update the extent preview.
    *
-   * @param {String} cid
+   * @param {Object} extent
    */
   move: function(extent, cid) {
     this.view.renderExtent(extent);
@@ -44,9 +44,8 @@ module.exports = Controller.extend({
    * Render highlights.
    *
    * @param {String} label
-   * @param {String} cid
    */
-  highlight: function(label, cid) {
+  highlight: function(label) {
     this.view.renderHighlight(label);
   },
 
@@ -55,9 +54,8 @@ module.exports = Controller.extend({
    * Render unhighlights.
    *
    * @param {String} label
-   * @param {String} cid
    */
-  unhighlight: function(label, cid) {
+  unhighlight: function(label) {
     this.view.renderUnhighlight(label);
   }
 

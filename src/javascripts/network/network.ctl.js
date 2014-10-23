@@ -35,19 +35,16 @@ module.exports = Controller.extend({
    * Render highlights.
    *
    * @param {String} label
-   * @param {String} cid
    */
-  highlight: function(label, cid) {
+  highlight: function(label) {
     this.view.renderHighlight(label);
   },
 
 
   /**
    * Render unhighlights.
-   *
-   * @param {String} cid
    */
-  unhighlight: function(cid) {
+  unhighlight: function() {
     this.view.renderUnhighlight();
   },
 
