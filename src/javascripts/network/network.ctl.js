@@ -27,7 +27,6 @@ module.exports = Controller.extend({
    */
   initialize: function(options) {
     this.view = new Network(options);
-    window.view = this.view;
   },
 
 
