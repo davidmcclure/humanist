@@ -428,10 +428,6 @@ var Network = module.exports = Backbone.View.extend({
   },
 
 
-  // ** PUBLISHERS **
-  // ----------------
-
-
   /**
    * Publish a node highlight.
    *
@@ -465,6 +461,8 @@ var Network = module.exports = Backbone.View.extend({
     // Apply new selection.
     this.renderSelect(label);
     this.radio.trigger('select', label, this.cid);
+
+    // Suppress click-off.
     d3.event.stopPropagation();
 
   },
@@ -477,10 +475,6 @@ var Network = module.exports = Backbone.View.extend({
     this.renderUnselect();
     this.radio.trigger('unselect', this.cid);
   },
-
-
-  // ** RENDERERS **
-  // ---------------
 
 
   /**

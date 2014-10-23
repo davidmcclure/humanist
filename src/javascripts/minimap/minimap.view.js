@@ -266,13 +266,13 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   unselect: function() {
 
-    // If the currently-selected node is also highlighted, drop the radius
-    // down to the highlighted size, not the default.
+    // If a currently-selected node is also highlighted, drop the radius down
+    // to the highlighted size, not the default.
     this.nodes
-      .filter('.highlight.select')
+      .filter('.select.highlight')
       .attr('r', this.options.r.on);
 
-    // Then, filter out highlighted nodes when dropping the size.
+    // Then, ignore highlighted nodes when unselecting the radius.
     this.nodes
       .filter('.select')
       .classed({ select: false })

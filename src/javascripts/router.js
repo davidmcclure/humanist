@@ -14,7 +14,7 @@ module.exports = Backbone.Router.extend({
 
 
   /**
-   * Initialize channels.
+   * Initialize channel, start history.
    */
   initialize: function() {
     this.radio = Radio.channel('router');
