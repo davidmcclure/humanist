@@ -39,7 +39,7 @@ module.exports = Controller.extend({
    */
   highlight: function(label, cid) {
     if (cid != this.view.cid) {
-      this.view.highlight(label);
+      this.view.renderHighlight(label);
     }
   },
 
@@ -51,7 +51,7 @@ module.exports = Controller.extend({
    */
   unhighlight: function(cid) {
     if (cid != this.view.cid) {
-      this.view.unhighlight();
+      this.view.renderUnhighlight();
     }
   },
 

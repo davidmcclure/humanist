@@ -145,29 +145,24 @@ var Network = module.exports = Backbone.View.extend({
     this.nodes = this.nodeGroup
       .selectAll('text');
 
-    // Highlight on hover.
+    // Highlight on focus.
     this.nodes.on('mouseenter', _.bind(function(d) {
-      this.highlight(d.label);
-      this.radio.trigger('highlight', d.label, this.cid);
+      this.publishHighlight(d.label);
+    }, this));
+
+    // Select on click.
+    this.nodes.on( 'click', _.bind(function(d) {
+      this.publishSelect(d.label);
     }, this));
 
     // Unhighlight on blur.
     this.nodes.on('mouseleave', _.bind(function() {
-      this.unhighlight();
-      this.radio.trigger('unhighlight', this.cid);
+      this.publishUnhighlight();
     }, this));
 
-    // Select on node click.
-    this.nodes.on('click', _.bind(function(d) {
-      d3.event.stopPropagation();
-      this.select(d.label);
-      this.radio.trigger('select', d.label, this.cid);
-    }, this));
-
-    // Unselect on canvas click.
+    // Unselect on click off.
     this.svg.on('click', _.bind(function() {
-      this.unselect();
-      this.radio.trigger('unselect', this.cid);
+      this.publishUnselect();
     }, this));
 
   },
@@ -189,41 +184,6 @@ var Network = module.exports = Backbone.View.extend({
 
     // Init selection.
     this.selectEdges();
-
-  },
-
-
-  /**
-   * Fill the window with the network.
-   */
-  fitWindow: function() {
-
-    // Measure the window.
-    this.h = $(window).height();
-    this.w = $(window).width();
-
-    // Fit the scales to the node extent.
-    this.fitScales(this.data.extent, this.h, this.w);
-
-    // Size the SVG container.
-    this.svg
-      .attr('height', this.h)
-      .attr('width', this.w);
-
-    // Size the overlay.
-    this.zoomOverlay
-      .attr('height', this.h)
-      .attr('width', this.w);
-
-    // Update the zoom handler.
-    this.zoom
-      .size([this.w, this.h])
-      .x(this.xScale)
-      .y(this.yScale);
-
-    if (this.focus) {
-      this.focusOnXYZ(this.focus);
-    }
 
   },
 
@@ -374,6 +334,41 @@ var Network = module.exports = Backbone.View.extend({
 
 
   /**
+   * Fill the window with the network.
+   */
+  fitWindow: function() {
+
+    // Measure the window.
+    this.h = $(window).height();
+    this.w = $(window).width();
+
+    // Fit the scales to the node extent.
+    this.fitScales(this.data.extent, this.h, this.w);
+
+    // Size the SVG container.
+    this.svg
+      .attr('height', this.h)
+      .attr('width', this.w);
+
+    // Size the overlay.
+    this.zoomOverlay
+      .attr('height', this.h)
+      .attr('width', this.w);
+
+    // Update the zoom handler.
+    this.zoom
+      .size([this.w, this.h])
+      .x(this.xScale)
+      .y(this.yScale);
+
+    if (this.focus) {
+      this.focusOnXYZ(this.focus);
+    }
+
+  },
+
+
+  /**
    * Apply a :x/:y/:z focus position.
    *
    * @param {Object} focus
@@ -433,12 +428,67 @@ var Network = module.exports = Backbone.View.extend({
   },
 
 
+  // ** PUBLISHERS **
+  // ----------------
+
+
+  /**
+   * Publish a node highlight.
+   *
+   * @param {String} label
+   */
+  publishHighlight: function(label) {
+    this.renderHighlight(label);
+    this.radio.trigger('highlight', label, this.cid);
+  },
+
+
+  /**
+   * Publish a node unhighlight.
+   */
+  publishUnhighlight: function() {
+    this.renderUnhighlight();
+    this.radio.trigger('unhighlight', this.cid);
+  },
+
+
+  /**
+   * Publish a node selection.
+   *
+   * @param {String} label
+   */
+  publishSelect: function(label) {
+
+    // Clear old selection.
+    this.publishUnselect();
+
+    // Apply new selection.
+    this.renderSelect(label);
+    this.radio.trigger('select', label, this.cid);
+    d3.event.stopPropagation();
+
+  },
+
+
+  /**
+   * Publish a node unselection.
+   */
+  publishUnselect: function() {
+    this.renderUnselect();
+    this.radio.trigger('unselect', this.cid);
+  },
+
+
+  // ** RENDERERS **
+  // ---------------
+
+
   /**
    * Highlight a node.
    *
    * @param {String} label
    */
-  highlight: function(label) {
+  renderHighlight: function(label) {
 
     // Get the source coordinates.
     var sourceDatum = this.data.nodes[label];
@@ -483,7 +533,7 @@ var Network = module.exports = Backbone.View.extend({
    *
    * @param {String} label
    */
-  select: function(label) {
+  renderSelect: function(label) {
     this.labelToNode[label]
       .classed({ select: true });
   },
@@ -492,7 +542,7 @@ var Network = module.exports = Backbone.View.extend({
   /**
    * Unhighlight all nodes.
    */
-  unhighlight: function() {
+  renderUnhighlight: function() {
 
     // Remove highlight classes.
     this.nodes
@@ -509,7 +559,7 @@ var Network = module.exports = Backbone.View.extend({
   /**
    * Unselect all nodes.
    */
-  unselect: function() {
+  renderUnselect: function() {
     this.nodes
       .classed({ select: false });
   }

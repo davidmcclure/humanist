@@ -205,7 +205,9 @@ var Minimap = module.exports = Backbone.View.extend({
     var y = this.yScale.invert(mouse[1]);
 
     // Pan the map.
-    this.radio.trigger('focus', { x:x, y:y }, animate);
+    this.radio.trigger(
+      'focus', { x:x, y:y }, animate
+    );
 
   },
 
@@ -243,7 +245,6 @@ var Minimap = module.exports = Backbone.View.extend({
   select: function(label) {
     this.labelToNode[label]
       .classed({ select: true })
-      .filter(':not(.select)')
       .attr('r', this.options.r.src);
   },
 
@@ -253,6 +254,7 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   unhighlight: function() {
     this.nodes
+      .filter('.highlight')
       .classed({ highlight: false, source: false })
       .filter(':not(.select)')
       .attr('r', this.options.r.off);
@@ -263,9 +265,20 @@ var Minimap = module.exports = Backbone.View.extend({
    * Unselect all nodes.
    */
   unselect: function() {
+
+    // If the currently-selected node is also highlighted, drop the radius
+    // down to the highlighted size, not the default.
     this.nodes
+      .filter('.highlight.select')
+      .attr('r', this.options.r.on);
+
+    // Then, filter out highlighted nodes when dropping the size.
+    this.nodes
+      .filter('.select')
       .classed({ select: false })
+      .filter(':not(.highlight)')
       .attr('r', this.options.r.off);
+
   }
 
 
