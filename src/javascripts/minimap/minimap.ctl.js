@@ -11,11 +11,9 @@ module.exports = Controller.extend({
 
     network: {
       events: [
-        'move',
         'highlight',
         'unhighlight',
-        'select',
-        'unselect'
+        'move'
       ]
     }
 
@@ -52,7 +50,7 @@ module.exports = Controller.extend({
    */
   highlight: function(label, cid) {
     if (cid != this.view.cid) {
-      this.view.highlight(label);
+      this.view.renderHighlight(label);
     }
   },
 
@@ -65,34 +63,9 @@ module.exports = Controller.extend({
    */
   unhighlight: function(label, cid) {
     if (cid != this.view.cid) {
-      this.view.unhighlight(label);
+      this.view.renderUnhighlight(label);
     }
-  },
-
-
-  /**
-   * Render unhighlights.
-   *
-   * @param {String} label
-   * @param {String} cid
-   */
-  select: function(label, cid) {
-    if (cid != this.view.cid) {
-      this.view.select(label);
-    }
-  },
-
-
-  /**
-   * Render unselects.
-   *
-   * @param {String} cid
-   */
-  unselect: function(label, cid) {
-    if (cid != this.view.cid) {
-      this.view.unselect();
-    }
-  },
+  }
 
 
 });
