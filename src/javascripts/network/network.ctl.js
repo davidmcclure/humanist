@@ -47,12 +47,11 @@ module.exports = Controller.extend({
   /**
    * Render unhighlights.
    *
-   * @param {String} label
    * @param {String} cid
    */
-  unhighlight: function(label, cid) {
+  unhighlight: function(cid) {
     if (cid != this.view.cid) {
-      this.view.unhighlight(label);
+      this.view.unhighlight();
     }
   },
 

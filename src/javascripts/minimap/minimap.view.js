@@ -151,57 +151,9 @@ var Minimap = module.exports = Backbone.View.extend({
     }, this));
 
     // Unhighlight on blur.
-    this.nodes.on('mouseleave', _.bind(function(d) {
-      this.unhighlight(d.label);
-      this.radio.trigger('unhighlight', d.label, this.cid);
-    }, this));
-
-  },
-
-
-  /**
-   * Highlight a node and all its siblings.
-   *
-   * @param {String} label
-   */
-  highlight: function(label) {
-
-    var datum = this.data.nodes[label];
-
-    // Highlight the source <text>.
-    this.labelToNode[label]
-      .classed({ highlighted: true, source: true })
-      .attr('r', this.options.r.src);
-
-    // Highlight the target <text>'s.
-    _.each(datum.targets, _.bind(function(label) {
-      this.labelToNode[label]
-        .classed({ highlighted: true })
-        .attr('r', this.options.r.on);
-    }, this));
-
-  },
-
-
-  /**
-   * Unhighlight nodes.
-   *
-   * @param {String} label
-   */
-  unhighlight: function(label) {
-
-    var datum = this.data.nodes[label];
-
-    // Unhighlight the source <text>.
-    this.labelToNode[label]
-      .classed({ highlighted: false, source: false })
-      .attr('r', this.options.r.off);
-
-    // Unhighlight the target <text>'s.
-    _.each(datum.targets, _.bind(function(label) {
-      this.labelToNode[label]
-        .classed({ highlighted: false })
-        .attr('r', this.options.r.off);
+    this.nodes.on('mouseleave', _.bind(function() {
+      this.unhighlight();
+      this.radio.trigger('unhighlight', this.cid);
     }, this));
 
   },
@@ -255,6 +207,62 @@ var Minimap = module.exports = Backbone.View.extend({
     // Pan the map.
     this.radio.trigger('focus', { x:x, y:y }, animate);
 
+  },
+
+
+  /**
+   * Highlight a node and all its siblings.
+   *
+   * @param {String} label
+   */
+  highlight: function(label) {
+
+    var datum = this.data.nodes[label];
+
+    // Highlight the source <text>.
+    this.labelToNode[label]
+      .classed({ highlight: true, source: true })
+      .attr('r', this.options.r.src);
+
+    // Highlight the target <text>'s.
+    _.each(datum.targets, _.bind(function(label) {
+      this.labelToNode[label]
+        .classed({ highlight: true })
+        .attr('r', this.options.r.on);
+    }, this));
+
+  },
+
+
+  /**
+   * Select a node.
+   *
+   * @param {String} label
+   */
+  select: function(label) {
+    this.labelToNode[label]
+      .attr('r', this.options.r.src)
+      .classed({ select: true });
+  },
+
+
+  /**
+   * Unhighlight nodes.
+   */
+  unhighlight: function() {
+    this.nodes
+      .classed({ highlight: false, source: false })
+      .attr('r', this.options.r.off);
+  },
+
+
+  /**
+   * Unselect all nodes.
+   */
+  unselect: function() {
+    this.nodes
+      .attr('r', this.options.r.off)
+      .classed({ select: false });
   }
 
 

@@ -152,20 +152,22 @@ var Network = module.exports = Backbone.View.extend({
     }, this));
 
     // Unhighlight on blur.
-    this.nodes.on('mouseleave', _.bind(function(d) {
-      this.unhighlight(d.label);
-      this.radio.trigger('unhighlight', d.label, this.cid);
+    this.nodes.on('mouseleave', _.bind(function() {
+      this.unhighlight();
+      this.radio.trigger('unhighlight', this.cid);
     }, this));
 
     // Select on node click.
     this.nodes.on('click', _.bind(function(d) {
-      console.log(d.label);
       d3.event.stopPropagation();
+      this.select(d.label);
+      this.radio.trigger('select', d.label, this.cid);
     }, this));
 
     // Unselect on canvas click.
-    this.svg.on('click', _.bind(function(d) {
-      console.log('unselect');
+    this.svg.on('click', _.bind(function() {
+      this.unselect();
+      this.radio.trigger('unselect', this.cid);
     }, this));
 
   },
@@ -445,14 +447,14 @@ var Network = module.exports = Backbone.View.extend({
 
     // Highlight the source <text>.
     this.labelToNode[label]
-      .classed({ highlighted: true, source: true });
+      .classed({ highlight: true, source: true });
 
     // Iterate over the targets.
     _.each(sourceDatum.targets, _.bind(function(label) {
 
       // Highlight the target <text>'s.
       this.labelToNode[label]
-        .classed({ highlighted: true })
+        .classed({ highlight: true })
 
       // Get the target coordinates.
       var targetDatum = this.data.nodes[label]
@@ -477,27 +479,39 @@ var Network = module.exports = Backbone.View.extend({
 
 
   /**
-   * Unhighlight all nodes.
+   * Select a node.
    *
    * @param {String} label
    */
-  unhighlight: function(label) {
-
-    var datum = this.data.nodes[label];
-
-    // Unhighlight the source <text>.
+  select: function(label) {
     this.labelToNode[label]
-      .classed({ highlighted: false, source: false });
+      .classed({ select: true });
+  },
 
-    // Unhighlight the target <text>'s.
-    _.each(datum.targets, _.bind(function(label) {
-      this.labelToNode[label]
-        .classed({ highlighted: false });
-    }, this));
 
-    // Remove highlight edges.
-    this.edgeGroup.selectAll('line.highlight').remove();
+  /**
+   * Unhighlight all nodes.
+   */
+  unhighlight: function() {
 
+    // Remove highlight classes.
+    this.nodes
+      .classed({ highlight: false, source: false });
+
+    // Remove the highlight lines.
+    this.edgeGroup
+      .selectAll('line.highlight')
+      .remove();
+
+  },
+
+
+  /**
+   * Unselect all nodes.
+   */
+  unselect: function() {
+    this.nodes
+      .classed({ select: false });
   }
 
 

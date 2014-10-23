@@ -11,9 +11,11 @@ module.exports = Controller.extend({
 
     network: {
       events: [
+        'move',
         'highlight',
         'unhighlight',
-        'move'
+        'select',
+        'unselect'
       ]
     }
 
@@ -27,6 +29,18 @@ module.exports = Controller.extend({
    */
   initialize: function(options) {
     this.view = new Minimap(options);
+  },
+
+
+  /**
+   * Update the extent preview.
+   *
+   * @param {String} cid
+   */
+  move: function(extent, cid) {
+    if (cid != this.view.cid) {
+      this.view.renderExtent(extent);
+    }
   },
 
 
@@ -57,15 +71,28 @@ module.exports = Controller.extend({
 
 
   /**
-   * Update the extent preview.
+   * Render unhighlights.
+   *
+   * @param {String} label
+   * @param {String} cid
+   */
+  select: function(label, cid) {
+    if (cid != this.view.cid) {
+      this.view.select(label);
+    }
+  },
+
+
+  /**
+   * Render unselects.
    *
    * @param {String} cid
    */
-  move: function(extent, cid) {
+  unselect: function(label, cid) {
     if (cid != this.view.cid) {
-      this.view.renderExtent(extent);
+      this.view.unselect();
     }
-  }
+  },
 
 
 });
