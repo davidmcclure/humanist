@@ -230,22 +230,9 @@ var Minimap = module.exports = Backbone.View.extend({
     _.each(datum.targets, _.bind(function(label) {
       this.labelToNode[label]
         .classed({ highlight: true })
-        .filter(':not(.select)')
         .attr('r', this.options.r.on);
     }, this));
 
-  },
-
-
-  /**
-   * Select a node.
-   *
-   * @param {String} label
-   */
-  select: function(label) {
-    this.labelToNode[label]
-      .classed({ select: true })
-      .attr('r', this.options.r.src);
   },
 
 
@@ -256,29 +243,7 @@ var Minimap = module.exports = Backbone.View.extend({
     this.nodes
       .filter('.highlight')
       .classed({ highlight: false, source: false })
-      .filter(':not(.select)')
       .attr('r', this.options.r.off);
-  },
-
-
-  /**
-   * Unselect all nodes.
-   */
-  unselect: function() {
-
-    // If a currently-selected node is also highlighted, drop the radius down
-    // to the highlighted size, not the default.
-    this.nodes
-      .filter('.select.highlight')
-      .attr('r', this.options.r.on);
-
-    // Then, ignore highlighted nodes when unselecting the radius.
-    this.nodes
-      .filter('.select')
-      .classed({ select: false })
-      .filter(':not(.highlight)')
-      .attr('r', this.options.r.off);
-
   }
 
 
