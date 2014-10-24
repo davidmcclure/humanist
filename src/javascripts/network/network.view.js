@@ -19,7 +19,7 @@ var Network = module.exports = Backbone.View.extend({
     padding: 50,
     fontExtent: [4, 70],
     zoomExtent: [0.1, 50],
-    edgeCount: 500,
+    edgeCount: 1000,
     panDuration: 800,
     focusScale: 7
   },
@@ -98,7 +98,7 @@ var Network = module.exports = Backbone.View.extend({
 
     // Debounce a zoom-end callback.
     this.debouncedZoomEnd = _.debounce(
-      this.onZoomEnd, 200
+      this.onZoomEnd, 100
     );
 
   },
@@ -192,7 +192,9 @@ var Network = module.exports = Backbone.View.extend({
   renderZoom: function() {
 
     this.renderNodes();
-    this.renderEdges();
+
+    // Hide the edges while panning.
+    this.edgeGroup.style('display', 'none');
 
     // Get current focus.
     var x = this.xScale.invert(this.w/2);
@@ -207,7 +209,7 @@ var Network = module.exports = Backbone.View.extend({
 
     // On zoom, update the font sizes.
     if (!this.center || z != this.center.z) {
-      this.nodes.style('font-size', this.fontScale(z));
+      this.nodes.style('font-size', this.fontScale(z)+'px');
     }
 
     // Set the new extent and center.
@@ -243,7 +245,7 @@ var Network = module.exports = Backbone.View.extend({
    */
   refreshEdges: function() {
     this.selectEdges();
-    this.renderEdges();
+    this.positionEdges();
   },
 
 
@@ -257,12 +259,15 @@ var Network = module.exports = Backbone.View.extend({
 
   /**
    * Render the edge positions.
+   *
+   * @param {Selection} edges
    */
-  renderEdges: function() {
+  positionEdges: function(edges) {
 
     var self = this;
+    edges = edges || this.edges;
 
-    this.edges.each(function(d) {
+    edges.each(function(d) {
       d3.select(this).attr({
         x1: self.xScale(d.x1),
         y1: self.yScale(d.y1),
@@ -279,6 +284,7 @@ var Network = module.exports = Backbone.View.extend({
    */
   onZoomEnd: function() {
     this.filterEdgesByExtent();
+    this.edgeGroup.style('display', '');
     this.updateRoute();
   },
 
@@ -338,10 +344,12 @@ var Network = module.exports = Backbone.View.extend({
    */
   updateRoute: function() {
 
+    // Round off the coordinates.
     var x = this.center.x.toFixed(2);
     var y = this.center.y.toFixed(2);
     var z = this.center.z.toFixed(2);
 
+    // Update the route.
     Backbone.history.navigate(x+'/'+y+'/'+z, {
       replace: true
     });
@@ -377,6 +385,7 @@ var Network = module.exports = Backbone.View.extend({
       .x(this.xScale)
       .y(this.yScale);
 
+    // Reset the current focus.
     if (this.center) {
       this.focusOnXYZ(this.center);
     }
@@ -504,7 +513,10 @@ var Network = module.exports = Backbone.View.extend({
 
     }, this));
 
-    this.refreshEdges();
+    // Render new edges.
+    this.positionEdges(
+      this.edgeGroup.selectAll('line.highlight')
+    );
 
   },
 
