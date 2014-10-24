@@ -528,6 +528,7 @@ var Network = module.exports = Backbone.View.extend({
 
     // Remove highlight classes.
     this.nodes
+      .filter('.highlight')
       .classed({ highlight: false, source: false });
 
     // Remove the highlight lines.
