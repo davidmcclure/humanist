@@ -6,8 +6,8 @@ var Backbone = require('backbone');
 Backbone.$ = $;
 
 var Network = require('./network/network.ctl');
-var Timeline = require('./timeline/timeline.ctl');
 var Minimap = require('./minimap/minimap.ctl');
+var Timeline = require('./timeline/timeline.ctl');
 var Router = require('./router');
 
 

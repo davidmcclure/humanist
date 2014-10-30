@@ -147,8 +147,7 @@ var Network = module.exports = Backbone.View.extend({
     }, this));
 
     // Select the collection.
-    this.nodes = this.nodeGroup
-      .selectAll('text');
+    this.nodes = this.nodeGroup.selectAll('text');
 
     // Highlight on focus.
     this.nodes.on('mouseenter', _.bind(function(d) {
@@ -209,7 +208,7 @@ var Network = module.exports = Backbone.View.extend({
 
     // On zoom, update the font sizes.
     if (!this.center || z != this.center.z) {
-      this.nodes.style('font-size', this.fontScale(z)+'px');
+      this.nodeGroup.style('font-size', this.fontScale(z)+'px');
     }
 
     // Set the new extent and center.
