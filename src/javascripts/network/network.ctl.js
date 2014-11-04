@@ -7,16 +7,12 @@ var Network = require('./network.view');
 module.exports = Controller.extend({
 
 
-  radio: {
-
+  events: {
     minimap: {
-      events: [
-        'highlight',
-        'unhighlight',
-        'focus'
-      ]
+      highlight: 'highlight',
+      unhighlight: 'unhighlight',
+      focus: 'focus'
     }
-
   },
 
 

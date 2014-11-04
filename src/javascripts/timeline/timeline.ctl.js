@@ -7,14 +7,10 @@ var Timeline = require('./timeline.view');
 module.exports = Controller.extend({
 
 
-  radio: {
-
+  events: {
     network: {
-      events: [
-        'move'
-      ]
+      move: 'move'
     }
-
   },
 
 

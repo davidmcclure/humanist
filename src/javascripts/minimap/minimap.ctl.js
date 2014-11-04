@@ -7,16 +7,12 @@ var Minimap = require('./minimap.view');
 module.exports = Controller.extend({
 
 
-  radio: {
-
+  events: {
     network: {
-      events: [
-        'highlight',
-        'unhighlight',
-        'move'
-      ]
+      highlight: 'highlight',
+      unhighlight: 'unhighlight',
+      move: 'move'
     }
-
   },
 
 
