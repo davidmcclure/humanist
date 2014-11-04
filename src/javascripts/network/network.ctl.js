@@ -12,11 +12,11 @@ module.exports = Controller.extend({
     minimap: {
       highlight: 'highlight',
       unhighlight: 'unhighlight',
-      center: 'focusOnXYZ'
+      center: 'minimapFocus'
     },
 
     router: {
-      xyz: 'focusOnXYZ'
+      xyz: 'routerFocusXYZ'
     }
 
   },
@@ -51,14 +51,22 @@ module.exports = Controller.extend({
 
 
   /**
-   * Apply an X/Y/Z focus.
+   * Mirror the minimap position.
    *
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Number} z
+   * @param {Object} center
    */
-  focusOnXYZ: function(center, animate) {
+  minimapFocus: function(center, animate) {
     this.view.focusOnXYZ(center, animate);
+  },
+
+
+  /**
+   * Mirror the minimap position.
+   *
+   * @param {Object} center
+   */
+  routerFocusXYZ: function(center) {
+    this.view.focusOnXYZ(center, true);
   }
 
 
