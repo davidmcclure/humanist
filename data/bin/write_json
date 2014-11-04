@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+import json
+import networkx as nx
+import click
+
+from networkx.readwrite import json_graph
+
+
+@click.command()
+def write_json():
+
+    # Read in the network.
+    graph = nx.read_gml('build/graph.gml')
+    links = json_graph.node_link_data(graph)
+
+    raw = json.dumps(links)
+    with open('build/graph.json', 'w') as out:
+        out.write(raw)
+
+
+if __name__ == '__main__':
+    write_json()

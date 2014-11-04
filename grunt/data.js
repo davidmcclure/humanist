@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 
 
       // Read the data file.
-      var d1 = grunt.file.readJSON('data.json');
+      var d1 = grunt.file.readJSON('data/build/graph.json');
       var d2 = {}; // New data.
 
 

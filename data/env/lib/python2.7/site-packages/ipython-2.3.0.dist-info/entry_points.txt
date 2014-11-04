@@ -1,0 +1,12 @@
+[console_scripts]
+ipengine2 = IPython.parallel.apps.ipengineapp:launch_new_instance
+iptest = IPython.testing.iptestcontroller:main
+ipython2 = IPython:start_ipython
+ipcluster2 = IPython.parallel.apps.ipclusterapp:launch_new_instance
+ipcluster = IPython.parallel.apps.ipclusterapp:launch_new_instance
+ipython = IPython:start_ipython
+ipcontroller2 = IPython.parallel.apps.ipcontrollerapp:launch_new_instance
+ipcontroller = IPython.parallel.apps.ipcontrollerapp:launch_new_instance
+iptest2 = IPython.testing.iptestcontroller:main
+ipengine = IPython.parallel.apps.ipengineapp:launch_new_instance
+
