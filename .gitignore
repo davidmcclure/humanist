@@ -2,6 +2,6 @@ node_modules
 _site
 
 *.pyc
-corpus/corpus.txt
-corpus/env
-corpus/src
+data/corpus.txt
+data/env
+data/src
