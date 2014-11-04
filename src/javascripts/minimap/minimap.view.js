@@ -64,7 +64,7 @@ var Minimap = module.exports = Backbone.View.extend({
 
 
   /**
-   * Initialize the X/Y scales.
+   * Initialize the X/Y node scales.
    */
   _initScales: function() {
 

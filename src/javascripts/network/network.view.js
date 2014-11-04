@@ -21,7 +21,7 @@ var Network = module.exports = Backbone.View.extend({
     zoomExtent: [0.1, 50],
     edgeCount: 1000,
     panDuration: 800,
-    focusScale: 7
+    focusScale: 10
   },
 
 
@@ -299,7 +299,7 @@ var Network = module.exports = Backbone.View.extend({
    */
   onZoomEnd: function() {
     this.filterEdgesByExtent();
-    this.edgeGroup.style('display', '');
+    this.edgeGroup.style('display', null);
     this.updateRoute();
   },
 
