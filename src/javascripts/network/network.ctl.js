@@ -16,6 +16,7 @@ module.exports = Controller.extend({
     },
 
     router: {
+      word: 'routerFocusWord',
       xyz: 'routerFocusXYZ'
     }
 
@@ -61,7 +62,18 @@ module.exports = Controller.extend({
 
 
   /**
-   * Mirror the minimap position.
+   * Apply a :word route.
+   *
+   * @param {String} word
+   */
+  routerFocusWord: function(word) {
+    this.view.renderSelect(word);
+    this.view.focusOnWord(word, true);
+  },
+
+
+  /**
+   * Apply a :x/:y/:z route.
    *
    * @param {Object} center
    */

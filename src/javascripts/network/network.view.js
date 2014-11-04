@@ -96,6 +96,11 @@ var Network = module.exports = Backbone.View.extend({
       .domain(this.options.zoomExtent)
       .range(this.options.fontExtent);
 
+    // Don't trigger `click` on drag.
+    this.outer.on('mousedown', function() {
+      d3.event.preventDefault();
+    });
+
     // Debounce a zoom-end callback.
     this.debouncedZoomEnd = _.debounce(
       this.onZoomEnd, 100
@@ -164,7 +169,8 @@ var Network = module.exports = Backbone.View.extend({
       this.publishUnhighlight();
     }, this));
 
-    this.svg.on('click', _.bind(function() {
+    this.outer.on('click', _.bind(function() {
+      if (d3.event.defaultPrevented) return;
       this.publishUnselect();
     }, this));
 
@@ -352,6 +358,8 @@ var Network = module.exports = Backbone.View.extend({
    */
   updateRoute: function() {
 
+    if (this.selected) return;
+
     // Round off the coordinates.
     var x = this.center.x.toFixed(2);
     var y = this.center.y.toFixed(2);
@@ -479,8 +487,13 @@ var Network = module.exports = Backbone.View.extend({
    */
   publishSelect: function(label) {
 
-    this.renderSelect(label);
     d3.event.stopPropagation();
+
+    // Unselect current.
+    this.publishUnselect()
+
+    // Render new select.
+    this.renderSelect(label);
 
     // Update the route.
     Backbone.history.navigate(label, {
@@ -593,7 +606,13 @@ var Network = module.exports = Backbone.View.extend({
    * Unselect the currently-selected node.
    */
   renderUnselect: function() {
-    console.log('unselect');
+
+    this.nodes
+      .filter('.select')
+      .classed({ select: false });
+
+    this.selected = null;
+
   }
 
 
