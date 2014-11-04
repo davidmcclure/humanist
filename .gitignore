@@ -3,3 +3,4 @@ node_modules
 _site
 
 corpus/corpus.txt
+corpus/src
