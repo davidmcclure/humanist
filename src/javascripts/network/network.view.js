@@ -154,9 +154,18 @@ var Network = module.exports = Backbone.View.extend({
       this.publishHighlight(d.label);
     }, this));
 
+    // Select on click.
+    this.nodes.on('click', _.bind(function(d) {
+      this.publishSelect(d.label);
+    }, this));
+
     // Unhighlight on blur.
     this.nodes.on('mouseleave', _.bind(function() {
       this.publishUnhighlight();
+    }, this));
+
+    this.svg.on('click', _.bind(function() {
+      this.publishUnselect();
     }, this));
 
   },
@@ -339,7 +348,7 @@ var Network = module.exports = Backbone.View.extend({
 
 
   /**
-   * Update the route to point to the current location.
+   * Point the route to current XYZ location.
    */
   updateRoute: function() {
 
@@ -459,7 +468,25 @@ var Network = module.exports = Backbone.View.extend({
    */
   publishHighlight: function(label) {
     this.renderHighlight(label);
-    this.radio.trigger('highlight', label, this.cid);
+    this.radio.trigger('highlight', label);
+  },
+
+
+  /**
+   * Publish a node selection.
+   *
+   * @param {String} label
+   */
+  publishSelect: function(label) {
+
+    this.renderSelect(label);
+    d3.event.stopPropagation();
+
+    // Update the route.
+    Backbone.history.navigate(label, {
+      replace: true
+    });
+
   },
 
 
@@ -468,7 +495,16 @@ var Network = module.exports = Backbone.View.extend({
    */
   publishUnhighlight: function() {
     this.renderUnhighlight();
-    this.radio.trigger('unhighlight', this.cid);
+    this.radio.trigger('unhighlight');
+  },
+
+
+  /**
+   * Publish a node unselect.
+   */
+  publishUnselect: function() {
+    this.renderUnselect();
+    this.radio.trigger('unselect');
   },
 
 
@@ -521,9 +557,24 @@ var Network = module.exports = Backbone.View.extend({
 
 
   /**
+   * Select a node.
+   */
+  renderSelect: function(label) {
+
+    this.selected = label;
+
+    this.labelToNode[label]
+      .classed({ select: true });
+
+  },
+
+
+  /**
    * Unhighlight all nodes.
    */
   renderUnhighlight: function() {
+
+    var self = this;
 
     // Remove highlight classes.
     this.nodes
@@ -535,6 +586,14 @@ var Network = module.exports = Backbone.View.extend({
       .selectAll('line.highlight')
       .remove();
 
+  },
+
+
+  /**
+   * Unselect the currently-selected node.
+   */
+  renderUnselect: function() {
+    console.log('unselect');
   }
 
 
