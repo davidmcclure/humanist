@@ -67,7 +67,7 @@ module.exports = Controller.extend({
    * @param {String} word
    */
   routerFocusWord: function(word) {
-    this.view.renderSelect(word);
+    this.view.publishSelect(word);
     this.view.focusOnWord(word, true);
   },
 

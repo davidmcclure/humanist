@@ -161,6 +161,7 @@ var Network = module.exports = Backbone.View.extend({
 
     // Select on click.
     this.nodes.on('click', _.bind(function(d) {
+      d3.event.stopPropagation();
       this.publishSelect(d.label);
     }, this));
 
@@ -486,8 +487,6 @@ var Network = module.exports = Backbone.View.extend({
    * @param {String} label
    */
   publishSelect: function(label) {
-
-    d3.event.stopPropagation();
 
     // Unselect current.
     this.publishUnselect()
