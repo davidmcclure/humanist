@@ -8,11 +8,17 @@ module.exports = Controller.extend({
 
 
   events: {
+
     minimap: {
       highlight: 'highlight',
       unhighlight: 'unhighlight',
-      focus: 'focus'
+      center: 'focusOnXYZ'
+    },
+
+    router: {
+      xyz: 'focusOnXYZ'
     }
+
   },
 
 
@@ -45,12 +51,13 @@ module.exports = Controller.extend({
 
 
   /**
-   * Apply a new focus position.
+   * Apply an X/Y/Z focus.
    *
-   * @param {Object} center
-   * @param {Boolean} animate
+   * @param {Number} x
+   * @param {Number} y
+   * @param {Number} z
    */
-  focus: function(center, animate) {
+  focusOnXYZ: function(center, animate) {
     this.view.focusOnXYZ(center, animate);
   }
 

@@ -30,7 +30,9 @@ module.exports = Backbone.Router.extend({
    * @param {String} z
    */
   xyz: function(x, y, z) {
-    this.radio.trigger('xyz', x, y, z);
+    this.radio.trigger('xyz', {
+      x: Number(x), y: Number(y), z: Number(z)
+    });
   },
 
 

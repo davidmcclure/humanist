@@ -14,9 +14,11 @@ var Router = require('./router');
 // Load the data file.
 $.getJSON('data.json', _.bind(function(data) {
 
-  // Views:
+  // Widgets:
   new Minimap({ data: data });
   new Timeline({ data: data });
+
+  // Network:
   new Network({ data: data });
 
   // Routes:

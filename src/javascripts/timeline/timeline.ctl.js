@@ -9,7 +9,7 @@ module.exports = Controller.extend({
 
   events: {
     network: {
-      move: 'move'
+      extent: 'focus'
     }
   },
 
@@ -29,10 +29,8 @@ module.exports = Controller.extend({
    *
    * @param {String} cid
    */
-  move: function(extent, cid) {
-    if (cid != this.view.cid) {
-      this.view.renderExtent(extent);
-    }
+  focus: function(extent, cid) {
+    this.view.renderExtent(extent);
   }
 
 

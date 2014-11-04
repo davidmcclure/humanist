@@ -11,7 +11,7 @@ module.exports = Controller.extend({
     network: {
       highlight: 'highlight',
       unhighlight: 'unhighlight',
-      move: 'move'
+      extent: 'focus'
     }
   },
 
@@ -23,16 +23,6 @@ module.exports = Controller.extend({
    */
   initialize: function(options) {
     this.view = new Minimap(options);
-  },
-
-
-  /**
-   * Update the extent preview.
-   *
-   * @param {Object} extent
-   */
-  move: function(extent, cid) {
-    this.view.renderExtent(extent);
   },
 
 
@@ -53,6 +43,16 @@ module.exports = Controller.extend({
    */
   unhighlight: function(label) {
     this.view.renderUnhighlight(label);
+  },
+
+
+  /**
+   * Update the extent preview.
+   *
+   * @param {Object} extent
+   */
+  focus: function(extent) {
+    this.view.renderExtent(extent);
   }
 
 

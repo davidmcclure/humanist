@@ -204,7 +204,7 @@ var Minimap = module.exports = Backbone.View.extend({
 
     // Pan the map.
     this.radio.trigger(
-      'focus', { x:x, y:y }, animate
+      'center', { x:x, y:y }, animate
     );
 
   },

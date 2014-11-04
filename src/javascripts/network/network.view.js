@@ -216,7 +216,7 @@ var Network = module.exports = Backbone.View.extend({
     this.center = { x:x, y:y, z:z };
 
     // Publish the extent.
-    this.radio.trigger('move', this.extent, this.cid);
+    this.radio.trigger('extent', this.extent);
 
     // Notify zoom end.
     this.debouncedZoomEnd();
