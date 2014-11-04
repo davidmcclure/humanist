@@ -37,7 +37,7 @@ def build_graph(term_depth, spike_depth, skim_depth, spike_bw):
     g = Diachronic()
 
     print 'Generating graph:'
-    g.build(m, skim_depth)
+    g.build(m, skim_depth, bandwidth=spike_bw)
     g.write_gml('build/graph.gml')
 
 

@@ -7,7 +7,7 @@ from clint.textui import progress
 class Diachronic(Graph):
 
 
-    def build(self, matrix, skim_depth=10):
+    def build(self, matrix, skim_depth=10, **kwargs):
 
         """
         Register term count, KDE max, and center-of-mass on nodes.
@@ -24,9 +24,7 @@ class Diachronic(Graph):
 
             # Register the metadata.
             self.graph.add_node(label, {
-                'count':    len(matrix.text.terms[term]),
-                'kde_max':  matrix.text.kde_max(term),
-                'median':   matrix.text.median_ratio(term)
+                'center': matrix.text.kde_max_ratio(term, **kwargs)
             })
 
         # Edges:
