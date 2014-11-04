@@ -249,6 +249,7 @@ var Minimap = module.exports = Backbone.View.extend({
 
       // Highlight the target <text>'s.
       this.labelToNode[label]
+        .filter(':not(.select)')
         .classed({ highlight: true })
         .attr('r', this.options.r.on);
 
@@ -258,13 +259,43 @@ var Minimap = module.exports = Backbone.View.extend({
 
 
   /**
+   * Select a node.
+   *
+   * @param {String} label
+   */
+  renderSelect: function(label) {
+
+    this.labelToNode[label]
+      .classed({ select: true })
+      .attr('r', this.options.r.src);
+
+  },
+
+
+  /**
    * Unhighlight nodes.
    */
   renderUnhighlight: function() {
+
     this.nodes
       .filter('.highlight')
       .classed({ highlight: false, source: false })
+      .filter(':not(.select)')
       .attr('r', this.options.r.off);
+
+  },
+
+
+  /**
+   * Unselect nodes.
+   */
+  renderUnselect: function() {
+
+    this.nodes
+      .filter('.select')
+      .classed({ select: false })
+      .attr('r', this.options.r.off);
+
   }
 
 

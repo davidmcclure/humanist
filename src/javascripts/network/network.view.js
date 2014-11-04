@@ -493,6 +493,7 @@ var Network = module.exports = Backbone.View.extend({
 
     // Render new select.
     this.renderSelect(label);
+    this.radio.trigger('select', label);
 
     // Update the route.
     Backbone.history.navigate(label, {

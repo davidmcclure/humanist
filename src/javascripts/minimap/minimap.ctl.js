@@ -10,7 +10,9 @@ module.exports = Controller.extend({
   events: {
     network: {
       highlight: 'highlight',
+      select: 'select',
       unhighlight: 'unhighlight',
+      unselect: 'unselect',
       extent: 'focus'
     }
   },
@@ -37,12 +39,32 @@ module.exports = Controller.extend({
 
 
   /**
+   * Render selects.
+   *
+   * @param {String} label
+   */
+  select: function(label) {
+    this.view.renderSelect(label);
+  },
+
+
+  /**
    * Render unhighlights.
    *
    * @param {String} label
    */
   unhighlight: function(label) {
     this.view.renderUnhighlight(label);
+  },
+
+
+  /**
+   * Render unselects.
+   *
+   * @param {String} label
+   */
+  unselect: function() {
+    this.view.renderUnselect();
   },
 
 
