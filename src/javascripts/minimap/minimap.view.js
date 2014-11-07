@@ -6,6 +6,7 @@ var Cocktail = require('backbone.cocktail');
 var ScalesMixin = require('../mixins/scales.mixin');
 var Radio = require('backbone.radio');
 var d3 = require('d3-browserify');
+var config = require('../config');
 
 
 var Minimap = module.exports = Backbone.View.extend({
@@ -29,6 +30,7 @@ var Minimap = module.exports = Backbone.View.extend({
     this._initRadio();
     this._initMarkup();
     this._initScales();
+    this._initTimeline();
     this._initDrag();
     this._initClick();
     this._initNodes();
@@ -56,6 +58,10 @@ var Minimap = module.exports = Backbone.View.extend({
     this.nodeGroup = this.svg.append('g')
       .classed({ nodes: true });
 
+    // Axis <g>.
+    this.axisGroup = this.svg.append('g')
+      .classed({ axis: true });
+
     // Extent <rect>.
     this.extent = this.svg.append('rect')
       .classed({ extent: true });
@@ -74,6 +80,34 @@ var Minimap = module.exports = Backbone.View.extend({
 
     // Fit the scales to the node extent.
     this.fitScales(this.data.extent, this.h, this.w);
+
+  },
+
+
+  /**
+   * Initialize the timeline axis.
+   */
+  _initTimeline: function() {
+
+    // Padded width.
+    var width = this.w - 2*this.options.padding;
+
+    // Parse the dates.
+    var d1 = new Date(config.d1);
+    var d2 = new Date(config.d2);
+
+    // Timeline scale.
+    this.timeScale = d3.time.scale()
+      .domain([d1, d2])
+      .range([0, width]);
+
+    // Timeline axis.
+    this.timeAxis = d3.svg.axis()
+      .scale(this.timeScale)
+      .tickFormat(d3.time.format('%y'))
+      .orient('bottom');
+
+    this.axisGroup.call(this.timeAxis);
 
   },
 

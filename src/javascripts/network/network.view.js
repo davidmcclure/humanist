@@ -103,7 +103,7 @@ var Network = module.exports = Backbone.View.extend({
 
     // Debounce a zoom-end callback.
     this.debouncedZoomEnd = _.debounce(
-      this.onZoomEnd, 100
+      this.onZoomEnd, 200
     );
 
   },

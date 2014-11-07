@@ -16,7 +16,7 @@ module.exports = {
    */
   fitScales: function(e, h, w) {
 
-    // Get the X/Y-axis domains.
+    // Wide.
     if (e.dx > e.dy) {
       var r = h/w;
       var p = ((e.dx*r)-e.dy)/2;
@@ -24,7 +24,10 @@ module.exports = {
       var yd = [e.ymin-p, e.ymax+p];
       var xp = this.options.padding;
       var yp = this.options.padding*r;
-    } else {
+    }
+
+    // Tall.
+    else {
       var r = w/h;
       var p = ((e.dy*r)-e.dx)/2;
       var xd = [e.xmin-p, e.xmax+p];
