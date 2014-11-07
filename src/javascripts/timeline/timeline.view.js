@@ -5,19 +5,13 @@ var _ = require('lodash');
 var Backbone = require('backbone');
 var Radio = require('backbone.radio');
 var d3 = require('d3-browserify');
+var config = require('../config');
 
 
 module.exports = Backbone.View.extend({
 
 
   el: '#timeline',
-
-  options: {
-    dates: {
-      t1: '1987-05-12',
-      t2: '2014-09-26'
-    }
-  },
 
 
   /**
@@ -61,13 +55,13 @@ module.exports = Backbone.View.extend({
     var xmax = this.data.extent.xmax;
 
     // Date extent.
-    var t1 = new Date(this.options.dates.t1);
-    var t2 = new Date(this.options.dates.t2);
+    var d1 = new Date(config.d1);
+    var d2 = new Date(config.d2);
 
     // Map coordinates -> dates.
     this.timeScale = d3.time.scale()
       .domain([xmin, xmax])
-      .range([t1, t2]);
+      .range([d1, d2]);
 
   },
 

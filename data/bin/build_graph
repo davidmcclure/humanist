@@ -13,7 +13,7 @@ from humanist.graphs import Diachronic
 @click.command()
 @click.option('--freq_depth',   default=3000)
 @click.option('--spike_depth',  default=1000)
-@click.option('--skim_depth',   default=20)
+@click.option('--skim_depth',   default=6)
 @click.option('--bandwidth',    default=50000)
 def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
 
@@ -24,13 +24,13 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
     # Get the top X most frequent terms.
     frequent = t.most_frequent_terms(freq_depth)
 
-    print 'Computing KDE maxima...'
+    print 'Computing standard deviations...'
     spiky = OrderedDict()
     for term in frequent:
-        spiky[term] = t.kde_max(term, bandwidth=bandwidth)
+        spiky[term] = np.std(t.terms[term])
 
     # Sort by KDE max.
-    spiky = sort_dict(spiky)
+    spiky = sort_dict(spiky, False)
 
     print 'Indexing terms:'
     m.index(spiky.keys()[:spike_depth], bandwidth=bandwidth)
