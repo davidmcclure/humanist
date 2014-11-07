@@ -30,7 +30,7 @@ var Minimap = module.exports = Backbone.View.extend({
     this._initRadio();
     this._initMarkup();
     this._initScales();
-    this._initTimeline();
+    //this._initTimeline();
     this._initDrag();
     this._initClick();
     this._initNodes();
