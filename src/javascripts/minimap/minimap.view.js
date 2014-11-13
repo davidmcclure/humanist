@@ -31,7 +31,6 @@ var Minimap = module.exports = Backbone.View.extend({
     this._initRadio();
     this._initMarkup();
     this._initScales();
-    this._initTimeline();
     this._initDrag();
     this._initClick();
     this._initNodes();
@@ -59,18 +58,9 @@ var Minimap = module.exports = Backbone.View.extend({
     this.nodeGroup = this.svg.append('g')
       .classed({ nodes: true });
 
-    // Axis <g>.
-    this.axisGroup = this.svg.append('g')
-      .classed({ axis: true });
-
     // Extent <rect>.
     this.extent = this.svg.append('rect')
       .classed({ extent: true });
-
-    // Center <line>.
-    this.center = this.svg.append('line')
-      .style('display', 'none')
-      .classed({ center: true });
 
   },
 
@@ -86,36 +76,6 @@ var Minimap = module.exports = Backbone.View.extend({
 
     // Fit the scales to the node extent.
     this.fitScales(this.data.extent, this.h, this.w);
-
-  },
-
-
-  /**
-   * Initialize the timeline axis.
-   */
-  _initTimeline: function() {
-
-    var p = this.options.padding;
-
-    // Parse the dates.
-    this.date1 = new Date(config.d1);
-    this.date2 = new Date(config.d2);
-
-    // Cache the delta.
-    this.delta = this.date2-this.date1;
-
-    // Timeline scale.
-    this.timeScale = d3.time.scale()
-      .domain([this.date1, this.date2])
-      .range([p, this.w-p]);
-
-    // Timeline axis.
-    this.timeAxis = d3.svg.axis()
-      .scale(this.timeScale)
-      .tickFormat(d3.time.format('%y'))
-      .orient('bottom');
-
-    this.axisGroup.call(this.timeAxis);
 
   },
 
@@ -296,19 +256,6 @@ var Minimap = module.exports = Backbone.View.extend({
         .attr('r', this.options.r.on);
 
     }, this));
-
-    // Get the center line offset.
-    var center = moment(this.date1);
-    center.add(moment.duration(datum.center * this.delta));
-    var offset = this.timeScale(center.valueOf())
-
-    // Position the center <line>
-    this.center
-      .style('display', null)
-      .attr('x1', offset)
-      .attr('y1', 0)
-      .attr('x2', offset)
-      .attr('y2', this.h);
 
   },
 

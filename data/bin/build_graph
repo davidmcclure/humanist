@@ -13,8 +13,8 @@ from humanist.graphs import Diachronic
 @click.command()
 @click.option('--freq_depth',   default=3000)
 @click.option('--spike_depth',  default=1000)
-@click.option('--skim_depth',   default=6)
-@click.option('--bandwidth',    default=50000)
+@click.option('--skim_depth',   default=5)
+@click.option('--bandwidth',    default=100000)
 def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
 
     print 'Tokenizing corpus...'
