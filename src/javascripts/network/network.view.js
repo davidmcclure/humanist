@@ -96,11 +96,6 @@ var Network = module.exports = Backbone.View.extend({
       .domain(this.options.zoomExtent)
       .range(this.options.fontExtent);
 
-    // Don't trigger `click` on drag.
-    this.outer.on('mousedown', function() {
-      d3.event.preventDefault();
-    });
-
     // Debounce a zoom-end callback.
     this.debouncedZoomEnd = _.debounce(
       this.onZoomEnd, 200
