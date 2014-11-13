@@ -17,10 +17,10 @@ module.exports = Controller.extend({
   /**
    * Start the view.
    *
-   * @param {Object} options
+   * @param {Object} data
    */
-  initialize: function(options) {
-    this.view = new Timeline(options);
+  initialize: function(data) {
+    this.view = new Timeline(data);
   },
 
 

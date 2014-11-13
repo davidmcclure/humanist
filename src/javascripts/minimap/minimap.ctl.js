@@ -21,10 +21,10 @@ module.exports = Controller.extend({
   /**
    * Start the view.
    *
-   * @param {Object} options
+   * @param {Object} data
    */
-  initialize: function(options) {
-    this.view = new Minimap(options);
+  initialize: function(data) {
+    this.view = new Minimap(data);
   },
 
 

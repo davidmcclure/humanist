@@ -12,7 +12,7 @@ module.exports = React.createClass({
    * Render the search component.
    */
   render: function() {
-    return <Input />;
+    return <Input data={this.props.data} />;
   }
 
 

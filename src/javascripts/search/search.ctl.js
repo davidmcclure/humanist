@@ -13,11 +13,11 @@ module.exports = Controller.extend({
   /**
    * Start the view.
    *
-   * @param {Object} options
+   * @param {Object} data
    */
-  initialize: function(options) {
+  initialize: function(data) {
     this.view = React.renderComponent(
-      <Search />,
+      <Search data={data} />,
       $('#search').get(0)
     );
   }

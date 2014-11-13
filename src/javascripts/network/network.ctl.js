@@ -30,10 +30,10 @@ module.exports = Controller.extend({
   /**
    * Start the view.
    *
-   * @param {Object} options
+   * @param {Object} data
    */
-  initialize: function(options) {
-    this.view = new Network(options);
+  initialize: function(data) {
+    this.view = new Network(data);
   },
 
 

@@ -1,8 +1,9 @@
 
 
 /** @jsx React.DOM */
-var React = require('react');
+var _ = require('lodash');
 var Radio = require('backbone.radio');
+var React = require('react/addons');
 
 
 module.exports = React.createClass({
@@ -17,24 +18,57 @@ module.exports = React.createClass({
 
 
   /**
-   * Render the text input.
+   * By default, invalid.
    */
-  render: function() {
-    return <input
-      type="text"
-      onKeyPress={this.onKeyPress} />;
+  getInitialState: function() {
+    return { valid: false };
   },
 
 
   /**
-   * Select word on <Enter>.
+   * Render the text input.
+   */
+  render: function() {
+
+    var cx = React.addons.classSet({
+      valid: this.state.valid
+    });
+
+    return <input
+      type="text"
+      className={cx}
+      onKeyUp={this.onKeyUp}
+      onFocus={this.onFocus} />;
+
+  },
+
+
+  /**
+   * When a key is pressed.
    *
    * @param {Object} event
    */
-  onKeyPress: function(event) {
+  onKeyUp: function(event) {
+
+    var value = event.target.value;
+
+    // Select on <Enter>.
     if (event.key == 'Enter') {
-      this.radio.trigger('select', event.target.value);
+      this.radio.trigger('select', value);
     }
+
+    // Set the `valid` class.
+    var valid = _.has(this.props.data.nodes, value);
+    this.setState({ valid: valid });
+
+  },
+
+
+  /**
+   * When the input is focused.
+   */
+  onFocus: function() {
+    // TODO
   }
 
 
