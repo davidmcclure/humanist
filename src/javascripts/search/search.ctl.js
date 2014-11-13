@@ -1,6 +1,9 @@
 
 
+/** @jsx React.DOM */
+var React = require('react');
 var Controller = require('radio.controller');
+var $ = require('jquery');
 
 
 module.exports = Controller.extend({
@@ -12,7 +15,10 @@ module.exports = Controller.extend({
    * @param {Object} options
    */
   initialize: function(options) {
-    console.log('search', options);
+    this.view = React.renderComponent(
+      <h1>Test</h1>,
+      $('#search').get(0)
+    );
   }
 
 
