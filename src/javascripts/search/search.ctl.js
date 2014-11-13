@@ -1,9 +1,10 @@
 
 
 /** @jsx React.DOM */
+var $ = require('jquery');
 var React = require('react');
 var Controller = require('radio.controller');
-var $ = require('jquery');
+var Search = require('./components/search');
 
 
 module.exports = Controller.extend({
@@ -16,7 +17,7 @@ module.exports = Controller.extend({
    */
   initialize: function(options) {
     this.view = React.renderComponent(
-      <h1>Test</h1>,
+      <Search />,
       $('#search').get(0)
     );
   }

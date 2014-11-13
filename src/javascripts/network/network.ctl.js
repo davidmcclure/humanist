@@ -15,9 +15,13 @@ module.exports = Controller.extend({
       center: 'minimapFocus'
     },
 
+    search: {
+      select: 'select'
+    },
+
     router: {
-      word: 'routerFocusWord',
-      xyz: 'routerFocusXYZ'
+      word: 'select',
+      xyz: 'routerFocus'
     }
 
   },
@@ -44,6 +48,17 @@ module.exports = Controller.extend({
 
 
   /**
+   * Render selections.
+   *
+   * @param {String} label
+   */
+  select: function(label) {
+    this.view.publishSelect(label);
+    this.view.focusOnWord(label, true);
+  },
+
+
+  /**
    * Render unhighlights.
    */
   unhighlight: function() {
@@ -62,22 +77,11 @@ module.exports = Controller.extend({
 
 
   /**
-   * Apply a :word route.
-   *
-   * @param {String} word
-   */
-  routerFocusWord: function(word) {
-    this.view.publishSelect(word);
-    this.view.focusOnWord(word, true);
-  },
-
-
-  /**
    * Apply a :x/:y/:z route.
    *
    * @param {Object} center
    */
-  routerFocusXYZ: function(center) {
+  routerFocus: function(center) {
     this.view.focusOnXYZ(center, true);
   }
 
