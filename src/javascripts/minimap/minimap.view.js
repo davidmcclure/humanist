@@ -6,6 +6,7 @@ var Cocktail = require('backbone.cocktail');
 var ScalesMixin = require('../mixins/scales.mixin');
 var Radio = require('backbone.radio');
 var d3 = require('d3-browserify');
+var moment = require('moment');
 var config = require('../config');
 
 
@@ -30,7 +31,7 @@ var Minimap = module.exports = Backbone.View.extend({
     this._initRadio();
     this._initMarkup();
     this._initScales();
-    //this._initTimeline();
+    this._initTimeline();
     this._initDrag();
     this._initClick();
     this._initNodes();
@@ -66,6 +67,11 @@ var Minimap = module.exports = Backbone.View.extend({
     this.extent = this.svg.append('rect')
       .classed({ extent: true });
 
+    // Center <line>.
+    this.center = this.svg.append('line')
+      .style('display', 'none')
+      .classed({ center: true });
+
   },
 
 
@@ -89,17 +95,19 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   _initTimeline: function() {
 
-    // Padded width.
-    var width = this.w - 2*this.options.padding;
+    var p = this.options.padding;
 
     // Parse the dates.
-    var d1 = new Date(config.d1);
-    var d2 = new Date(config.d2);
+    this.date1 = new Date(config.d1);
+    this.date2 = new Date(config.d2);
+
+    // Cache the delta.
+    this.delta = this.date2-this.date1;
 
     // Timeline scale.
     this.timeScale = d3.time.scale()
-      .domain([d1, d2])
-      .range([0, width]);
+      .domain([this.date1, this.date2])
+      .range([p, this.w-p]);
 
     // Timeline axis.
     this.timeAxis = d3.svg.axis()
@@ -288,6 +296,19 @@ var Minimap = module.exports = Backbone.View.extend({
         .attr('r', this.options.r.on);
 
     }, this));
+
+    // Get the center line offset.
+    var center = moment(this.date1);
+    center.add(moment.duration(datum.center * this.delta));
+    var offset = this.timeScale(center.valueOf())
+
+    // Position the center <line>
+    this.center
+      .style('display', null)
+      .attr('x1', offset)
+      .attr('y1', 0)
+      .attr('x2', offset)
+      .attr('y2', this.h);
 
   },
 
