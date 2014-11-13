@@ -12,18 +12,15 @@ var Search = require('./search/search.ctl');
 var Router = require('./router');
 
 
-// Load the data file.
 $.getJSON('data.json', _.bind(function(data) {
 
-  // Widgets:
-  new Minimap({ data: data });
-  new Timeline({ data: data });
-  new Search({ data: data });
+  // Modules:
+  new Minimap(data);
+  new Timeline(data);
+  new Search(data);
+  new Network(data);
 
-  // Network:
-  new Network({ data: data });
-
-  // Routes:
+  // Router:
   new Router();
 
 }, this));

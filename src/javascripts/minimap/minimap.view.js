@@ -26,7 +26,7 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   initialize: function(options) {
 
-    this.data = options.data;
+    this.data = options;
 
     this._initRadio();
     this._initMarkup();
