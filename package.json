@@ -29,6 +29,7 @@
     "backbone.radio": "^0.7.0",
     "d3-browserify": "^3.4.11",
     "jquery": "^2.1.1",
+    "lesshat": "^3.0.2",
     "lodash": "^2.4.1",
     "moment": "^2.8.3",
     "radio.controller": "^0.2.0",

@@ -8,12 +8,16 @@
 
   input {
 
+    width: 150px;
     padding: 10px;
     border: none;
     background: rgba(0, 0, 0, 0.5);
     color: darken(whitesmoke, 10%);
     font-family: @font-body;
-    font-size: 20px;
+    font-size: 16px;
+
+    .transition(width 0.2s ease);
+    .placeholder(darken(whitesmoke, 40%));
 
     &:focus {
       outline: 0;
@@ -21,6 +25,11 @@
 
     &.valid {
       color: @color-hl;
+    }
+
+    &.active {
+      width: 200px;
+      .placeholder(darken(whitesmoke, 20%));
     }
 
   }
