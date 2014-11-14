@@ -20,16 +20,12 @@
     font-size: 16px;
 
     &:focus {
+      .placeholder(darken(whitesmoke, 20%));
       outline: 0;
     }
 
     &.valid {
       color: @color-hl;
-    }
-
-    &.active {
-      width: 200px;
-      .placeholder(darken(whitesmoke, 20%));
     }
 
   }

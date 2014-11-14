@@ -21,10 +21,7 @@ module.exports = React.createClass({
    * By default, invalid.
    */
   getInitialState: function() {
-    return {
-      valid: false,
-      active: false
-    };
+    return { valid: false };
   },
 
 
@@ -39,9 +36,7 @@ module.exports = React.createClass({
       type="text"
       className={cx}
       placeholder="search words"
-      onKeyUp={this.onKeyUp}
-      onFocus={this.onFocus}
-      onBlur={this.onBlur} />;
+      onKeyUp={this.onKeyUp} />;
 
   },
 
@@ -64,22 +59,6 @@ module.exports = React.createClass({
     var valid = _.has(this.props.data.nodes, value);
     this.setState({ valid: valid });
 
-  },
-
-
-  /**
-   * When the input is focused.
-   */
-  onFocus: function() {
-    this.setState({ active: true });
-  },
-
-
-  /**
-   * When the input is blurred.
-   */
-  onBlur: function() {
-    this.setState({ active: false });
   }
 
 
