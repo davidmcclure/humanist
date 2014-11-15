@@ -1,0 +1,14 @@
+{
+  "name": "humanist",
+  "version": "0.1.0",
+  "homepage": "https://github.com/davidmcclure/humanist",
+  "authors": [
+    "David McClure <davidwilliammcclure@gmail.com>"
+  ],
+  "description": "27 years of the Humanist list.",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "metrics-graphics": "*"
+  }
+}

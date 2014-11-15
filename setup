@@ -1,0 +1,5 @@
+#!/bin/sh
+
+mkdir -p data/build/kde
+npm install
+bower install

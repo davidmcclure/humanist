@@ -1,0 +1,88 @@
+a.active {
+    background-color: steelblue;
+    border: 0;
+    border-radius: 4px;
+    color: #fff;
+    padding: 5px;
+}
+
+a.examples-options.selected {
+    font-weight: bold;
+}
+
+a:hover.examples-options {
+    text-decoration: none;
+}
+
+.chart_title {
+    margin-left: 30px;
+}
+ 
+.examples-options {
+    font-size: 10px;
+}
+
+.float-right {
+    float: right;
+}
+
+.footer {
+    font-size: 11px;
+    padding: 40px;
+    text-align: center;
+}
+
+.head {
+    color: black;
+    margin: auto;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.head h1 {
+    font-size: 50px;
+    font-weight: 300;
+    margin: 45px 0 0 0;
+}
+
+.head ul {
+    clear: both;
+    font-size: 14px;
+    padding: 10px 0 0 0;
+}
+
+.head ul li {
+    display: inline;
+    list-style: none;
+    padding-right: 15px;
+}
+
+.head ul li.no-padding {
+    padding: 0;
+}
+
+#logo {
+    margin: 60px 0 30px 0;
+    height: 79px;
+    width: 400px;
+}
+
+.pill {
+    font-family: 'Open Sans', serif;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.pill:hover {
+    text-decoration: none;
+}
+
+.wip {
+    background-color: #f1f1f1;
+    font-size: 15px;
+    margin-top: 60px;
+    padding: 10px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    opacity: 0.8;
+}
