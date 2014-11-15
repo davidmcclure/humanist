@@ -12,11 +12,14 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * TODO|dev
+   * Render a KDE plot.
+   *
+   * @param {String} label
    */
-  initialize: function() {
-    console.log('kde');
-    // TODO
+  show: function(label) {
+    $.getJSON('kde/'+label+'.json', _.bind(function(kde) {
+      console.log(kde);
+    }, this));
   }
 
 

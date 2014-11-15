@@ -1,5 +1,6 @@
 
 
 module.exports = {
-  dist: '<%= site %>'
+  dist: '<%= site %>',
+  build: 'data/build'
 };

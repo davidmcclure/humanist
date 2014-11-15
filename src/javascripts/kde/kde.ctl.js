@@ -28,8 +28,8 @@ module.exports = Controller.extend({
    *
    * @param {String} label
    */
-  select: function(lebel) {
-    // TODO
+  select: function(label) {
+    this.view.show(label);
   },
 
 
