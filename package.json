@@ -27,14 +27,12 @@
     "backbone": "^1.1.2",
     "backbone.cocktail": "^0.5.9",
     "backbone.radio": "^0.7.0",
-    "cortexjs": "^0.6.2",
     "d3-browserify": "^3.4.11",
     "jquery": "^2.1.1",
     "lesshat": "^3.0.2",
     "lodash": "^2.4.1",
     "moment": "^2.8.3",
     "radio.controller": "^0.2.0",
-    "rbush": "^1.3.4",
-    "react": "^0.11.1"
+    "rbush": "^1.3.4"
   }
 }
