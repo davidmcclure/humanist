@@ -2,6 +2,7 @@
 
 import click
 import numpy as np
+import json
 
 from collections import OrderedDict
 from textplot.utils import sort_dict
@@ -31,15 +32,28 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
 
     # Sort by KDE max.
     spiky = sort_dict(spiky, False)
+    terms = spiky.keys()[:spike_depth]
 
     print 'Indexing terms:'
-    m.index(spiky.keys()[:spike_depth], bandwidth=bandwidth)
+    m.index(terms, bandwidth=bandwidth)
 
     g = Diachronic()
 
     print 'Generating graph:'
     g.build(m, skim_depth, bandwidth=bandwidth)
     g.write_gml('build/graph.gml')
+
+    # Write the KDEs.
+    for term in terms:
+
+        # Compute the KDE.
+        kde = t.kde(term, bandwidth=bandwidth, samples=100)
+        out = 'build/kde/'+t.unstem(term)+'.json'
+
+        # Write the file.
+        with open(out, 'w') as f:
+            f.write(json.dumps(kde.tolist()))
+            print out
 
 
 if __name__ == '__main__':
