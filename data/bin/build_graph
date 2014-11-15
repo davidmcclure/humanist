@@ -19,7 +19,6 @@ from humanist.graphs import Diachronic
 @click.option('--bandwidth',    default=100000)
 def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
 
-    # Create the build directory.
     if not os.path.exists('build/kde'):
         os.makedirs('build/kde')
 
@@ -53,11 +52,12 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
 
         # Compute the KDE.
         kde = t.kde(term, bandwidth=bandwidth, samples=100)
+        kde = [{'value': v} for v in kde.tolist()]
         out = 'build/kde/'+t.unstem(term)+'.json'
 
         # Write the file.
         with open(out, 'w') as f:
-            f.write(json.dumps(kde.tolist()))
+            f.write(json.dumps(kde))
             print out
 
 
