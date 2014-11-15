@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var _ = require('lodash');
 var Backbone = require('backbone');
+var data_graphic = require('mg');
 
 
 module.exports = Backbone.View.extend({
@@ -18,7 +19,12 @@ module.exports = Backbone.View.extend({
    */
   show: function(label) {
     $.getJSON('kde/'+label+'.json', _.bind(function(kde) {
-      console.log(kde);
+
+      data_graphic({
+        target: '#kde',
+        data: kde
+      });
+
     }, this));
   }
 
