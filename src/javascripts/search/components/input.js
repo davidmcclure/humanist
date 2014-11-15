@@ -30,6 +30,10 @@ module.exports = React.createClass({
    */
   render: function() {
 
+    var h = this.props.selection.highlight.getValue();
+    var s = this.props.selection.select.getValue();
+    console.log(h, s);
+
     var cx = React.addons.classSet(this.state);
 
     return <input
@@ -56,7 +60,7 @@ module.exports = React.createClass({
     }
 
     // Set the `valid` class.
-    var valid = _.has(this.props.data.nodes, value);
+    var valid = _.has(this.props.nodes, value);
     this.setState({ valid: valid });
 
   }
