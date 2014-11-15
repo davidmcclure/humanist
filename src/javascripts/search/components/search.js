@@ -12,9 +12,7 @@ module.exports = React.createClass({
    * Render the search component.
    */
   render: function() {
-    return <Input
-      selection={this.props.selection}
-      nodes={this.props.data.nodes} />
+    return <Input nodes={this.props.data.nodes} />
   }
 
 

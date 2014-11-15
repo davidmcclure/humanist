@@ -30,10 +30,6 @@ module.exports = React.createClass({
    */
   render: function() {
 
-    var h = this.props.selection.highlight.getValue();
-    var s = this.props.selection.select.getValue();
-    console.log(h, s);
-
     var cx = React.addons.classSet(this.state);
 
     return <input
