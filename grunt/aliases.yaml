@@ -1,6 +1,7 @@
 
 compile:
   - data
+  - copy
   - jade
   - browserify
   - less
