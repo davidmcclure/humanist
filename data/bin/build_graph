@@ -2,6 +2,7 @@
 
 import click
 import numpy as np
+import os
 import json
 
 from collections import OrderedDict
@@ -17,6 +18,10 @@ from humanist.graphs import Diachronic
 @click.option('--skim_depth',   default=5)
 @click.option('--bandwidth',    default=100000)
 def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
+
+    # Create the build directory.
+    if not os.path.exists('build/kde'):
+        os.makedirs('build/kde')
 
     print 'Tokenizing corpus...'
     t = Text.from_file('corpus.txt')
