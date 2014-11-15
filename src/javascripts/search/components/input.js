@@ -18,10 +18,23 @@ module.exports = React.createClass({
 
 
   /**
+   * Apply a highlight/select query.
+   *
+   * @param {Object} props
+   */
+  componentWillReceiveProps: function(props) {
+    this.setState({ query: props.query });
+  },
+
+
+  /**
    * By default, invalid.
    */
   getInitialState: function() {
-    return { valid: false };
+    return {
+      query: this.props.query,
+      valid: false
+    };
   },
 
 
@@ -36,7 +49,30 @@ module.exports = React.createClass({
       type="text"
       className={cx}
       placeholder="search words"
+      value={this.state.query}
+      onChange={this.onChange}
       onKeyUp={this.onKeyUp} />;
+
+  },
+
+
+  /**
+   * When the query is modified.
+   *
+   * @param {Object} event
+   */
+  onChange: function(event) {
+
+    var value = event.target.value;
+
+    // Render the new query.
+    this.setState({ query: value });
+
+    // Set the `valid` class.
+    var valid = _.has(this.props.nodes, value);
+    this.setState({ valid: valid });
+
+    // TODO: Search.
 
   },
 
@@ -48,16 +84,10 @@ module.exports = React.createClass({
    */
   onKeyUp: function(event) {
 
-    var value = event.target.value;
-
     // Select on <Enter>.
     if (event.key == 'Enter') {
-      this.radio.trigger('select', value);
+      this.radio.trigger('select', event.target.value);
     }
-
-    // Set the `valid` class.
-    var valid = _.has(this.props.nodes, value);
-    this.setState({ valid: valid });
 
   }
 
