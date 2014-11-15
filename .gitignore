@@ -4,3 +4,6 @@ _site
 *.pyc
 data/corpus.txt
 data/env
+
+data/build/*
+!data/build/*/.gitkeep
