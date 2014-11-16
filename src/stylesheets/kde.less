@@ -1,9 +1,38 @@
 
 
 #kde {
+
   position: fixed;
   width: 400px;
   height: 140px;
   top: 180px;
   right: 20px;
+
+  background: rgba(0, 0, 0, 0.5);
+
+  path.main-line {
+    stroke: white;
+  }
+
+  circle.line_rollover_circle {
+    fill: @color-hl;
+  }
+
+  text.active_datapoint {
+    fill: white;
+  }
+
+  .x-axis {
+
+    line {
+      stroke: white;
+    }
+
+    text {
+      fill: white;
+      opacity: 0.7;
+    }
+
+  }
+
 }

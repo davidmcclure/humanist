@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var _ = require('lodash');
+var d3 = require('d3-browserify');
 var Backbone = require('backbone');
 var data_graphic = require('mg');
 var config = require('../config');
@@ -19,7 +20,8 @@ module.exports = Backbone.View.extend({
    * @param {String} label
    */
   show: function(label) {
-    $.getJSON('kde/'+label+'.json', _.bind(function(kde) {
+
+    $.getJSON('kde/'+label+'.json', function(kde) {
 
       // Cast ISO strings -> dates.
       kde = _.map(kde, function(datum) {
@@ -27,15 +29,32 @@ module.exports = Backbone.View.extend({
         return datum;
       });
 
+      var xFormat = d3.time.format('%y');
+
       // Update chart.
       data_graphic({
+
         target: '#kde',
         data: kde,
         x_accessor: 'date',
-        y_accessor: 'value'
+        y_accessor: 'value',
+        area: false,
+        y_axis: false,
+        width: 400,
+        height: 140,
+        left: 10,
+        right: 10,
+
+        show_years: false,
+        xax_count: 10,
+        xax_format: function(d) {
+          return xFormat(d);
+        }
+
       });
 
-    }, this));
+    });
+
   }
 
 

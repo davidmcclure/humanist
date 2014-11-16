@@ -66,8 +66,9 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
         out = 'build/kde/'+t.unstem(term)+'.json'
 
         line = []
+        vmax = max(kde)
         for i, v in enumerate(kde):
-            line.append({ 'value': v, 'date': dates[i] })
+            line.append({'value': v/vmax, 'date': dates[i]})
 
         # Write the file.
         with open(out, 'w') as f:

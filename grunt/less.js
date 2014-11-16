@@ -3,7 +3,7 @@
 module.exports = {
 
   options: {
-    paths: 'node_modules',
+    paths: ['node_modules', 'bower_components'],
     sourceMap: true,
     sourceMapBasepath: '<%= site %>',
     sourceMapRootpath: '..'
