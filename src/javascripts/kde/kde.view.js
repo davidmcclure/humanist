@@ -21,11 +21,19 @@ module.exports = Backbone.View.extend({
   show: function(label) {
     $.getJSON('kde/'+label+'.json', _.bind(function(kde) {
 
-      // TODO|dev
-      //data_graphic({
-        //target: '#kde',
-        //data: kde
-      //});
+      // Cast ISO strings -> dates.
+      kde = _.map(kde, function(datum) {
+        datum.date = new Date(datum.date);
+        return datum;
+      });
+
+      // Update chart.
+      data_graphic({
+        target: '#kde',
+        data: kde,
+        x_accessor: 'date',
+        y_accessor: 'value'
+      });
 
     }, this));
   }
