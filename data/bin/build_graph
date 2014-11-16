@@ -2,6 +2,7 @@
 
 import click
 import numpy as np
+import datetime
 import os
 import json
 
@@ -47,17 +48,30 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
     g.build(m, skim_depth, bandwidth=bandwidth)
     g.write_gml('build/graph.gml')
 
+    d1 = datetime.datetime(1987, 5, 12)
+    d2 = datetime.datetime(2014, 9, 26)
+    duration = (d2-d1).total_seconds()
+
+    dates = []
+    for i in xrange(100):
+        diff = (float(i)/100) * duration
+        date = d1 + datetime.timedelta(seconds=diff)
+        dates.append(date.isoformat())
+
     # Write the KDEs.
     for term in terms:
 
         # Compute the KDE.
         kde = t.kde(term, bandwidth=bandwidth, samples=100)
-        kde = [{'value': v} for v in kde.tolist()]
         out = 'build/kde/'+t.unstem(term)+'.json'
+
+        line = []
+        for i, v in enumerate(kde):
+            line.append({ 'value': v, 'date': dates[i] })
 
         # Write the file.
         with open(out, 'w') as f:
-            f.write(json.dumps(kde))
+            f.write(json.dumps(line))
             print out
 
 
