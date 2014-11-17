@@ -511,16 +511,9 @@ var Network = module.exports = Backbone.View.extend({
    * Publish a node unselect.
    */
   publishUnselect: function() {
-
-    // Clear the selection.
     this.renderUnselect();
     this.radio.trigger('unselect');
-
-    // Clear the route.
-    Backbone.history.navigate(null, {
-      replace: true
-    });
-
+    this.updateRoute();
   },
 
 
