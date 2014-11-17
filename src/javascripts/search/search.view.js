@@ -9,7 +9,7 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * Initialize Selectize.
+   * TODO
    *
    * @param {Object} options
    */
