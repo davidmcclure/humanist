@@ -44,7 +44,10 @@
     ]
   },
   "browser": {
-    "mg": "./bower_components/metrics-graphics/js/metricsgraphics.min.js"
+    "mg": "./bower_components/metrics-graphics/js/metricsgraphics.min.js",
+    "selectize": "./bower_components/selectize/dist/js/selectize.js",
+    "sifter": "./bower_components/sifter/sifter.js",
+    "microplugin": "./bower_components/microplugin/src/microplugin.js"
   },
   "browserify-shim": {
     "mg": {
