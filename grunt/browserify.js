@@ -3,7 +3,7 @@
 module.exports = {
 
   options: {
-    transform: [require('grunt-react').browserify],
+    transform: [['jstify', { engine: 'lodash' }]],
     watch: true,
     browserifyOptions: {
       debug: true
