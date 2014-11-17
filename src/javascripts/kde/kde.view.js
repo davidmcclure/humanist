@@ -26,7 +26,7 @@ module.exports = Backbone.View.extend({
   show: function(label) {
 
     // Show the conatiner.
-    this.$el.show(200);
+    this.$el.show(this.options.duration);
     this.visible = true;
 
     $.getJSON('kde/'+label+'.json', function(kde) {
@@ -72,7 +72,6 @@ module.exports = Backbone.View.extend({
 
     this.visible = false;
 
-    // Hide after 200ms.
     setTimeout(_.bind(function() {
       if (!this.visible) {
         this.$el.hide(this.options.duration);
