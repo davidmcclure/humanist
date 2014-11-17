@@ -13,6 +13,10 @@ module.exports = Backbone.View.extend({
 
   el: '#kde',
 
+  options: {
+   duration: 200
+  },
+
 
   /**
    * Render a KDE plot.
@@ -20,6 +24,10 @@ module.exports = Backbone.View.extend({
    * @param {String} label
    */
   show: function(label) {
+
+    // Show the conatiner.
+    this.$el.show(200);
+    this.visible = true;
 
     $.getJSON('kde/'+label+'.json', function(kde) {
 
@@ -31,7 +39,6 @@ module.exports = Backbone.View.extend({
 
       var xFormat = d3.time.format('%y');
 
-      // Update chart.
       data_graphic({
 
         target: '#kde',
@@ -54,6 +61,23 @@ module.exports = Backbone.View.extend({
       });
 
     });
+
+  },
+
+
+  /**
+   * Hide the graph.
+   */
+  hide: function() {
+
+    this.visible = false;
+
+    // Hide after 200ms.
+    setTimeout(_.bind(function() {
+      if (!this.visible) {
+        this.$el.hide(this.options.duration);
+      }
+    }, this), 200);
 
   }
 

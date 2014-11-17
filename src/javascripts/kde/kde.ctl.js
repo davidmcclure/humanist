@@ -37,7 +37,7 @@ module.exports = Controller.extend({
    * Hide the KDE.
    */
   unselect: function() {
-    // TODO
+    this.view.hide();
   }
 
 

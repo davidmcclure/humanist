@@ -516,7 +516,7 @@ var Network = module.exports = Backbone.View.extend({
     this.renderUnselect();
     this.radio.trigger('unselect');
 
-    // Clear the route slug.
+    // Clear the route.
     Backbone.history.navigate(null, {
       replace: true
     });
