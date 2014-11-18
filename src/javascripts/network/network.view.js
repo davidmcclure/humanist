@@ -511,9 +511,13 @@ var Network = module.exports = Backbone.View.extend({
    * Publish a node unselect.
    */
   publishUnselect: function() {
+
     this.renderUnselect();
     this.radio.trigger('unselect');
-    this.updateRoute();
+
+    // Restore the XYZ route.
+    _.delay(_.bind(this.updateRoute, this), 200);
+
   },
 
 

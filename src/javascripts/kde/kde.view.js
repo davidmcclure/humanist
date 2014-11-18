@@ -72,7 +72,7 @@ module.exports = Backbone.View.extend({
 
     this.visible = false;
 
-    setTimeout(_.bind(function() {
+    _.delay(_.bind(function() {
       if (!this.visible) {
         this.$el.hide(this.options.duration);
       }
