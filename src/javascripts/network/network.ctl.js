@@ -16,7 +16,8 @@ module.exports = Controller.extend({
     },
 
     search: {
-      select: 'select'
+      select: 'select',
+      unselect: 'unselect'
     },
 
     router: {
@@ -48,13 +49,21 @@ module.exports = Controller.extend({
 
 
   /**
-   * Render selections.
+   * Render (and propagate) selections.
    *
    * @param {String} label
    */
   select: function(label) {
     this.view.publishSelect(label);
     this.view.focusOnWord(label, true);
+  },
+
+
+  /**
+   * Render (and propagate) unselections.
+   */
+  unselect: function() {
+    this.view.publishUnselect();
   },
 
 
