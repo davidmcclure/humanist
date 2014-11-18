@@ -295,7 +295,7 @@ var Network = module.exports = Backbone.View.extend({
   onZoomEnd: function() {
     this.filterEdgesByExtent();
     this.edgeGroup.style('display', null);
-    this.updateRoute();
+    this.updateRouteXYZ();
   },
 
 
@@ -352,7 +352,7 @@ var Network = module.exports = Backbone.View.extend({
   /**
    * Point the route to current XYZ location.
    */
-  updateRoute: function() {
+  updateRouteXYZ: function() {
 
     if (this.selected) return;
 
@@ -366,6 +366,18 @@ var Network = module.exports = Backbone.View.extend({
       replace: true
     });
 
+  },
+
+
+  /**
+   * Point the route to a specific term.
+   *
+   * @param {String} label
+   */
+  updateRouteTerm: function(label) {
+    Backbone.history.navigate(label, {
+      replace: true
+    });
   },
 
 
@@ -482,16 +494,9 @@ var Network = module.exports = Backbone.View.extend({
    * @param {String} label
    */
   publishSelect: function(label) {
-
-    // Render new select.
     this.renderSelect(label);
     this.radio.trigger('select', label);
-
-    // Update the route.
-    Backbone.history.navigate(label, {
-      replace: true
-    });
-
+    this.updateRouteTerm(label);
   },
 
 
@@ -510,7 +515,7 @@ var Network = module.exports = Backbone.View.extend({
   publishUnselect: function() {
     this.renderUnselect();
     this.radio.trigger('unselect');
-    this.updateRoute();
+    this.updateRouteXYZ();
   },
 
 
