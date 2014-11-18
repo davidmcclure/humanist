@@ -27,7 +27,6 @@ module.exports = Backbone.View.extend({
 
     // Show the conatiner.
     this.$el.show(this.options.duration);
-    this.visible = true;
 
     $.getJSON('kde/'+label+'.json', function(kde) {
 
@@ -69,15 +68,7 @@ module.exports = Backbone.View.extend({
    * Hide the graph.
    */
   hide: function() {
-
-    this.visible = false;
-
-    _.delay(_.bind(function() {
-      if (!this.visible) {
-        this.$el.hide(this.options.duration);
-      }
-    }, this), 200);
-
+    this.$el.hide(this.options.duration);
   }
 
 
