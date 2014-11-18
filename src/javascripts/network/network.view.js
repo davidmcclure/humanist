@@ -483,9 +483,6 @@ var Network = module.exports = Backbone.View.extend({
    */
   publishSelect: function(label) {
 
-    // Unselect current.
-    this.publishUnselect()
-
     // Render new select.
     this.renderSelect(label);
     this.radio.trigger('select', label);
@@ -575,6 +572,7 @@ var Network = module.exports = Backbone.View.extend({
   renderSelect: function(label) {
 
     this.selected = label;
+    this.renderUnselect();
 
     this.labelToNode[label]
       .classed({ select: true });

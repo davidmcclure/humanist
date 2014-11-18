@@ -8,6 +8,16 @@ var Search = require('./search.view');
 module.exports = Controller.extend({
 
 
+  events: {
+
+    network: {
+      //select: 'select',
+      //unselect: 'unselect'
+    }
+
+  },
+
+
   /**
    * Start the view.
    *
@@ -15,6 +25,24 @@ module.exports = Controller.extend({
    */
   initialize: function(data) {
     this.view = new Search(data);
+  },
+
+
+  /**
+   * Render a selection.
+   *
+   * @param {String} label
+   */
+  select: function(label) {
+    this.view.renderSelect(label);
+  },
+
+
+  /**
+   * Clear the input.
+   */
+  unselect: function() {
+    this.view.renderUnselect();
   }
 
 

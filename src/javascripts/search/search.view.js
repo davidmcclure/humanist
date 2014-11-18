@@ -48,10 +48,11 @@ module.exports = Backbone.View.extend({
     this.select = this.$el.find('select');
 
     // Start Selectize.
-    this.select.selectize({
-      onItemAdd: _.bind(this.publishSelect, this),
-      onItemRemove: _.bind(this.publishUnselect, this)
-    });
+    this.select.selectize();
+    this.selectize = this.select[0].selectize;
+
+    this.selectize.on('item_add', _.bind(this.publishSelect, this));
+    this.selectize.on('item_remove', _.bind(this.publishUnselect, this));
 
   },
 
@@ -72,6 +73,24 @@ module.exports = Backbone.View.extend({
   publishUnselect: function() {
     this.radio.trigger('unselect');
   },
+
+
+  /**
+   * Set the current term.
+   *
+   * @param {String} label
+   */
+  renderSelect: function(label) {
+    this.selectize.setValue(label);
+  },
+
+
+  /**
+   * Clear the input.
+   */
+  renderUnselect: function(label) {
+    this.selectize.clear();
+  }
 
 
 });

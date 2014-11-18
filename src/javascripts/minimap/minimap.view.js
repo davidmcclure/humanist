@@ -267,6 +267,8 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   renderSelect: function(label) {
 
+    this.renderUnselect();
+
     this.labelToNode[label]
       .classed({ select: true })
       .attr('r', this.options.r.src);
