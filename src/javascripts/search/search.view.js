@@ -51,8 +51,17 @@ module.exports = Backbone.View.extend({
     this.select.selectize();
     this.selectize = this.select[0].selectize;
 
-    this.selectize.on('item_add', _.bind(this.publishSelect, this));
-    this.selectize.on('item_remove', _.bind(this.publishUnselect, this));
+    // When a word is selected.
+    this.selectize.on(
+      'item_add',
+      _.bind(this.publishSelect, this)
+    );
+
+    // When the input is cleared.
+    this.selectize.on(
+      'item_remove',
+      _.bind(this.publishUnselect, this)
+    );
 
   },
 
