@@ -10,9 +10,9 @@ module.exports = Controller.extend({
 
   events: {
 
-    network: {
-      //select: 'select',
-      //unselect: 'unselect'
+    global: {
+      select: 'select',
+      unselect: 'unselect'
     }
 
   },

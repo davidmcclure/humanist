@@ -42,7 +42,10 @@ var Minimap = module.exports = Backbone.View.extend({
    * Connect to event channels.
    */
   _initRadio: function() {
-    this.radio = Radio.channel('minimap');
+    this.radio = {
+      global: Radio.channel('global'),
+      minimap: Radio.channel('minimap')
+    };
   },
 
 
@@ -205,7 +208,7 @@ var Minimap = module.exports = Backbone.View.extend({
     var y = this.yScale.invert(mouse[1]);
 
     // Pan the map.
-    this.radio.trigger(
+    this.radio.minimap.trigger(
       'center', { x:x, y:y }, animate
     );
 
@@ -219,7 +222,7 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   publishHighlight: function(label) {
     this.renderHighlight(label);
-    this.radio.trigger('highlight', label, this.cid);
+    this.radio.global.trigger('highlight', label, this.cid);
   },
 
 
@@ -228,7 +231,7 @@ var Minimap = module.exports = Backbone.View.extend({
    */
   publishUnhighlight: function() {
     this.renderUnhighlight();
-    this.radio.trigger('unhighlight', this.cid);
+    this.radio.global.trigger('unhighlight', this.cid);
   },
 
 

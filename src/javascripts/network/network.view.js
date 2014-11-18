@@ -48,7 +48,10 @@ var Network = module.exports = Backbone.View.extend({
    * Connect to event channels.
    */
   _initRadio: function() {
-    this.radio = Radio.channel('network');
+    this.radio = {
+      global: Radio.channel('global'),
+      network: Radio.channel('network')
+    };
   },
 
 
@@ -227,7 +230,7 @@ var Network = module.exports = Backbone.View.extend({
     this.center = { x:x, y:y, z:z };
 
     // Publish the extent.
-    this.radio.trigger('extent', this.extent);
+    this.radio.network.trigger('extent', this.extent);
 
     // Notify zoom end.
     this.debouncedZoomEnd();
@@ -484,7 +487,7 @@ var Network = module.exports = Backbone.View.extend({
    */
   publishHighlight: function(label) {
     this.renderHighlight(label);
-    this.radio.trigger('highlight', label);
+    this.radio.global.trigger('highlight', label);
   },
 
 
@@ -495,7 +498,7 @@ var Network = module.exports = Backbone.View.extend({
    */
   publishSelect: function(label) {
     this.renderSelect(label);
-    this.radio.trigger('select', label);
+    this.radio.global.trigger('select', label);
     this.updateRouteTerm(label);
   },
 
@@ -505,7 +508,7 @@ var Network = module.exports = Backbone.View.extend({
    */
   publishUnhighlight: function() {
     this.renderUnhighlight();
-    this.radio.trigger('unhighlight');
+    this.radio.global.trigger('unhighlight');
   },
 
 
@@ -514,7 +517,7 @@ var Network = module.exports = Backbone.View.extend({
    */
   publishUnselect: function() {
     this.renderUnselect();
-    this.radio.trigger('unselect');
+    this.radio.global.trigger('unselect');
     this.updateRouteXYZ();
   },
 
