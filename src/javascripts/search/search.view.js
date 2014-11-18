@@ -30,9 +30,7 @@ module.exports = Backbone.View.extend({
    * Connect to event channels.
    */
   _initRadio: function() {
-    this.radio = {
-      global: Radio.channel('global')
-    };
+    this.radio = Radio.channel('search');
   },
 
 
@@ -65,7 +63,7 @@ module.exports = Backbone.View.extend({
    * @param {String} label
    */
   publishSelect: function(label) {
-    this.radio.global.trigger('select', label);
+    this.radio.trigger('select', label);
   },
 
 
@@ -73,7 +71,7 @@ module.exports = Backbone.View.extend({
    * When the input is cleared.
    */
   publishUnselect: function() {
-    this.radio.global.trigger('unselect');
+    this.radio.trigger('unselect');
   },
 
 

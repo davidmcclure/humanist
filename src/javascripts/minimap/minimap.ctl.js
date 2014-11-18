@@ -8,18 +8,13 @@ module.exports = Controller.extend({
 
 
   events: {
-
-    global: {
+    network: {
       highlight: 'highlight',
       select: 'select',
       unhighlight: 'unhighlight',
-      unselect: 'unselect'
-    },
-
-    network: {
+      unselect: 'unselect',
       extent: 'focus'
     }
-
   },
 
 
