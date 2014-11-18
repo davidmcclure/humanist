@@ -19,9 +19,19 @@ module.exports = Backbone.View.extend({
    * @param {Object} options
    */
   initialize: function(options) {
+
+    // Get terms, with empty option.
     var terms = _.keys(options.nodes).sort();
+    terms.unshift(null);
+
+    // Render the <select>.
     this.$el.html(template({ words: terms }));
-    this.$el.find('select').selectize();
+
+    // Initialize Selectize.
+    this.$el.find('select').selectize({
+      // TODO
+    });
+
   }
 
 
