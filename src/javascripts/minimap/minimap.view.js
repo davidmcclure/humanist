@@ -8,9 +8,10 @@ var Radio = require('backbone.radio');
 var d3 = require('d3-browserify');
 var moment = require('moment');
 var config = require('../config');
+var View = require('../lib/view');
 
 
-var Minimap = module.exports = Backbone.View.extend({
+var Minimap = module.exports = View.extend({
 
 
   el: '#minimap',
@@ -20,6 +21,8 @@ var Minimap = module.exports = Backbone.View.extend({
     padding: 20
   },
 
+  channels: ['minimap', 'global'],
+
 
   /**
    * Spin up the network.
@@ -27,6 +30,7 @@ var Minimap = module.exports = Backbone.View.extend({
   initialize: function(options) {
 
     this.data = options;
+    console.log(this.channels);
 
     this._initRadio();
     this._initMarkup();

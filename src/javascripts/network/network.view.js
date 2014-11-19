@@ -8,9 +8,10 @@ var ScalesMixin = require('../mixins/scales.mixin');
 var Radio = require('backbone.radio');
 var d3 = require('d3-browserify');
 var rbush = require('rbush');
+var View = require('../lib/view');
 
 
-var Network = module.exports = Backbone.View.extend({
+var Network = module.exports = View.extend({
 
 
   el: '#network',
@@ -23,6 +24,8 @@ var Network = module.exports = Backbone.View.extend({
     panDuration: 800,
     focusScale: 10
   },
+
+  channels: ['network', 'global'],
 
 
   /**

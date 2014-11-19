@@ -5,13 +5,16 @@ var _ = require('lodash');
 var Radio = require('backbone.radio');
 var Backbone = require('backbone');
 var template = require('./search.tpl');
+var View = require('../lib/view');
 require('selectize');
 
 
-module.exports = Backbone.View.extend({
+module.exports = View.extend({
 
 
   el: '#search',
+
+  channels: ['global'],
 
 
   /**
