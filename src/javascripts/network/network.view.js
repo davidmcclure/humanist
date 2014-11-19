@@ -20,6 +20,7 @@ var Network = module.exports = View.extend({
     padding: 50,
     fontExtent: [4, 70],
     zoomExtent: [0.1, 50],
+    baselineWidth: 1600,
     edgeCount: 1000,
     nodeCount: 50,
     maxNodeSize: 40,
@@ -123,6 +124,7 @@ var Network = module.exports = View.extend({
     // Debounce the resizer.
     var resize = _.debounce(_.bind(function() {
       this.fitWindow();
+      this.resizeLabels();
       this.triggerZoom();
     }, this), 500);
 
@@ -247,7 +249,7 @@ var Network = module.exports = View.extend({
 
     // On zoom, update the font sizes.
     if (!this.center || z != this.center.z) {
-      this.labelGroup.style('font-size', this.fontScale(z)+'px');
+      this.resizeLabels();
     }
 
     // Set the new extent and center.
@@ -292,6 +294,16 @@ var Network = module.exports = View.extend({
       ')';
     }, this));
 
+  },
+
+
+  /**
+   * Resize the node labels.
+   */
+  resizeLabels: function() {
+    var r = this.w / this.options.baselineWidth;
+    var size = this.fontScale(this.zoom.scale()) * r;
+    this.labelGroup.style('font-size', size+'px');
   },
 
 
