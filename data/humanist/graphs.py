@@ -1,5 +1,7 @@
 
 
+import networkx as nx
+
 from textplot.graphs import Graph
 from clint.textui import progress
 
@@ -38,3 +40,7 @@ class Diachronic(Graph):
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)
+
+        # Set degree centralities.
+        degrees = nx.degree_centrality(self.graph)
+        nx.set_node_attributes(self.graph, 'degree', degrees)
