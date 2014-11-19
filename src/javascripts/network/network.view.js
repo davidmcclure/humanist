@@ -575,8 +575,8 @@ var Network = module.exports = View.extend({
    */
   renderSelect: function(label) {
 
-    this.selected = label;
     this.renderUnselect();
+    this.selected = label;
 
     this.labelToNode[label]
       .classed({ select: true });
