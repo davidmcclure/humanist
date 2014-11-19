@@ -21,6 +21,7 @@ var Network = module.exports = View.extend({
     fontExtent: [4, 70],
     zoomExtent: [0.1, 50],
     edgeCount: 1000,
+    nodeCount: 50,
     panDuration: 800,
     focusScale: 10
   },
@@ -69,6 +70,10 @@ var Network = module.exports = View.extend({
     // Nodes <g>.
     this.nodeGroup = this.outer.append('g')
       .classed({ nodes: true });
+
+    // Labels <g>.
+    this.labelGroup = this.outer.append('g')
+      .classed({ labels: true });
 
   },
 
@@ -129,7 +134,7 @@ var Network = module.exports = View.extend({
     _.map(this.data.nodes, _.bind(function(n) {
 
       // Inject the label.
-      var label = this.nodeGroup
+      var label = this.labelGroup
         .append('text')
         .datum(n)
         .attr('text-anchor', 'middle')
@@ -143,7 +148,7 @@ var Network = module.exports = View.extend({
     }, this));
 
     // Select the labels.
-    this.labels = this.nodeGroup.selectAll('text');
+    this.labels = this.labelGroup.selectAll('text');
 
     // Highlight on focus.
     this.labels.on('mouseenter', _.bind(function(d) {
@@ -194,6 +199,18 @@ var Network = module.exports = View.extend({
 
 
   /**
+   * Get the current [x1, y1, x2, y2] viewport bounding box.
+   */
+  _getBoundingBox: function() {
+    var x1 = this.xScale.invert(0);
+    var y1 = this.yScale.invert(this.h);
+    var x2 = this.xScale.invert(this.w);
+    var y2 = this.yScale.invert(0);
+    return [x1, y1, x2, y2];
+  },
+
+
+  /**
    * Programmatically trigger a `zoom` event.
    */
   triggerZoom: function() {
@@ -208,8 +225,9 @@ var Network = module.exports = View.extend({
 
     this.renderLabels();
 
-    // Hide the edges while panning.
+    // Hide the edges/nodes while panning.
     this.edgeGroup.style('display', 'none');
+    this.nodeGroup.style('display', 'none');
 
     // Get current focus.
     var x = this.xScale.invert(this.w/2);
@@ -224,7 +242,7 @@ var Network = module.exports = View.extend({
 
     // On zoom, update the font sizes.
     if (!this.center || z != this.center.z) {
-      this.nodeGroup.style('font-size', this.fontScale(z)+'px');
+      this.labelGroup.style('font-size', this.fontScale(z)+'px');
     }
 
     // Set the new extent and center.
@@ -299,7 +317,7 @@ var Network = module.exports = View.extend({
    */
   onZoomEnd: function() {
     this.filterEdgesByExtent();
-    this.edgeGroup.style('display', null);
+    this.filterNodesByExtent();
     this.updateRouteXYZ();
   },
 
@@ -310,16 +328,10 @@ var Network = module.exports = View.extend({
    */
   filterEdgesByExtent: function() {
 
-    // Get current BBOX.
-    var x1 = this.xScale.invert(0);
-    var y1 = this.yScale.invert(this.h);
-    var x2 = this.xScale.invert(this.w);
-    var y2 = this.yScale.invert(0);
-
     // Query for visible edges.
-    var edges = this.edgeIndex.search([
-      x1, y1, x2, y2
-    ]);
+    var edges = this.edgeIndex.search(
+      this._getBoundingBox()
+    );
 
     // Sort by edge weight.
     var edges = _.sortBy(edges, function(e) {
@@ -334,7 +346,7 @@ var Network = module.exports = View.extend({
       .selectAll('line.background')
       .remove();
 
-    // Walk the 1000 heaviest edges.
+    // Walk the heaviest edges.
     _.each(edges, _.bind(function(e) {
 
       // Render the new edges.
@@ -349,7 +361,50 @@ var Network = module.exports = View.extend({
 
     }, this));
 
+    // Show the edges.
+    this.edgeGroup.style('display', null);
     this.refreshEdges();
+
+  },
+
+
+  /**
+   * Render a new set of node circles, scaled by PageRank.
+   */
+  filterNodesByExtent: function() {
+
+    // Query for visible nodes.
+    var nodes = this.nodeIndex.search(
+      this._getBoundingBox()
+    );
+
+    // Sort by PageRank.
+    var nodes = _.sortBy(nodes, function(n) {
+      return 1-n[4].rank
+    });
+
+    // Take the X heaviest edges.
+    var nodes = _.first(nodes, this.options.nodeCount);
+
+    // Clear current nodes.
+    this.nodeGroup
+      .selectAll('circle.node')
+      .remove();
+
+    // Walk the heaviest nodes.
+    _.each(nodes, _.bind(function(n) {
+
+      // Render the new nodes.
+      this.nodeGroup.append('circle')
+        .classed({ node: true })
+        .attr('cx', this.xScale(n[0]))
+        .attr('cy', this.yScale(n[1]))
+        .attr('r', 40*n[4].rank);
+
+    }, this));
+
+    // Show the nodes.
+    this.nodeGroup.style('display', null);
 
   },
 

@@ -77,6 +77,8 @@ module.exports = function(grunt) {
         d2.nodeIndex.push([
           n.graphics.x,
           n.graphics.y,
+          n.graphics.x,
+          n.graphics.y,
           { rank: n.pagerank }
         ]);
 
