@@ -48,7 +48,7 @@ module.exports = Backbone.Router.extend({
    * @param {String} word
    */
   word: function(word) {
-    this.channels.global.trigger('word', word);
+    this.channels.global.trigger('select', word);
   }
 
 

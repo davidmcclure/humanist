@@ -54,14 +54,9 @@ module.exports = Controller.extend({
    * @param {String} cid
    */
   select: function(label, cid) {
-
     this.view.updateRouteTerm(label);
     this.view.renderSelect(label);
-
-    if (cid != this.view.cid) {
-      this.view.focusOnWord(label, true);
-    }
-
+    this.view.focusOnWord(label, true);
   },
 
 

@@ -487,7 +487,7 @@ var Network = module.exports = View.extend({
    * @param {String} label
    */
   publishSelect: function(label) {
-    this.channels.global.trigger('select', label, this.cid);
+    this.channels.global.trigger('select', label);
   },
 
 
