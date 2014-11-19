@@ -92,6 +92,11 @@ var Network = module.exports = View.extend({
     // Add zoom to <g>.
     this.outer.call(this.zoom);
 
+    // Hide edges on zoom start.
+    this.zoom.on('zoomstart', _.bind(function() {
+      this.edgeGroup.style('display', 'none');
+    }, this));
+
     // Prevent accidental selections.
     this.outer.on('mousedown', function() {
       d3.event.preventDefault();
@@ -161,7 +166,7 @@ var Network = module.exports = View.extend({
       this.publishHighlight(d.label);
     }, this));
 
-    // Select on click.
+    // Select when a label is clicked.
     this.labels.on('click', _.bind(function(d) {
       if (d3.event.defaultPrevented) return;
       d3.event.preventDefault();
@@ -173,6 +178,7 @@ var Network = module.exports = View.extend({
       this.publishUnhighlight();
     }, this));
 
+    // Unselect when container is clicked.
     this.outer.on('click', _.bind(function() {
       if (d3.event.defaultPrevented) return;
       this.publishUnselect();
@@ -182,11 +188,12 @@ var Network = module.exports = View.extend({
 
 
   /**
-   * Initialize the node index.
+   * Initialize the node index, render starting nodes.
    */
   _initNodes: function() {
     this.nodeIndex = new rbush();
     this.nodeIndex.load(this.data.nodeIndex);
+    this.filterNodesByExtent();
   },
 
 
@@ -194,14 +201,9 @@ var Network = module.exports = View.extend({
    * Initialize the edge index.
    */
   _initEdges: function() {
-
-    // Load the index.
     this.edgeIndex = new rbush();
     this.edgeIndex.load(this.data.edgeIndex);
-
-    // Init selection.
-    this.selectEdges();
-
+    this.filterEdgesByExtent();
   },
 
 
@@ -230,11 +232,7 @@ var Network = module.exports = View.extend({
    */
   renderZoom: function() {
 
-    this.renderLabels();
-
-    // Hide the edges/nodes while panning.
-    this.edgeGroup.style('display', 'none');
-    this.nodeGroup.style('display', 'none');
+    this.positionNodes();
 
     // Get current focus.
     var x = this.xScale.invert(this.w/2);
@@ -266,14 +264,31 @@ var Network = module.exports = View.extend({
 
 
   /**
+   * After a zoom, query for new edges and update the route.
+   */
+  onZoomEnd: function() {
+    this.filterEdgesByExtent();
+    this.filterNodesByExtent();
+    this.updateRouteXYZ();
+  },
+
+
+  /**
    * Render the node positions.
    */
-  renderLabels: function() {
+  positionNodes: function() {
 
     this.labels.attr('transform', _.bind(function(d) {
       return 'translate('+
         this.xScale(d.graphics.x)+','+
         this.yScale(d.graphics.y)+
+      ')';
+    }, this));
+
+    this.nodes.attr('transform', _.bind(function(d) {
+      return 'translate('+
+        this.xScale(d.cx)+','+
+        this.yScale(d.cy)+
       ')';
     }, this));
 
@@ -316,16 +331,6 @@ var Network = module.exports = View.extend({
       })
     });
 
-  },
-
-
-  /**
-   * After a zoom, query for new edges and update the route.
-   */
-  onZoomEnd: function() {
-    this.filterEdgesByExtent();
-    this.filterNodesByExtent();
-    this.updateRouteXYZ();
   },
 
 
@@ -405,13 +410,13 @@ var Network = module.exports = View.extend({
       this.nodeGroup.append('circle')
         .classed({ node: true })
         .attr('r', this.options.maxNodeSize*n[4].rank)
-        .attr('cx', this.xScale(n[0]))
-        .attr('cy', this.yScale(n[1]));
+        .datum({ cx: n[0], cy: n[1] });
 
     }, this));
 
-    // Show the nodes.
-    this.nodeGroup.style('display', null);
+    // Select and position the nodes.
+    this.nodes = this.nodeGroup.selectAll('circle');
+    this.positionNodes();
 
   },
 
