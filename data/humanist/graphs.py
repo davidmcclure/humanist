@@ -49,4 +49,4 @@ class Diachronic(Graph):
         ranks = {k: v/first for k, v in ranks.items()}
 
         # Annotate the nodes.
-        nx.set_node_attributes(self.graph, 'pageranks', ranks)
+        nx.set_node_attributes(self.graph, 'pagerank', ranks)

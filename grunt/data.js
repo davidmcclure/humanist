@@ -66,10 +66,27 @@ module.exports = function(grunt) {
       });
 
 
-      // Edges:
-      // ------
+      // Node index:
+      // -----------
 
-      d2.edges = [];
+      d2.nodeIndex = [];
+
+      // Node list for rbush.
+      _.each(d1.nodes, function(n) {
+
+        d2.nodeIndex.push([
+          n.graphics.x,
+          n.graphics.y,
+          { rank: n.pagerank }
+        ]);
+
+      });
+
+
+      // Edge index:
+      // -----------
+
+      d2.edgeIndex = [];
 
       // Edge list for rbush.
       _.each(d1.links, function(e) {
@@ -77,7 +94,7 @@ module.exports = function(grunt) {
         var s = d1.nodes[e.source];
         var t = d1.nodes[e.target];
 
-        d2.edges.push([
+        d2.edgeIndex.push([
           s.graphics.x,
           s.graphics.y,
           t.graphics.x,

@@ -173,7 +173,8 @@ var Network = module.exports = View.extend({
    * Initialize the node index.
    */
   _initNodes: function() {
-    // TODO
+    this.nodeIndex = new rbush();
+    this.nodeIndex.load(this.data.nodeIndex);
   },
 
 
@@ -184,7 +185,7 @@ var Network = module.exports = View.extend({
 
     // Load the index.
     this.edgeIndex = new rbush();
-    this.edgeIndex.load(this.data.edges);
+    this.edgeIndex.load(this.data.edgeIndex);
 
     // Init selection.
     this.selectEdges();
