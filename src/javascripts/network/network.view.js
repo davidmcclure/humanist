@@ -131,6 +131,7 @@ var Network = module.exports = View.extend({
       var node = this.nodeGroup
         .append('text')
         .datum(n)
+        .attr('dominant-baseline', 'middle')
         .attr('text-anchor', 'middle')
         .classed({ node: true })
         .text(n.label);
