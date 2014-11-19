@@ -91,6 +91,11 @@ var Network = module.exports = View.extend({
     // Add zoom to <g>.
     this.outer.call(this.zoom);
 
+    // Prevent accidental selections.
+    this.outer.on('mousedown', function() {
+      d3.event.preventDefault();
+    });
+
     // Zoom -> font size scale.
     this.fontScale = d3.scale.linear()
       .domain(this.options.zoomExtent)
@@ -157,7 +162,8 @@ var Network = module.exports = View.extend({
 
     // Select on click.
     this.labels.on('click', _.bind(function(d) {
-      d3.event.stopPropagation();
+      if (d3.event.defaultPrevented) return;
+      d3.event.preventDefault();
       this.publishSelect(d.label);
     }, this));
 
