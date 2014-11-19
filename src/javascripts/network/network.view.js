@@ -39,6 +39,7 @@ var Network = module.exports = View.extend({
     this._initZoom();
     this._initResize();
     this._initLabels();
+    this._initNodes();
     this._initEdges();
 
     this.triggerZoom();
@@ -165,6 +166,14 @@ var Network = module.exports = View.extend({
       this.publishUnselect();
     }, this));
 
+  },
+
+
+  /**
+   * Initialize the node index.
+   */
+  _initNodes: function() {
+    // TODO
   },
 
 

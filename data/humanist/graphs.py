@@ -40,3 +40,13 @@ class Diachronic(Graph):
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)
+
+        # Compute PageRanks.
+        ranks = nx.pagerank(self.graph)
+        first = max(ranks.values())
+
+        # Convert to 0->1 ratios.
+        ranks = {k: v/first for k, v in ranks.items()}
+
+        # Annotate the nodes.
+        nx.set_node_attributes(self.graph, 'pageranks', ranks)
