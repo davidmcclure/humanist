@@ -21,7 +21,7 @@ var Minimap = module.exports = View.extend({
     padding: 20
   },
 
-  channels: ['minimap'],
+  channels: ['minimap', 'global'],
 
 
   /**
@@ -30,7 +30,6 @@ var Minimap = module.exports = View.extend({
   initialize: function(options) {
 
     this.data = options;
-    console.log(this.channels);
 
     this._initMarkup();
     this._initScales();
@@ -213,8 +212,7 @@ var Minimap = module.exports = View.extend({
    * @param {String} label
    */
   publishHighlight: function(label) {
-    this.renderHighlight(label);
-    this.channels.minimap.trigger('highlight', label, this.cid);
+    this.channels.global.trigger('highlight', label);
   },
 
 
@@ -222,8 +220,7 @@ var Minimap = module.exports = View.extend({
    * Publish a node unhighlight.
    */
   publishUnhighlight: function() {
-    this.renderUnhighlight();
-    this.channels.minimap.trigger('unhighlight', this.cid);
+    this.channels.global.trigger('unhighlight');
   },
 
 

@@ -14,7 +14,7 @@ module.exports = View.extend({
 
   el: '#search',
 
-  channels: ['search'],
+  channels: ['global'],
 
 
   /**
@@ -87,7 +87,7 @@ module.exports = View.extend({
    * @param {String} label
    */
   publishSelect: function(label) {
-    this.channels.search.trigger('select', label);
+    this.channels.global.trigger('select', label);
   },
 
 
@@ -95,7 +95,7 @@ module.exports = View.extend({
    * When the input is cleared.
    */
   publishUnselect: function() {
-    this.channels.search.trigger('unselect');
+    this.channels.global.trigger('unselect');
   },
 
 

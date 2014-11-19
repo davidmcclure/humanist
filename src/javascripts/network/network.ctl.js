@@ -9,19 +9,18 @@ module.exports = Controller.extend({
 
   events: {
 
-    minimap: {
+    global: {
       highlight: 'highlight',
       unhighlight: 'unhighlight',
-      center: 'minimapFocus'
-    },
-
-    search: {
       select: 'select',
       unselect: 'unselect'
     },
 
+    minimap: {
+      center: 'minimapFocus'
+    },
+
     router: {
-      word: 'select',
       xyz: 'routerFocus'
     }
 
@@ -52,10 +51,17 @@ module.exports = Controller.extend({
    * Render (and propagate) selections.
    *
    * @param {String} label
+   * @param {String} cid
    */
-  select: function(label) {
-    this.view.publishSelect(label);
-    this.view.focusOnWord(label, true);
+  select: function(label, cid) {
+
+    this.view.updateRouteTerm(label);
+    this.view.renderSelect(label);
+
+    if (cid != this.view.cid) {
+      this.view.focusOnWord(label, true);
+    }
+
   },
 
 
@@ -63,7 +69,8 @@ module.exports = Controller.extend({
    * Render (and propagate) unselections.
    */
   unselect: function() {
-    this.view.publishUnselect();
+    this.view.renderUnselect();
+    this.view.updateRouteXYZ();
   },
 
 

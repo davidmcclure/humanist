@@ -25,7 +25,7 @@ var Network = module.exports = View.extend({
     focusScale: 10
   },
 
-  channels: ['network'],
+  channels: ['network', 'global'],
 
 
   /**
@@ -477,8 +477,7 @@ var Network = module.exports = View.extend({
    * @param {String} label
    */
   publishHighlight: function(label) {
-    this.renderHighlight(label);
-    this.channels.network.trigger('highlight', label);
+    this.channels.global.trigger('highlight', label);
   },
 
 
@@ -488,9 +487,7 @@ var Network = module.exports = View.extend({
    * @param {String} label
    */
   publishSelect: function(label) {
-    this.renderSelect(label);
-    this.channels.network.trigger('select', label);
-    this.updateRouteTerm(label);
+    this.channels.global.trigger('select', label, this.cid);
   },
 
 
@@ -498,8 +495,7 @@ var Network = module.exports = View.extend({
    * Publish a node unhighlight.
    */
   publishUnhighlight: function() {
-    this.renderUnhighlight();
-    this.channels.network.trigger('unhighlight');
+    this.channels.global.trigger('unhighlight');
   },
 
 
@@ -507,9 +503,7 @@ var Network = module.exports = View.extend({
    * Publish a node unselect.
    */
   publishUnselect: function() {
-    this.renderUnselect();
-    this.channels.network.trigger('unselect');
-    this.updateRouteXYZ();
+    this.channels.global.trigger('unselect');
   },
 
 
@@ -562,7 +556,7 @@ var Network = module.exports = View.extend({
 
 
   /**
-   * Select a node.
+   * Select a node, update the route.
    */
   renderSelect: function(label) {
 
@@ -596,7 +590,7 @@ var Network = module.exports = View.extend({
 
 
   /**
-   * Unselect the currently-selected node.
+   * Unselect nodes, update the route.
    */
   renderUnselect: function() {
 

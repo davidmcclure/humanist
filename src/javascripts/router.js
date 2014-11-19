@@ -14,11 +14,17 @@ module.exports = Backbone.Router.extend({
 
 
   /**
-   * Initialize channel, start history.
+   * Get channel references, start history.
    */
   initialize: function() {
-    this.radio = Radio.channel('router');
+
+    this.channels = {
+      router: Radio.channel('router'),
+      global: Radio.channel('global')
+    }
+
     Backbone.history.start();
+
   },
 
 
@@ -30,7 +36,7 @@ module.exports = Backbone.Router.extend({
    * @param {String} z
    */
   xyz: function(x, y, z) {
-    this.radio.trigger('xyz', {
+    this.channels.router.trigger('xyz', {
       x: Number(x), y: Number(y), z: Number(z)
     });
   },
@@ -42,7 +48,7 @@ module.exports = Backbone.Router.extend({
    * @param {String} word
    */
   word: function(word) {
-    this.radio.trigger('word', word);
+    this.channels.global.trigger('word', word);
   }
 
 
