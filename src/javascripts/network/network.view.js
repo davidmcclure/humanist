@@ -38,7 +38,7 @@ var Network = module.exports = View.extend({
     this._initMarkup();
     this._initZoom();
     this._initResize();
-    this._initNodes();
+    this._initLabels();
     this._initEdges();
 
     this.triggerZoom();
@@ -117,46 +117,46 @@ var Network = module.exports = View.extend({
 
 
   /**
-   * Render the nodes.
+   * Render the labels.
    */
-  _initNodes: function() {
+  _initLabels: function() {
 
-    this.labelToNode = {};
+    this.termToLabel = {};
     this.selected = null;
 
     // Iterate over nodes.
     _.map(this.data.nodes, _.bind(function(n) {
 
       // Inject the label.
-      var node = this.nodeGroup
+      var label = this.nodeGroup
         .append('text')
         .datum(n)
-        .attr('dominant-baseline', 'middle')
         .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
         .classed({ node: true })
         .text(n.label);
 
       // Map label -> element.
-      this.labelToNode[n.label] = node;
+      this.termToLabel[n.label] = label;
 
     }, this));
 
-    // Select the collection.
-    this.nodes = this.nodeGroup.selectAll('text');
+    // Select the labels.
+    this.labels = this.nodeGroup.selectAll('text');
 
     // Highlight on focus.
-    this.nodes.on('mouseenter', _.bind(function(d) {
+    this.labels.on('mouseenter', _.bind(function(d) {
       this.publishHighlight(d.label);
     }, this));
 
     // Select on click.
-    this.nodes.on('click', _.bind(function(d) {
+    this.labels.on('click', _.bind(function(d) {
       d3.event.stopPropagation();
       this.publishSelect(d.label);
     }, this));
 
     // Unhighlight on blur.
-    this.nodes.on('mouseleave', _.bind(function() {
+    this.labels.on('mouseleave', _.bind(function() {
       this.publishUnhighlight();
     }, this));
 
@@ -196,7 +196,7 @@ var Network = module.exports = View.extend({
    */
   renderZoom: function() {
 
-    this.renderNodes();
+    this.renderLabels();
 
     // Hide the edges while panning.
     this.edgeGroup.style('display', 'none');
@@ -233,9 +233,9 @@ var Network = module.exports = View.extend({
   /**
    * Render the node positions.
    */
-  renderNodes: function() {
+  renderLabels: function() {
 
-    this.nodes.attr('transform', _.bind(function(d) {
+    this.labels.attr('transform', _.bind(function(d) {
       return 'translate('+
         this.xScale(d.graphics.x)+','+
         this.yScale(d.graphics.y)+
@@ -521,14 +521,14 @@ var Network = module.exports = View.extend({
     var sy = sourceDatum.graphics.y;
 
     // Highlight the source <text>.
-    this.labelToNode[label]
+    this.termToLabel[label]
       .classed({ highlight: true, source: true });
 
     // Iterate over the targets.
     _.each(sourceDatum.targets, _.bind(function(label) {
 
       // Highlight the target <text>'s.
-      this.labelToNode[label]
+      this.termToLabel[label]
         .classed({ highlight: true })
 
       // Get the target coordinates.
@@ -564,7 +564,7 @@ var Network = module.exports = View.extend({
     this.renderUnselect();
     this.selected = label;
 
-    this.labelToNode[label]
+    this.termToLabel[label]
       .classed({ select: true });
 
   },
@@ -578,7 +578,7 @@ var Network = module.exports = View.extend({
     var self = this;
 
     // Remove highlight classes.
-    this.nodes
+    this.labels
       .filter('.highlight')
       .classed({ highlight: false, source: false });
 
@@ -595,7 +595,7 @@ var Network = module.exports = View.extend({
    */
   renderUnselect: function() {
 
-    this.nodes
+    this.labels
       .filter('.select')
       .classed({ select: false });
 
