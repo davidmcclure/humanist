@@ -20,7 +20,7 @@ var Network = module.exports = View.extend({
     padding: 50,
     fontExtent: [4, 70],
     zoomExtent: [0.1, 50],
-    baselineWidth: 1600,
+    baselineWidth: 1700,
     edgeCount: 1000,
     nodeCount: 50,
     maxNodeSize: 40,
@@ -92,11 +92,6 @@ var Network = module.exports = View.extend({
 
     // Add zoom to <g>.
     this.outer.call(this.zoom);
-
-    // Hide edges on zoom start.
-    this.zoom.on('zoomstart', _.bind(function() {
-      this.edgeGroup.style('display', 'none');
-    }, this));
 
     // Prevent accidental selections.
     this.outer.on('mousedown', function() {
@@ -235,6 +230,9 @@ var Network = module.exports = View.extend({
   renderZoom: function() {
 
     this.positionNodes();
+
+    // Hide the edges.
+    this.edgeGroup.style('display', 'none');
 
     // Get current focus.
     var x = this.xScale.invert(this.w/2);
