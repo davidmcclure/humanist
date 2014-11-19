@@ -14,7 +14,7 @@ module.exports = View.extend({
 
   el: '#search',
 
-  channels: ['global'],
+  channels: ['search'],
 
 
   /**
@@ -24,17 +24,8 @@ module.exports = View.extend({
    */
   initialize: function(options) {
     this.data = options;
-    this._initRadio();
     this._initSelectize();
     this._bindEvents();
-  },
-
-
-  /**
-   * Connect to event channels.
-   */
-  _initRadio: function() {
-    this.radio = Radio.channel('search');
   },
 
 
@@ -96,7 +87,7 @@ module.exports = View.extend({
    * @param {String} label
    */
   publishSelect: function(label) {
-    this.radio.trigger('select', label);
+    this.channels.search.trigger('select', label);
   },
 
 
@@ -104,7 +95,7 @@ module.exports = View.extend({
    * When the input is cleared.
    */
   publishUnselect: function() {
-    this.radio.trigger('unselect');
+    this.channels.search.trigger('unselect');
   },
 
 

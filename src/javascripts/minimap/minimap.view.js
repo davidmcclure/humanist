@@ -21,7 +21,7 @@ var Minimap = module.exports = View.extend({
     padding: 20
   },
 
-  channels: ['minimap', 'global'],
+  channels: ['minimap'],
 
 
   /**
@@ -32,21 +32,12 @@ var Minimap = module.exports = View.extend({
     this.data = options;
     console.log(this.channels);
 
-    this._initRadio();
     this._initMarkup();
     this._initScales();
     this._initDrag();
     this._initClick();
     this._initNodes();
 
-  },
-
-
-  /**
-   * Connect to event channels.
-   */
-  _initRadio: function() {
-    this.radio = Radio.channel('minimap');
   },
 
 
@@ -209,7 +200,7 @@ var Minimap = module.exports = View.extend({
     var y = this.yScale.invert(mouse[1]);
 
     // Pan the map.
-    this.radio.trigger(
+    this.channels.minimap.trigger(
       'center', { x:x, y:y }, animate
     );
 
@@ -223,7 +214,7 @@ var Minimap = module.exports = View.extend({
    */
   publishHighlight: function(label) {
     this.renderHighlight(label);
-    this.radio.trigger('highlight', label, this.cid);
+    this.channels.minimap.trigger('highlight', label, this.cid);
   },
 
 
@@ -232,7 +223,7 @@ var Minimap = module.exports = View.extend({
    */
   publishUnhighlight: function() {
     this.renderUnhighlight();
-    this.radio.trigger('unhighlight', this.cid);
+    this.channels.minimap.trigger('unhighlight', this.cid);
   },
 
 
