@@ -23,6 +23,7 @@ module.exports = Backbone.View.extend({
     this.data = options;
     this._initRadio();
     this._initSelectize();
+    this._bindEvents();
   },
 
 
@@ -67,6 +68,38 @@ module.exports = Backbone.View.extend({
 
 
   /**
+   * Bind selection change events.
+   */
+  _bindEvents: function() {
+
+    // When a word is selected.
+    this.selectize.on(
+      'item_add',
+      _.bind(this.publishSelect, this)
+    );
+
+    // When the input is cleared.
+    this.selectize.on(
+      'item_remove',
+      _.bind(this.publishUnselect, this)
+    );
+
+  },
+
+
+  /**
+   * Mutate Selectize without triggering events.
+   *
+   * @param {Function} render
+   */
+  _renderSilent: function(render) {
+    this.selectize.off();
+    render.apply(this);
+    this._bindEvents();
+  },
+
+
+  /**
    * When a term is selected.
    *
    * @param {String} label
@@ -90,7 +123,9 @@ module.exports = Backbone.View.extend({
    * @param {String} label
    */
   renderSelect: function(label) {
-    this.selectize.setValue(label);
+    this._renderSilent(function() {
+      this.selectize.setValue(label);
+    });
   },
 
 
@@ -98,7 +133,9 @@ module.exports = Backbone.View.extend({
    * Clear the input.
    */
   renderUnselect: function(label) {
-    this.selectize.clear();
+    this._renderSilent(function() {
+      this.selectize.clear();
+    });
   }
 
 

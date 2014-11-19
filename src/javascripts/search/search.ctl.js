@@ -11,8 +11,8 @@ module.exports = Controller.extend({
   events: {
 
     network: {
-      //select: 'select',
-      //unselect: 'unselect'
+      select: 'select',
+      unselect: 'unselect'
     }
 
   },
