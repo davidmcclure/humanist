@@ -7,12 +7,12 @@ module.exports = {
     options: { livereload: true }
   },
 
-  jade: {
-    files: 'index.jade',
+  templates: {
+    files: ['index.jade', 'content/*.md'],
     tasks: 'jade'
   },
 
-  less: {
+  stylesheets: {
     files: 'src/**/*.less',
     tasks: 'less'
   }
