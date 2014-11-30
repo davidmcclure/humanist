@@ -79,7 +79,7 @@ module.exports = function(grunt) {
           n.graphics.y,
           n.graphics.x,
           n.graphics.y,
-          { rank: n.pagerank }
+          { rank: n.graphics.d }
         ]);
 
       });

@@ -419,7 +419,7 @@ var Network = module.exports = View.extend({
       // Render the new nodes.
       this.nodeGroup.append('circle')
         .classed({ node: true })
-        .attr('r', this.options.maxNodeSize*n[4].rank)
+        .attr('r', n[4].rank)
         .datum({ cx: n[0], cy: n[1] });
 
     }, this));
