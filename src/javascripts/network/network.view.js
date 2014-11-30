@@ -23,7 +23,6 @@ var Network = module.exports = View.extend({
     baselineWidth: 1700,
     edgeCount: 1000,
     nodeCount: 50,
-    maxNodeSize: 40,
     panDuration: 800,
     focusScale: 10
   },

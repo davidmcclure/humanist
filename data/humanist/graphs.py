@@ -18,18 +18,6 @@ class Diachronic(Graph):
         :param skim_depth: The number of sibling edges.
         """
 
-        # Nodes:
-        for term in matrix.terms:
-
-            # Unstem the label.
-            label = matrix.text.unstem(term);
-
-            # Register the metadata.
-            self.graph.add_node(label, {
-                'center': matrix.text.kde_max_ratio(term, **kwargs)
-            })
-
-        # Edges:
         for anchor in progress.bar(matrix.terms):
 
             n1 = matrix.text.unstem(anchor)
@@ -40,13 +28,3 @@ class Diachronic(Graph):
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)
-
-        # Compute PageRanks.
-        ranks = nx.pagerank(self.graph)
-        first = max(ranks.values())
-
-        # Convert to 0->1 ratios.
-        ranks = {k: v/first for k, v in ranks.items()}
-
-        # Annotate the nodes.
-        nx.set_node_attributes(self.graph, 'pagerank', ranks)
