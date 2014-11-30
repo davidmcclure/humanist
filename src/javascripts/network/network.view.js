@@ -23,6 +23,7 @@ var Network = module.exports = View.extend({
     baselineWidth: 1700,
     edgeCount: 1000,
     nodeCount: 50,
+    maxNodeSize: 40,
     panDuration: 800,
     focusScale: 10
   },
@@ -418,7 +419,7 @@ var Network = module.exports = View.extend({
       // Render the new nodes.
       this.nodeGroup.append('circle')
         .classed({ node: true })
-        .attr('r', n[4].rank)
+        .attr('r', this.options.maxNodeSize*n[4].rank)
         .datum({ cx: n[0], cy: n[1] });
 
     }, this));

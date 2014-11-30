@@ -9,15 +9,16 @@ from clint.textui import progress
 class Diachronic(Graph):
 
 
-    def build(self, matrix, skim_depth=10, **kwargs):
+    def build(self, matrix, skim_depth=10):
 
         """
-        Register term count, KDE max, and center-of-mass on nodes.
+        Build graph, with PageRanks on nodes.
 
         :param matrix: A term matrix.
         :param skim_depth: The number of sibling edges.
         """
 
+        # Register nodes and edges.
         for anchor in progress.bar(matrix.terms):
 
             n1 = matrix.text.unstem(anchor)
@@ -28,3 +29,13 @@ class Diachronic(Graph):
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)
+
+        # Compute PageRanks.
+        ranks = nx.pagerank(self.graph)
+        first = max(ranks.values())
+
+        # Convert to 0->1 ratios.
+        ranks = {k: v/first for k, v in ranks.items()}
+
+        # Annotate the nodes.
+        nx.set_node_attributes(self.graph, 'pagerank', ranks)

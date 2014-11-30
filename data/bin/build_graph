@@ -11,7 +11,7 @@ from collections import OrderedDict
 from textplot.utils import sort_dict
 from textplot.text import Text
 from textplot.matrix import Matrix
-from textplot.graphs import Skimmer
+from humanist.graphs import Diachronic
 
 
 @click.command()
@@ -44,7 +44,7 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
     print 'Indexing terms:'
     m.index(terms, bandwidth=bandwidth)
 
-    g = Skimmer()
+    g = Diachronic()
 
     print 'Generating graph:'
     g.build(m, skim_depth)
