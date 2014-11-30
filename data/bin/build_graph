@@ -11,13 +11,13 @@ from collections import OrderedDict
 from textplot.utils import sort_dict
 from textplot.text import Text
 from textplot.matrix import Matrix
-from humanist.graphs import Diachronic
+from textplot.graphs import Skimmer
 
 
 @click.command()
 @click.option('--freq_depth',   default=3000)
 @click.option('--spike_depth',  default=1000)
-@click.option('--skim_depth',   default=7)
+@click.option('--skim_depth',   default=6)
 @click.option('--bandwidth',    default=100000)
 def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
 
@@ -44,10 +44,10 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
     print 'Indexing terms:'
     m.index(terms, bandwidth=bandwidth)
 
-    g = Diachronic()
+    g = Skimmer()
 
     print 'Generating graph:'
-    g.build(m, skim_depth, bandwidth=bandwidth)
+    g.build(m, skim_depth)
     g.write_gml('build/graph.gml')
 
     d1 = datetime.datetime(1987, 5, 12)
