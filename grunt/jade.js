@@ -3,7 +3,7 @@
 module.exports = {
 
   dist: {
-    src: 'index.jade',
+    src: 'src/templates/index.jade',
     dest: '<%= site %>/index.html'
   }
 
