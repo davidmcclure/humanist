@@ -18,7 +18,7 @@ var Network = module.exports = View.extend({
 
   options: {
     padding: 50,
-    fontExtent: [4, 70],
+    fontExtent: [6, 70],
     zoomExtent: [0.1, 50],
     baselineWidth: 1700,
     edgeCount: 1000,
