@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var _ = require('lodash');
+var NProgress = require('nprogress');
 var Backbone = require('backbone');
 Backbone.$ = $;
 
@@ -12,6 +13,14 @@ var Minimap = require('./minimap/minimap.ctl');
 var KDE = require('./kde/kde.ctl');
 var Router = require('./router');
 
+
+NProgress.configure({
+  showSpinner: false,
+  trickleSpeed: 100
+});
+
+// Start loader.
+NProgress.start();
 
 $.getJSON('data.json', _.bind(function(data) {
 
@@ -24,5 +33,8 @@ $.getJSON('data.json', _.bind(function(data) {
 
   // Router:
   new Router();
+
+  // End loader.
+  NProgress.done();
 
 }, this));
