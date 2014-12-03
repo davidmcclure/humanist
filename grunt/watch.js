@@ -8,7 +8,7 @@ module.exports = {
   },
 
   templates: {
-    files: ['index.jade', 'content/*.md'],
+    files: ['src/templates/*'],
     tasks: 'jade'
   },
 

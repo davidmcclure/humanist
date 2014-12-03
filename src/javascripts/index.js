@@ -19,7 +19,7 @@ NProgress.configure({
   trickleSpeed: 100
 });
 
-// Start loader.
+// Start load.
 NProgress.start();
 
 $.getJSON('data.json', _.bind(function(data) {
@@ -34,7 +34,8 @@ $.getJSON('data.json', _.bind(function(data) {
   // Router:
   new Router();
 
-  // End loader.
+  // End load.
+  $('#spinner').hide();
   NProgress.done();
 
 }, this));
