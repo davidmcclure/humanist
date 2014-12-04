@@ -36,6 +36,7 @@ $.getJSON('data.json', _.bind(function(data) {
 
   // End load.
   $('#spinner').hide();
+  $('body').removeClass('loading');
   NProgress.done();
 
 }, this));

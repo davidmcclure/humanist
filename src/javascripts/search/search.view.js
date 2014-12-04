@@ -24,7 +24,7 @@ module.exports = View.extend({
    */
   initialize: function(options) {
     this.data = options;
-    this._initSelectize();
+    this._initInput();
     this._bindEvents();
   },
 
@@ -32,7 +32,7 @@ module.exports = View.extend({
   /**
    * Start Selectize.
    */
-  _initSelectize: function() {
+  _initInput: function() {
 
     // Get terms, with empty option.
     var terms = _.keys(this.data.nodes).sort();

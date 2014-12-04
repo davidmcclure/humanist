@@ -15,7 +15,7 @@ module.exports = Backbone.View.extend({
 
 
   /**
-   * Spin up the network.
+   * Spin up the timeline.
    */
   initialize: function(options) {
 
