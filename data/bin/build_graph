@@ -25,28 +25,28 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
     shutil.rmtree('build/kde')
     os.makedirs('build/kde')
 
-    print 'Tokenizing corpus...'
+    print('Tokenizing corpus...')
     t = Text.from_file('corpus.txt')
     m = Matrix(t)
 
     # Get the top X most frequent terms.
     frequent = t.most_frequent_terms(freq_depth)
 
-    print 'Computing standard deviations...'
+    print('Computing standard deviations...')
     spiky = OrderedDict()
     for term in frequent:
         spiky[term] = np.std(t.terms[term])
 
     # Sort by KDE max.
     spiky = sort_dict(spiky, False)
-    terms = spiky.keys()[:spike_depth]
+    terms = list(spiky.keys())[:spike_depth]
 
-    print 'Indexing terms:'
+    print('Indexing terms:')
     m.index(terms, bandwidth=bandwidth)
 
     g = Diachronic()
 
-    print 'Generating graph:'
+    print('Generating graph:')
     g.build(m, skim_depth)
     g.write_gml('build/graph.gml')
 
@@ -55,7 +55,7 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
     duration = (d2-d1).total_seconds()
 
     dates = []
-    for i in xrange(100):
+    for i in range(100):
         diff = (float(i)/100) * duration
         date = d1 + datetime.timedelta(seconds=diff)
         dates.append(date.isoformat())
@@ -75,7 +75,7 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
         # Write the file.
         with open(out, 'w') as f:
             f.write(json.dumps(line))
-            print out
+            print(out)
 
 
 if __name__ == '__main__':
