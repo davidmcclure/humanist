@@ -27,9 +27,9 @@ $.getJSON('data.json', _.bind(function(data) {
   // Modules:
   new Minimap(data);
   new Search(data);
-  new Timeline(data);
+  //new Timeline(data);
   new Network(data);
-  new KDE();
+  //new KDE();
 
   // Router:
   new Router();
