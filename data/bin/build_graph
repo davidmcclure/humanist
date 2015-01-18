@@ -22,7 +22,7 @@ from textplot.matrix import Matrix
 def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
 
     # Clear KDEs.
-    shutil.rmtree('build/kde')
+    shutil.rmtree('build/kde', ignore_errors=True)
     os.makedirs('build/kde')
 
     click.echo('Tokenizing corpus...')
