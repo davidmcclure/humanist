@@ -25,7 +25,7 @@ class Diachronic(Graph):
 
             # Heaviest pair scores:
             pairs = matrix.anchored_pairs(anchor).items()
-            for term, weight in pairs[:skim_depth]:
+            for term, weight in list(pairs)[:skim_depth]:
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)

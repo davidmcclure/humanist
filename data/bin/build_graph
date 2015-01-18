@@ -39,7 +39,7 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
 
     # Sort by KDE max.
     spiky = sort_dict(spiky, False)
-    terms = spiky.keys()[:spike_depth]
+    terms = list(spiky.keys())[:spike_depth]
 
     click.echo('Indexing terms:')
     m.index(terms, bandwidth=bandwidth)
@@ -55,7 +55,7 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
     duration = (d2-d1).total_seconds()
 
     dates = []
-    for i in xrange(100):
+    for i in range(100):
         diff = (float(i)/100) * duration
         date = d1 + datetime.timedelta(seconds=diff)
         dates.append(date.isoformat())
