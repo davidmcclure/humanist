@@ -10,8 +10,8 @@ import json
 from collections import OrderedDict
 from textplot.utils import sort_dict
 from textplot.text import Text
-from textplot.matrix import Matrix
 from humanist.graphs import Diachronic
+from textplot.matrix import Matrix
 
 
 @click.command()
@@ -25,14 +25,14 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
     shutil.rmtree('build/kde')
     os.makedirs('build/kde')
 
-    print 'Tokenizing corpus...'
+    click.echo('Tokenizing corpus...')
     t = Text.from_file('corpus.txt')
     m = Matrix(t)
 
     # Get the top X most frequent terms.
     frequent = t.most_frequent_terms(freq_depth)
 
-    print 'Computing standard deviations...'
+    click.echo('Computing standard deviations...')
     spiky = OrderedDict()
     for term in frequent:
         spiky[term] = np.std(t.terms[term])
@@ -41,12 +41,12 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
     spiky = sort_dict(spiky, False)
     terms = spiky.keys()[:spike_depth]
 
-    print 'Indexing terms:'
+    click.echo('Indexing terms:')
     m.index(terms, bandwidth=bandwidth)
 
     g = Diachronic()
 
-    print 'Generating graph:'
+    click.echo('Generating graph:')
     g.build(m, skim_depth)
     g.write_gml('build/graph.gml')
 
@@ -75,7 +75,7 @@ def build_graph(freq_depth, spike_depth, skim_depth, bandwidth):
         # Write the file.
         with open(out, 'w') as f:
             f.write(json.dumps(line))
-            print out
+            click.echo(out)
 
 
 if __name__ == '__main__':
