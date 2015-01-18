@@ -11,8 +11,11 @@ compile:min:
   - uglify
   - cssmin
 
+server:
+  - connect
+  - watch
+
 default:
   - clean
   - compile
-  - connect
-  - watch
+  - server

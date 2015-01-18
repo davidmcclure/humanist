@@ -4,7 +4,7 @@ var $ = require('jquery');
 var _ = require('lodash');
 var d3 = require('d3-browserify');
 var Backbone = require('backbone');
-var data_graphic = require('mg');
+var MG = require('mg');
 var config = require('../config');
 
 
@@ -38,7 +38,7 @@ module.exports = Backbone.View.extend({
 
       var xFormat = d3.time.format('%y');
 
-      data_graphic({
+      MG.data_graphic({
 
         target: '#kde',
         data: kde,

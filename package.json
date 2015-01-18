@@ -37,6 +37,7 @@
     "lesshat": "^3.0.2",
     "lodash": "^2.4.1",
     "moment": "^2.8.3",
+    "nprogress": "^0.1.6",
     "radio.controller": "^0.2.0",
     "rbush": "^1.3.4"
   },
@@ -46,16 +47,16 @@
     ]
   },
   "browser": {
-    "mg": "./bower_components/metrics-graphics/js/metricsgraphics.min.js",
+    "mg": "./bower_components/metrics-graphics/dist/metricsgraphics.js",
     "selectize": "./bower_components/selectize/dist/js/selectize.js",
     "sifter": "./bower_components/sifter/sifter.js",
     "microplugin": "./bower_components/microplugin/src/microplugin.js"
   },
   "browserify-shim": {
     "mg": {
-      "exports": "data_graphic",
+      "exports": "MG",
       "depends": [
-        "jquery:$",
+        "jquery:jQuery",
         "d3-browserify:d3"
       ]
     }
