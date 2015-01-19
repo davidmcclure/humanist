@@ -1,10 +1,13 @@
 
 
-var $ = require('jquery');
+// Facepalm. To fix Metrics Graphics.
+window.$ = window.jQuery = require('jquery');
+
 var _ = require('lodash');
 var NProgress = require('nprogress');
 var Backbone = require('backbone');
 Backbone.$ = $;
+
 
 var Network = require('./network/network.ctl');
 var Timeline = require('./timeline/timeline.ctl');

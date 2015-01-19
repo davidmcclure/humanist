@@ -56,7 +56,6 @@
     "mg": {
       "exports": "MG",
       "depends": [
-        "jquery:jQuery",
         "d3-browserify:d3"
       ]
     }

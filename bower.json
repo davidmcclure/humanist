@@ -9,7 +9,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "metrics-graphics": "*",
+    "metrics-graphics": "~2.0.0",
     "selectize": "~0.11.2"
   }
 }
